@@ -789,7 +789,7 @@ function resizeMap(){
   if (popIdx !== null) placePop();
 }
 if (window.ResizeObserver) new ResizeObserver(resizeMap).observe(mapEl); else window.addEventListener('resize', resizeMap);
-try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { mapCol = null; nightMin = -1; drawMap(now()); }); } catch(e) {}
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => applyTheme()); } catch(e) {}
 
 // najetí na pevninu: zvýraznit celé pásmo a ukázat jeho čas
 const tipEl = $('wm-tip');
@@ -1013,7 +1013,7 @@ function setFooter(){
     '<br>Zdroje: čas ' + src + ' · počasí, předpověď a hledání míst <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0)' +
     ' · mapa Natural Earth (volné dílo) a tz-lookup (CC0) · jmenný kalendář namedays-cs (MIT) · svátky podle zákona č. 245/2000 Sb. · východ a západ slunce výpočtem podle NOAA.' +
     '<br>Soukromí: stránka nemá vlastní server a nepoužívá cookies. Pro počasí a ověření času se váš prohlížeč připojuje k Open-Meteo a time.akamai.com, polohu odešle jen po kliknutí na „Moje poloha“. ' +
-    'Volby (formát času, pohled kalendáře) a poslední stažené počasí si pamatuje jen váš prohlížeč. Hosting (GitHub Pages) může zaznamenávat IP adresy návštěvníků.';
+    'Volby (formát času, světlý/tmavý režim, pohled kalendáře) a poslední stažené počasí si pamatuje jen váš prohlížeč. Hosting (GitHub Pages) může zaznamenávat IP adresy návštěvníků.';
 }
 
 /* ===== 24 h / 12 h ===== */
@@ -1023,6 +1023,29 @@ function applyMode(){
 document.querySelectorAll('#hfmt button').forEach(b => b.addEventListener('click', () => {
   h12 = b.dataset.h === '12'; store.set('pc_h12', h12); applyMode(); render(now());
 }));
+
+/* ===== Světlý / tmavý režim: výchozí podle systému, tlačítko v záhlaví ho ručně přepne ===== */
+// Volba se pamatuje v localStorage (pc_theme). Když se ručně zvolený režim shoduje se systémem,
+// volba se smaže a stránka se zase řídí systémem. Barvy jsou v styl.css (data-theme na <html>).
+function sysDark(){ try { return matchMedia('(prefers-color-scheme: dark)').matches; } catch(e) { return false; } }
+function themeNow(){ const t = document.documentElement.getAttribute('data-theme'); return t === 'dark' || t === 'light' ? t : (sysDark() ? 'dark' : 'light'); }
+function applyTheme(){
+  try {
+    const t = store.get('pc_theme'), root = document.documentElement;
+    if (t === 'dark' || t === 'light') root.setAttribute('data-theme', t); else root.removeAttribute('data-theme');
+    const dark = themeNow() === 'dark', b = $('theme');
+    root.setAttribute('data-scheme', dark ? 'dark' : 'light');
+    if (b) { b.setAttribute('aria-pressed', String(dark)); b.title = dark ? 'Přepnout na světlý režim' : 'Přepnout na tmavý režim'; }
+    mapCol = null; nightMin = -1; drawMap(now());   // mapa si barvy pamatuje, načíst znovu
+  } catch(e) { console.error(e); }
+}
+if ($('theme')) $('theme').addEventListener('click', () => {
+  const next = themeNow() === 'dark' ? 'light' : 'dark';
+  if ((next === 'dark') === sysDark()) store.del('pc_theme'); else store.set('pc_theme', next);
+  applyTheme();
+});
+window.addEventListener('storage', e => { if (e.key === 'pc_theme') applyTheme(); });   // změna v jiné záložce
+applyTheme();
 
 /* ===== Smyčka ===== */
 let lastWall = Date.now(), lastPerf = performance.now();

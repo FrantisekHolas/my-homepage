@@ -12,8 +12,10 @@
   --bday:#db2777; --nday:#0d9488;
   color-scheme: light dark;
 }
+/* Tmavý režim: podle systému, pokud ho tlačítko v záhlaví ručně nezmění (data-theme na <html>).
+   Tmavé barvy jsou tu dvakrát – při změně upravit obě místa. */
 @media (prefers-color-scheme: dark){
-  :root{
+  :root:not([data-theme="light"]){
     --bg:#0b0f15; --card:#151b24; --text:#e5e7eb; --muted:#8b95a5; --soft:#5d6878; --line:#232b37;
     --accent:#60a5fa; --pill:#172554; --pill-text:#bfdbfe;
     --day:#2a3649; --day-text:#f3f4f6; --day-muted:#a3adbb; --day-border:#364560;
@@ -26,6 +28,20 @@
     --bday:#f472b6; --nday:#2dd4bf;
   }
 }
+:root[data-theme="dark"]{
+  --bg:#0b0f15; --card:#151b24; --text:#e5e7eb; --muted:#8b95a5; --soft:#5d6878; --line:#232b37;
+  --accent:#60a5fa; --pill:#172554; --pill-text:#bfdbfe;
+  --day:#2a3649; --day-text:#f3f4f6; --day-muted:#a3adbb; --day-border:#364560;
+  --night:#121925; --night-text:#e5e7eb; --night-muted:#7c8696; --night-border:#222c3b;
+  --moon-ic:#c7d2fe; --cloud:#a3adbb; --rain:#60a5fa; --snow:#7dd3fc;
+  --we-bg:#1b2331; --we-text:#a3adbb; --hol-bg:#3a1c22; --hol-text:#fca5a5; --good:#4ade80; --warn:#fb923c;
+  --open-bg:#14361f; --warn-bg:#3b2412;
+  --map-sea:#1a2638; --map-l1:#46587a; --map-l2:#5f7394; --map-l3:#394a66; --map-home:#3b82f6; --map-hl:#f59e0b;
+  --map-night:0 0 0; --map-night-a:.6;
+  --bday:#f472b6; --nday:#2dd4bf;
+}
+:root[data-theme="light"]{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{margin:0}
@@ -39,6 +55,19 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .toggle{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px}
 .toggle button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;padding:4px 10px;border-radius:999px;cursor:pointer}
 .toggle button[aria-pressed="true"]{background:var(--text);color:var(--bg)}
+.hdr-ctl{display:flex;align-items:center;gap:8px}
+.theme-btn{display:grid;place-items:center;width:31px;height:31px;padding:0;border:1px solid var(--line);border-radius:50%;
+  background:var(--card);color:var(--muted);cursor:pointer}
+.theme-btn:hover{color:var(--text)}
+.theme-btn svg{width:16px;height:16px}
+.theme-btn .th-sun,:root[data-scheme="dark"] .theme-btn .th-moon{display:none}
+:root[data-scheme="dark"] .theme-btn .th-sun{display:block}
+.brand,.toggle button{white-space:nowrap}
+@media (max-width:380px){
+  .brand{font-size:15px;gap:6px}
+  .hdr-ctl{gap:6px}
+  .toggle button{padding:4px 8px}
+}
 
 .hero{background:var(--card);border-radius:16px;padding:22px 16px 22px;text-align:center}
 .hero .label{color:var(--muted);font-size:15px}
