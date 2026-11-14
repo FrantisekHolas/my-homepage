@@ -19,6 +19,7 @@ Osobní domovská stránka Františka Holase: přesný čas, svátky (jmenný ka
 - Externí služby jen bez klíčů a s povoleným voláním z prohlížeče (CORS): Open-Meteo (počasí, předpověď, hledání míst; zdarma jen nekomerčně, uvádět CC BY 4.0), time.akamai.com se zálohou worldtimeapi.org a timeapi.io. Žádné API klíče ani tokeny v repozitáři – repozitář je veřejný.
 - Stránka musí fungovat i bez sítě (hodiny, kalendář, mapa) a na iPhonu/iPadu (Safari); chyba v jedné části nesmí zastavit hodiny.
 - Texty česky. Nepřebírat texty z cas-presny.cz. Schválené znění hlavních textů: „Aktuální čas v České republice“, „Platí zimní čas (SEČ, UTC+1)“, „Hodiny tohoto zařízení se předbíhají/zpožďují o … (přesnost ±…)“, kartičky Dnes / Svátek / Týden / Den v roce / Slunce v Brně (východ – západ) / Počasí v Brně, sekce Plánovací kalendář (seznam pod ním: Události ve zvoleném období) / Předpověď na týden / Světový čas / Změna času, patička „Vytvořil František Holas“.
+- Obchody o státních svátcích podle zákona č. 223/2016 Sb. (prodejny nad 200 m²): zavřeno 1. 1., Velikonoční pondělí, 8. 5., 28. 9., 28. 10., 25. a 26. 12., Štědrý den od 12:00; ostatní státní svátky otevřeno. Kalendář: zavřeno = plná buňka, otevřeno = rámeček, Štědrý den = půl buňky. V Událostech štítek „obchody zavřené / otevřené / zavřené od 12:00“ a poznámka o výjimkách, v kartičce Dnes štítek „Dnes/Zítra velké obchody zavřené“. Při změně zákona upravit `SHOPS_CLOSED` a `shopsOf()`.
 - Barvy jen přes CSS proměnné, světlý i tmavý režim. Rozložení musí fungovat od šířky 360 px.
 - Lidé v `config.js` (`people`): narozeniny jen den a měsíc, věk se nikde nezobrazuje. Pro jmeniny používat výhradně slovo **svátek**; státní svátky v souhrnu a legendě označovat „státní svátek“. Svátek se dopočítá z jmenného kalendáře podle `firstName` (jinak prvního slova `name`), lze ho zadat ručně (`nameday`) nebo vypnout (`false`). V kalendáři tečka vlevo nahoře u čísla dne (narozeniny `--bday`, svátek `--nday`), seznam pod kalendářem se jmenuje „Události ve zvoleném období“ a má řádky „Narozeniny – jméno“ / „Svátek – jméno“. Kdo má narozeniny 29. 2., slaví v nepřestupném roce 28. 2.
 
@@ -29,7 +30,7 @@ V headless Chromiu (Playwright) s podvrženými odpověďmi Open-Meteo a time.ak
 - bez sítě: hodiny běží, místo počasí je srozumitelná hláška,
 - `config.js` výchozí, chybějící, s jiným místem a s neplatnými souřadnicemi,
 - lidé: dopočet svátku, přezdívka s `firstName`, ruční a vypnutý svátek, neplatné datum a chybějící jméno (jen varování v konzoli), 29. 2. v přestupném i nepřestupném roce,
-- u kalendáře kontrola svátků a počtu pracovních dní (2026: 250, 2027: 252), u mapy bez překryvů bublin měst.
+- u kalendáře kontrola svátků a počtu pracovních dní (2026: 250, 2027: 252), obchody o svátcích (23.–26. 12., Velikonoce, otevřený svátek 17. 11.), u mapy bez překryvů bublin měst.
 
 ## Nasazení
 

@@ -10,7 +10,7 @@ Je to jediný soubor `index.html`, bez serveru a bez instalace. Funguje v prohl�
 |---|---|
 | Hodiny | čas v Česku; ověření přesnosti hodin zařízení a oprava odchylky |
 | Kartičky | den, svátek dnes a zítra, kalendářní týden, den roku, východ a západ slunce, aktuální počasí |
-| Plánovací kalendář | 3 měsíce nebo celý rok, čísla týdnů, víkendy, státní svátky, narozeniny a svátky vybraných lidí, počet pracovních dní, tipy na prodloužené volno |
+| Plánovací kalendář | 3 měsíce nebo celý rok, čísla týdnů, víkendy, státní svátky (i s tím, zda mají velké obchody otevřeno), narozeniny a svátky vybraných lidí, počet pracovních dní, tipy na prodloužené volno |
 | Předpověď na týden | výchozí místo z nastavení; jiné místo hledáním nebo podle polohy zařízení (volba se nepamatuje) |
 | Světový čas | mapa časových pásem se dnem a nocí, jedno hlavní město za každé pásmo, detail po najetí nebo kliknutí |
 | Změna času | aktuální režim a datum další změny letního/zimního času |

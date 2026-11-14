@@ -14,6 +14,7 @@
   --sun:#f59e0b; --moon:#c7d2fe; --moon-ic:#6d74d6;
   --cloud:#9aa8ba; --rain:#2f74e0; --snow:#38bdf8;
   --we-bg:#eef2f7; --we-text:#475569; --hol-bg:#fde8e8; --hol-text:#c81e1e; --good:#15803d; --warn:#c2410c;
+  --open-bg:#dcfce7; --warn-bg:#ffedd5;
   --map-sea:#dfe7f1; --map-l1:#9aabc2; --map-l2:#b9c6d9; --map-l3:#8194b0; --map-home:#3f78e0; --map-hl:#f59e0b;
   --map-night:8 16 34; --map-night-a:.42;
   --bday:#db2777; --nday:#0d9488;
@@ -27,6 +28,7 @@
     --night:#121925; --night-text:#e5e7eb; --night-muted:#7c8696; --night-border:#222c3b;
     --moon-ic:#c7d2fe; --cloud:#a3adbb; --rain:#60a5fa; --snow:#7dd3fc;
     --we-bg:#1b2331; --we-text:#a3adbb; --hol-bg:#3a1c22; --hol-text:#fca5a5; --good:#4ade80; --warn:#fb923c;
+    --open-bg:#14361f; --warn-bg:#3b2412;
     --map-sea:#1a2638; --map-l1:#46587a; --map-l2:#5f7394; --map-l3:#394a66; --map-home:#3b82f6; --map-hl:#f59e0b;
     --map-night:0 0 0; --map-night-a:.6;
     --bday:#f472b6; --nday:#2dd4bf;
@@ -67,6 +69,9 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .card .v.long{white-space:normal;font-size:17px;line-height:1.25}
 .card .s{font-size:13px;color:var(--muted);margin-top:2px}
 .pill{display:inline-block;margin-top:6px;background:var(--hol-bg);color:var(--hol-text);font-size:12px;border-radius:6px;padding:2px 7px}
+.pill.shopx{background:var(--warn-bg);color:var(--warn);font-weight:600}
+.pill.shopo{background:var(--open-bg);color:var(--good)}
+#c-hol{display:flex;flex-wrap:wrap;gap:0 6px}
 
 h2{font-size:21px;margin:30px 0 4px}
 .lead{color:var(--muted);font-size:14px;margin:0 0 12px}
@@ -138,6 +143,7 @@ h2{font-size:21px;margin:30px 0 4px}
   font-style:normal;font-size:11.5px;font-variant-numeric:tabular-nums}
 .legend .we{background:var(--we-bg);color:var(--we-text)}
 .legend .hol{background:var(--hol-bg);color:var(--hol-text);font-weight:650}
+.legend .holo{background:var(--card);color:var(--hol-text);font-weight:650;box-shadow:inset 0 0 0 1.5px var(--hol-text)}
 .legend .td{box-shadow:inset 0 0 0 2px var(--accent);color:var(--text);font-weight:700}
 .legend b.dot{width:8px;height:8px;margin-right:6px}
 .cal{display:grid;gap:12px;align-items:start}
@@ -155,6 +161,10 @@ h2{font-size:21px;margin:30px 0 4px}
 .mon td.wk.cur{color:var(--accent);font-weight:700}
 .mon td.we{background:var(--we-bg);color:var(--we-text)}
 .mon td.hol{background:var(--hol-bg);color:var(--hol-text);font-weight:650}
+/* státní svátek s otevřenými obchody: jen rámeček; Štědrý den: zavřeno od poledne = pravá polovina */
+.mon td.hol.shop-open{background:var(--card);box-shadow:inset 0 0 0 1.5px var(--hol-text)}
+.mon td.we.hol.shop-open{background:var(--we-bg)}
+.mon td.hol.shop-noon{background:linear-gradient(90deg,var(--card) 50%,var(--hol-bg) 50%);box-shadow:inset 0 0 0 1.5px var(--hol-text)}
 .mon td.past{opacity:.5}
 .mon .num{position:relative;display:inline-block}
 .mon .dots{position:absolute;right:calc(100% + 1px);top:-1px;display:flex;gap:2px;pointer-events:none}
@@ -185,6 +195,10 @@ h2{font-size:21px;margin:30px 0 4px}
 .hlist .hx.tip{color:var(--accent)}
 .hlist li.past{opacity:.5}
 .hlist li.none{display:block;color:var(--muted)}
+.shop{display:inline-block;font-size:11.5px;line-height:1.55;border-radius:5px;padding:0 6px;margin-right:6px}
+.shop.closed,.shop.noon{background:var(--hol-bg);color:var(--hol-text)}
+.shop.open{background:var(--open-bg);color:var(--good)}
+.hnote{margin:8px 0 0;font-size:12.5px;color:var(--muted)}
 
 /* světové časy */
 /* mapa světového času */
@@ -312,10 +326,10 @@ footer a{color:inherit}
   </div>
   <div class="calinfo">
     <div><b id="cal-title"></b> <span class="sum" id="cal-sum"></span></div>
-    <div class="legend"><span><i class="we">So</i>víkend</span><span><i class="hol">17</i>státní svátek (den pracovního klidu)</span><span><i class="td" id="lg-today"></i>dnes</span><span class="lgp" hidden><b class="dot db"></b>narozeniny</span><span class="lgp" hidden><b class="dot dn"></b>svátek</span></div>
+    <div class="legend"><span><i class="we">So</i>víkend</span><span><i class="hol">17</i>státní svátek – obchody zavřené</span><span><i class="holo">17</i>státní svátek – obchody otevřené</span><span><i class="td" id="lg-today"></i>dnes</span><span class="lgp" hidden><b class="dot db"></b>narozeniny</span><span class="lgp" hidden><b class="dot dn"></b>svátek</span></div>
   </div>
   <section class="cal q" id="cal"></section>
-  <div class="hbox"><h3 id="cal-hol-h">Události ve zvoleném období</h3><ul class="hlist" id="cal-hol"></ul></div>
+  <div class="hbox"><h3 id="cal-hol-h">Události ve zvoleném období</h3><ul class="hlist" id="cal-hol"></ul><p class="hnote" id="cal-shopnote" hidden>Obchody: platí pro prodejny nad 200 m² (zákon č. 223/2016 Sb.). Menší obchody, lékárny, benzinky a prodejny na nádražích, letištích a v nemocnicích mohou mít otevřeno.</p></div>
   </div>
 
   <div id="sec-forecast">
@@ -503,6 +517,15 @@ function holidayOf(y, mo, d){
   return '';
 }
 const holT = t => { const p = ymd(t); return holidayOf(p.y, p.mo, p.d); };
+// Prodejní doba o svátcích (zákon č. 223/2016 Sb.): obchody nad 200 m² mají zavřeno, Štědrý den od 12:00
+const SHOPS_CLOSED = { '01-01': 'closed', '05-08': 'closed', '09-28': 'closed', '10-28': 'closed', '12-24': 'noon', '12-25': 'closed', '12-26': 'closed' };
+function shopsOf(y, mo, d){   // '' = není státní svátek, jinak 'closed' | 'noon' | 'open'
+  if (!holidayOf(y, mo, d)) return '';
+  if (SHOPS_CLOSED[mmdd(mo, d)]) return SHOPS_CLOSED[mmdd(mo, d)];
+  return Date.UTC(y, mo - 1, d) === easter(y) + D ? 'closed' : 'open';   // Velikonoční pondělí zavřeno
+}
+const SHOP_TXT = { closed: 'velké obchody zavřené', noon: 'velké obchody zavřené od 12:00', open: 'velké obchody otevřené' };
+const SHOP_TAG = { closed: 'obchody zavřené', noon: 'obchody zavřené od 12:00', open: 'obchody otevřené' };
 const isWeekend = t => { const w = new Date(t).getUTCDay(); return w === 0 || w === 6; };
 const isFree = t => isWeekend(t) || !!holT(t);
 function nameOf(mo, d){
@@ -921,11 +944,13 @@ function monthHTML(y, mo, today, curWeekMon){
       if (day < 1 || day > days) { h += '<td></td>'; continue; }
       const t = utc(y, mo, day), hol = holidayOf(y, mo, day), cls = ['d'];
       if (i >= 5) cls.push('we');
+      const shop = hol ? shopsOf(y, mo, day) : '';
       if (hol) cls.push('hol');
+      if (shop === 'open' || shop === 'noon') cls.push('shop-' + shop);
       if (t === today) cls.push('today'); else if (t < today) cls.push('past');
       const nm = nameOf(mo, day), pe = peopleOn(y, mo, day);
       if (pe) cls.push('ev');
-      const tip = WEEKDAY[(i + 1) % 7] + ' ' + day + '. ' + mo + '. ' + y + (hol ? '\n' + hol : '') +
+      const tip = WEEKDAY[(i + 1) % 7] + ' ' + day + '. ' + mo + '. ' + y + (hol ? '\n' + hol + ' · ' + SHOP_TXT[shop] : '') +
         (pe && pe.b.length ? '\nNarozeniny: ' + pe.b.join(', ') : '') +
         (nm || (pe && pe.n.length) ? '\nSvátek: ' + [nm, pe && pe.n.some(x => !(nm || '').split(', ').includes(x)) ? 'slaví ' + pe.n.filter(x => !(nm || '').split(', ').includes(x)).join(', ') : ''].filter(Boolean).join(' – ') : '') + '\nTýden ' + wk;
       const dots = pe ? '<i class="dots">' + (pe.b.length ? '<b class="db"></b>' : '') + (pe.n.length ? '<b class="dn"></b>' : '') + '</i>' : '';
@@ -978,8 +1003,9 @@ function renderCal(){
       nHol++;
       if (!isWeekend(t)) onWork++;
       const note = holidayNote(t, seen);
+      const sp = ymd(t), shop = shopsOf(sp.y, sp.mo, sp.d);
       items.push('<li' + past + '><span class="hd' + (isWeekend(t) ? ' wkend' : '') + '">' + shortD(t) + '</span><span class="hn">' + esc(hol) + '</span>' +
-        (note ? '<span class="hx ' + note.cls + '">' + esc(note.txt) + '</span>' : '') + '</li>');
+        '<span class="hx' + (note ? ' ' + note.cls : '') + '"><span class="shop ' + shop + '">' + SHOP_TAG[shop] + '</span>' + (note ? esc(note.txt) : '') + '</span></li>');
     }
     const p = ymd(t), pe = peopleOn(p.y, p.mo, p.d);
     if (pe && pe.b.length) { nB += pe.b.length; items.push('<li' + past + '><span class="hd pb">' + shortD(t) + '</span><span class="hn">Narozeniny – ' + esc(pe.b.join(', ')) + '</span></li>'); }
@@ -991,6 +1017,7 @@ function renderCal(){
     (nN ? ' · ' + nN + ' ' + plural(nN, 'svátek', 'svátky', 'svátků') : ''));
   document.querySelectorAll('.legend .lgp').forEach(el => { el.hidden = !HAS_PEOPLE; });
   setHTML($('cal-hol'), items.length ? items.join('') : '<li class="none">V tomto období nejsou žádné události.</li>');
+  $('cal-shopnote').hidden = !nHol;
   document.querySelectorAll('#cal-mode button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === calMode)));
 }
 function calShift(dir){
@@ -1271,8 +1298,19 @@ function renderDay(p, ms, first){
   set($('c-day'), WEEKDAY[p.wd]);
   set($('c-date'), p.d + '. ' + MONTH_GEN[p.mo-1] + ' ' + p.y);
   const hol = holidayOf(p.y, p.mo, p.d);
-  $('c-hol').innerHTML = hol ? '<span class="pill"></span>' : '';
-  if (hol) $('c-hol').firstChild.textContent = hol;
+  const tmr = new Date(Date.UTC(p.y, p.mo - 1, p.d + 1)), tm1 = tmr.getUTCMonth() + 1, td1 = tmr.getUTCDate();
+  const sToday = shopsOf(p.y, p.mo, p.d), sTmr = shopsOf(tmr.getUTCFullYear(), tm1, td1);
+  const pills = [];
+  if (hol) pills.push(['pill', hol]);
+  if (sToday === 'closed' && sTmr === 'closed') pills.push(['pill shopx', 'Dnes i zítra velké obchody zavřené']);
+  else {
+    if (sToday === 'closed' || sToday === 'noon') pills.push(['pill shopx', 'Dnes ' + SHOP_TXT[sToday]]);
+    else if (sToday === 'open') pills.push(['pill shopo', 'Dnes velké obchody otevřené']);
+    if (sTmr === 'closed' || sTmr === 'noon') pills.push(['pill shopx', 'Zítra ' + SHOP_TXT[sTmr]]);
+  }
+  const ch = $('c-hol');
+  ch.innerHTML = '';
+  pills.forEach(([c, txt]) => { const s = document.createElement('span'); s.className = c; s.textContent = txt; ch.appendChild(s); });
 
   const nm = nameOf(p.mo, p.d), ndTxt = nm || NO_NAME[mmdd(p.mo, p.d)] || '–';
   set($('c-nd-k'), 'Svátek');
