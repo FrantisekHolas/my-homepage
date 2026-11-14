@@ -1,4 +1,4 @@
-// Nastavení stránky My Homepage
+// Nastavení stránky František Homepage
 // ---------------------------------------------------------------
 // Soubor je volitelný. Když chybí, stránka použije výchozí hodnoty
 // (Brno, 24hodinový čas, kalendář na 3 měsíce, všechny sekce).

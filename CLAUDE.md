@@ -1,4 +1,4 @@
-# My Homepage – pravidla projektu
+# František Homepage – pravidla projektu
 
 Osobní domovská stránka Františka Holase: přesný čas, svátky (jmenný kalendář) a státní svátky, plánovací kalendář, týdenní předpověď počasí a mapa světového času se dnem a nocí. Zveřejněno přes GitHub Pages z větve `main` (kořen repozitáře).
 
@@ -12,10 +12,12 @@ Osobní domovská stránka Františka Holase: přesný čas, svátky (jmenný ka
 | `THIRD_PARTY_NOTICES.md` | licence cizích dat a služeb; doplnit při každém novém cizím zdroji |
 | `.nojekyll` | GitHub Pages soubory nepřevádí přes Jekyll |
 | `CNAME` | vlastní doména `frantisek.holasovi.net`; spravuje ji GitHub (Settings → Pages), ručně neměnit ani nemazat |
+| `apple-touch-icon.png` | ikona pro plochu iPhonu/iPadu (180 × 180, čtverec bez průhlednosti): lístek Františka z rodinného stromu holasovi.net se zlatým F; malé ikony do záložky (32 a 64 px) jsou vložené přímo v `index.html` jako data URI |
 
 ## Pravidla
 
-- Stránka zůstává jeden soubor bez sestavování a bez knihoven z CDN. Vložená data se mění jen přes `tools/update-data.mjs`, ne ručně.
+- Stránka zůstává jeden soubor bez sestavování a bez knihoven z CDN. Výjimkou je jen `apple-touch-icon.png`, který iOS spolehlivě načte jen jako samostatný soubor. Vložená data se mění jen přes `tools/update-data.mjs`, ne ručně.
+- Název stránky „František Homepage“ (záložka, záhlaví, `apple-mobile-web-app-title` pro název na ploše iPhonu, protože záložka se každou sekundu přepisuje podle hodin).
 - Externí služby jen bez klíčů a s povoleným voláním z prohlížeče (CORS): Open-Meteo (počasí, předpověď, hledání míst; zdarma jen nekomerčně, uvádět CC BY 4.0), time.akamai.com se zálohou worldtimeapi.org a timeapi.io. Žádné API klíče ani tokeny v repozitáři – repozitář je veřejný.
 - Stránka musí fungovat i bez sítě (hodiny, kalendář, mapa) a na iPhonu/iPadu (Safari); chyba v jedné části nesmí zastavit hodiny.
 - Texty česky. Nepřebírat texty z cas-presny.cz. Schválené znění hlavních textů: „Aktuální čas v České republice“, „Platí zimní čas (SEČ, UTC+1)“, „Hodiny tohoto zařízení se předbíhají/zpožďují o … (přesnost ±…)“, kartičky Dnes / Svátek / Týden / Den v roce / Slunce v Brně (východ – západ) / Počasí v Brně, sekce Plánovací kalendář (seznam pod ním: Události ve zvoleném období) / Předpověď na týden / Světový čas / Změna času, patička „Vytvořil František Holas“.

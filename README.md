@@ -1,4 +1,4 @@
-# My Homepage
+# František Homepage
 
 Domovská stránka s přesným časem, svátky, plánovacím kalendářem se státními svátky, týdenní předpovědí počasí a mapou světového času se dnem a nocí.
 
