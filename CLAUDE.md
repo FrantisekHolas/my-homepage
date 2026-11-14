@@ -11,6 +11,7 @@ Osobní domovská stránka Františka Holase: přesný čas, svátky a jmeniny, 
 | `tools/update-data.mjs` | obnoví data vložená v `index.html` mezi značkami `/*DATA:NAMES*/…/*END:NAMES*/` a `/*DATA:GRID*/…/*END:GRID*/` |
 | `THIRD_PARTY_NOTICES.md` | licence cizích dat a služeb; doplnit při každém novém cizím zdroji |
 | `.nojekyll` | GitHub Pages soubory nepřevádí přes Jekyll |
+| `CNAME` | vlastní doména `frantisek.holasovi.net`; spravuje ji GitHub (Settings → Pages), ručně neměnit ani nemazat |
 
 ## Pravidla
 
@@ -30,4 +31,6 @@ V headless Chromiu (Playwright) s podvrženými odpověďmi Open-Meteo a time.ak
 
 ## Nasazení
 
-Commit do `main` a push; GitHub Pages stránku zveřejní zhruba do minuty: https://frantisekholas.github.io/my-homepage/
+Commit do `main` a push; GitHub Pages stránku zveřejní zhruba do minuty: https://frantisek.holasovi.net/ (původní adresa frantisekholas.github.io/my-homepage/ na ni přesměrovává).
+
+DNS (u správce domény holasovi.net): CNAME `frantisek` → `frantisekholas.github.io`, TXT `_github-pages-challenge-FrantisekHolas` pro ověření domény na GitHubu – oba záznamy ponechat.

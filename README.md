@@ -28,7 +28,7 @@ Soubor je volitelný: když chybí, platí výchozí hodnoty (Brno, 24 h, 3 měs
 
 ## Spuštění
 
-- **Online:** GitHub Pages z větve `main`, složka `/` (kořen).
+- **Online:** https://frantisek.holasovi.net/ (GitHub Pages z větve `main`, složka `/`; vlastní doména je v souboru `CNAME`).
 - **Lokálně:** otevřít `index.html` v prohlížeči; `config.js` musí ležet ve stejné složce.
 
 ## Obnova vložených dat
