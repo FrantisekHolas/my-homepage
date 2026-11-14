@@ -312,10 +312,10 @@ footer a{color:inherit}
   </div>
   <div class="calinfo">
     <div><b id="cal-title"></b> <span class="sum" id="cal-sum"></span></div>
-    <div class="legend"><span><i class="we">So</i>víkend</span><span><i class="hol">17</i>svátek (den pracovního klidu)</span><span><i class="td" id="lg-today"></i>dnes</span><span class="lgp" hidden><b class="dot db"></b>narozeniny</span><span class="lgp" hidden><b class="dot dn"></b>jmeniny</span></div>
+    <div class="legend"><span><i class="we">So</i>víkend</span><span><i class="hol">17</i>státní svátek (den pracovního klidu)</span><span><i class="td" id="lg-today"></i>dnes</span><span class="lgp" hidden><b class="dot db"></b>narozeniny</span><span class="lgp" hidden><b class="dot dn"></b>svátek</span></div>
   </div>
   <section class="cal q" id="cal"></section>
-  <div class="hbox"><h3 id="cal-hol-h">Svátky v zobrazeném období</h3><ul class="hlist" id="cal-hol"></ul></div>
+  <div class="hbox"><h3 id="cal-hol-h">Události ve zvoleném období</h3><ul class="hlist" id="cal-hol"></ul></div>
   </div>
 
   <div id="sec-forecast">
@@ -511,7 +511,7 @@ function nameOf(mo, d){
   return Array.isArray(v) ? v.join(', ') : v;
 }
 
-/* ===== Narozeniny a jmeniny lidí z config.js ===== */
+/* ===== Narozeniny a svátky lidí z config.js ===== */
 // osoba: { name, birthday: 'D.M.', nameday: 'D.M.' | false, firstName }; rok se ignoruje, věk se nikde neukazuje
 function parseDM(s){
   const m = String(s).trim().match(/^(\d{1,2})\s*\.\s*(\d{1,2})\s*\.?(\s*\d{4})?$/);
@@ -522,7 +522,7 @@ function parseDM(s){
 }
 const NAME_DAYS = {};   // jméno malými písmeny → ['MM-DD', …]
 for (const k in NAMES) for (const n of [].concat(NAMES[k])) (NAME_DAYS[n.toLowerCase()] = NAME_DAYS[n.toLowerCase()] || []).push(k);
-const PEOPLE_EV = {};   // 'MM-DD' → { b: [jména s narozeninami], n: [jména se jmeninami] }
+const PEOPLE_EV = {};   // 'MM-DD' → { b: [jména s narozeninami], n: [jména, která mají svátek] }
 function addEv(key, type, name){ const e = PEOPLE_EV[key] || (PEOPLE_EV[key] = { b: [], n: [] }); if (!e[type].includes(name)) e[type].push(name); }
 (Array.isArray(USER_CFG.people) ? USER_CFG.people : []).forEach((p, i) => {
   const name = p && p.name ? String(p.name).trim() : '';
@@ -534,12 +534,12 @@ function addEv(key, type, name){ const e = PEOPLE_EV[key] || (PEOPLE_EV[key] = {
   if (p.nameday === false) return;
   if (p.nameday) {
     const k = parseDM(p.nameday);
-    if (k) addEv(k, 'n', name); else console.warn('config.js: ' + name + ' – neplatné datum jmenin „' + p.nameday + '“ (zadejte např. 23.4.).');
+    if (k) addEv(k, 'n', name); else console.warn('config.js: ' + name + ' – neplatné datum svátku „' + p.nameday + '“ (zadejte např. 23.4.).');
     return;
   }
   const first = String(p.firstName || name.split(/\s+/)[0]).toLowerCase();
   if (NAME_DAYS[first]) NAME_DAYS[first].forEach(k => addEv(k, 'n', name));
-  else console.warn('config.js: ' + name + ' – jméno „' + first + '“ v kalendáři jmenin není, doplňte nameday nebo firstName.');
+  else console.warn('config.js: ' + name + ' – jméno „' + first + '“ v kalendáři svátků není, doplňte nameday nebo firstName.');
 });
 const HAS_PEOPLE = Object.keys(PEOPLE_EV).length > 0;
 // události pro konkrétní den; kdo má 29. 2., slaví v nepřestupném roce 28. 2.
@@ -926,8 +926,8 @@ function monthHTML(y, mo, today, curWeekMon){
       const nm = nameOf(mo, day), pe = peopleOn(y, mo, day);
       if (pe) cls.push('ev');
       const tip = WEEKDAY[(i + 1) % 7] + ' ' + day + '. ' + mo + '. ' + y + (hol ? '\n' + hol : '') +
-        (pe && pe.b.length ? '\nNarozeniny: ' + pe.b.join(', ') : '') + (pe && pe.n.length ? '\nJmeniny: ' + pe.n.join(', ') : '') +
-        (nm ? '\nSvátek: ' + nm : '') + '\nTýden ' + wk;
+        (pe && pe.b.length ? '\nNarozeniny: ' + pe.b.join(', ') : '') +
+        (nm || (pe && pe.n.length) ? '\nSvátek: ' + [nm, pe && pe.n.some(x => !(nm || '').split(', ').includes(x)) ? 'slaví ' + pe.n.filter(x => !(nm || '').split(', ').includes(x)).join(', ') : ''].filter(Boolean).join(' – ') : '') + '\nTýden ' + wk;
       const dots = pe ? '<i class="dots">' + (pe.b.length ? '<b class="db"></b>' : '') + (pe.n.length ? '<b class="dn"></b>' : '') + '</i>' : '';
       h += '<td class="' + cls.join(' ') + '" title="' + esc(tip) + '">' + (pe ? '<span class="num">' + dots + day + '</span>' : day) + '</td>';
     }
@@ -983,15 +983,14 @@ function renderCal(){
     }
     const p = ymd(t), pe = peopleOn(p.y, p.mo, p.d);
     if (pe && pe.b.length) { nB += pe.b.length; items.push('<li' + past + '><span class="hd pb">' + shortD(t) + '</span><span class="hn">Narozeniny – ' + esc(pe.b.join(', ')) + '</span></li>'); }
-    if (pe && pe.n.length) { nN += pe.n.length; items.push('<li' + past + '><span class="hd pn">' + shortD(t) + '</span><span class="hn">Jmeniny – ' + esc(pe.n.join(', ')) + '</span></li>'); }
+    if (pe && pe.n.length) { nN += pe.n.length; items.push('<li' + past + '><span class="hd pn">' + shortD(t) + '</span><span class="hn">Svátek – ' + esc(pe.n.join(', ')) + '</span></li>'); }
   }
   set($('cal-sum'), '· ' + wsum + ' ' + plural(wsum, 'pracovní den', 'pracovní dny', 'pracovních dní') +
-    (nHol ? ' · ' + nHol + ' ' + plural(nHol, 'svátek', 'svátky', 'svátků') + ' (' + onWork + ' v pracovní den)' : '') +
+    (nHol ? ' · ' + nHol + ' ' + plural(nHol, 'státní svátek', 'státní svátky', 'státních svátků') + ' (' + onWork + ' v pracovní den)' : '') +
     (nB ? ' · ' + nB + ' ' + plural(nB, 'narozeniny', 'narozeniny', 'narozenin') : '') +
-    (nN ? ' · ' + nN + ' ' + plural(nN, 'jmeniny', 'jmeniny', 'jmenin') : ''));
-  set($('cal-hol-h'), HAS_PEOPLE ? 'Svátky, narozeniny a jmeniny v zobrazeném období' : 'Svátky v zobrazeném období');
+    (nN ? ' · ' + nN + ' ' + plural(nN, 'svátek', 'svátky', 'svátků') : ''));
   document.querySelectorAll('.legend .lgp').forEach(el => { el.hidden = !HAS_PEOPLE; });
-  setHTML($('cal-hol'), items.length ? items.join('') : '<li class="none">V tomto období nejsou žádné svátky.</li>');
+  setHTML($('cal-hol'), items.length ? items.join('') : '<li class="none">V tomto období nejsou žádné události.</li>');
   document.querySelectorAll('#cal-mode button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === calMode)));
 }
 function calShift(dir){

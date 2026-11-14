@@ -1,6 +1,6 @@
 # My Homepage
 
-Domovská stránka s přesným časem, jmeninami, plánovacím kalendářem se svátky, týdenní předpovědí počasí a mapou světového času se dnem a nocí.
+Domovská stránka s přesným časem, svátky, plánovacím kalendářem se státními svátky, týdenní předpovědí počasí a mapou světového času se dnem a nocí.
 
 Je to jediný soubor `index.html`, bez serveru a bez instalace. Funguje v prohlížeči na počítači, tabletu i mobilu.
 
@@ -9,8 +9,8 @@ Je to jediný soubor `index.html`, bez serveru a bez instalace. Funguje v prohl�
 | Část | Obsah |
 |---|---|
 | Hodiny | čas v Česku; ověření přesnosti hodin zařízení a oprava odchylky |
-| Kartičky | den, jmeniny dnes a zítra, kalendářní týden, den roku, východ a západ slunce, aktuální počasí |
-| Plánovací kalendář | 3 měsíce nebo celý rok, čísla týdnů, víkendy, svátky, narozeniny a jmeniny vybraných lidí, počet pracovních dní, tipy na prodloužené volno |
+| Kartičky | den, svátek dnes a zítra, kalendářní týden, den roku, východ a západ slunce, aktuální počasí |
+| Plánovací kalendář | 3 měsíce nebo celý rok, čísla týdnů, víkendy, státní svátky, narozeniny a svátky vybraných lidí, počet pracovních dní, tipy na prodloužené volno |
 | Předpověď na týden | výchozí místo z nastavení; jiné místo hledáním nebo podle polohy zařízení (volba se nepamatuje) |
 | Světový čas | mapa časových pásem se dnem a nocí, jedno hlavní město za každé pásmo, detail po najetí nebo kliknutí |
 | Změna času | aktuální režim a datum další změny letního/zimního času |
@@ -23,9 +23,9 @@ Nastavení je v souboru `config.js` vedle `index.html`:
 - `timeFormat` – `'24h'` nebo `'12h'`,
 - `calendarView` – `'3m'` nebo `'year'`,
 - `sections` – které sekce zobrazit,
-- `people` – lidé, jejichž narozeniny a jmeniny se ukážou v kalendáři (jméno, den a měsíc narození; jmeniny se dopočítají podle jména). Soubor je veřejný.
+- `people` – lidé, jejichž narozeniny a svátky se ukážou v kalendáři (jméno, den a měsíc narození; svátek se dopočítá podle jména). Soubor je veřejný.
 
-Soubor je volitelný: když chybí, platí výchozí hodnoty (Brno, 24 h, 3 měsíce, všechny sekce). Hodiny, svátky a jmeniny jsou vždy české.
+Soubor je volitelný: když chybí, platí výchozí hodnoty (Brno, 24 h, 3 měsíce, všechny sekce). Hodiny, státní svátky a jmenný kalendář jsou vždy české.
 
 ## Spuštění
 
