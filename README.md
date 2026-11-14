@@ -10,7 +10,7 @@ Je to jediný soubor `index.html`, bez serveru a bez instalace. Funguje v prohl�
 |---|---|
 | Hodiny | čas v Česku; ověření přesnosti hodin zařízení a oprava odchylky |
 | Kartičky | den, jmeniny dnes a zítra, kalendářní týden, den roku, východ a západ slunce, aktuální počasí |
-| Plánovací kalendář | 3 měsíce nebo celý rok, čísla týdnů, víkendy, svátky, počet pracovních dní, tipy na prodloužené volno |
+| Plánovací kalendář | 3 měsíce nebo celý rok, čísla týdnů, víkendy, svátky, narozeniny a jmeniny vybraných lidí, počet pracovních dní, tipy na prodloužené volno |
 | Předpověď na týden | výchozí místo z nastavení; jiné místo hledáním nebo podle polohy zařízení (volba se nepamatuje) |
 | Světový čas | mapa časových pásem se dnem a nocí, jedno hlavní město za každé pásmo, detail po najetí nebo kliknutí |
 | Změna času | aktuální režim a datum další změny letního/zimního času |
@@ -22,7 +22,8 @@ Nastavení je v souboru `config.js` vedle `index.html`:
 - `place` – výchozí místo pro počasí, předpověď a východ/západ slunce (název, tvar „v …“ pro popisky a souřadnice),
 - `timeFormat` – `'24h'` nebo `'12h'`,
 - `calendarView` – `'3m'` nebo `'year'`,
-- `sections` – které sekce zobrazit.
+- `sections` – které sekce zobrazit,
+- `people` – lidé, jejichž narozeniny a jmeniny se ukážou v kalendáři (jméno, den a měsíc narození; jmeniny se dopočítají podle jména). Soubor je veřejný.
 
 Soubor je volitelný: když chybí, platí výchozí hodnoty (Brno, 24 h, 3 měsíce, všechny sekce). Hodiny, svátky a jmeniny jsou vždy české.
 

@@ -31,4 +31,18 @@ window.MY_HOMEPAGE_CONFIG = {
     worldMap: true,     // mapa světového času
     timeChange: true,   // změna letního a zimního času
   },
+
+  // Narozeniny a jmeniny lidí: v kalendáři tečka u data, v seznamu pod kalendářem jméno (věk se nikde neukazuje)
+  //   name      – jak se má osoba zobrazit (může být i přezdívka)
+  //   birthday  – den a měsíc narození, např. '3.4.' (rok se nezadává)
+  //   firstName – občanské jméno, podle kterého se dopočítají jmeniny (když se liší od name)
+  //   nameday   – jmeniny zadané ručně, např. '23.4.', nebo false = jmeniny neukazovat
+  // Pozor: tento soubor je veřejný (repozitář i web).
+  people: [
+    { name: 'Věrka',     firstName: 'Věra',     birthday: '9.12.' },
+    { name: 'Luky',      firstName: 'Lukáš',    birthday: '2.9.' },
+    { name: 'Ráďa',      firstName: 'Radim',    birthday: '16.11.' },
+    { name: 'Kristýnka', firstName: 'Kristýna', birthday: '14.8.' },
+    { name: 'František',                        birthday: '2.6.' },
+  ],
 };

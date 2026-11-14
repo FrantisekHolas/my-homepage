@@ -16,6 +16,7 @@
   --we-bg:#eef2f7; --we-text:#475569; --hol-bg:#fde8e8; --hol-text:#c81e1e; --good:#15803d; --warn:#c2410c;
   --map-sea:#dfe7f1; --map-l1:#9aabc2; --map-l2:#b9c6d9; --map-l3:#8194b0; --map-home:#3f78e0; --map-hl:#f59e0b;
   --map-night:8 16 34; --map-night-a:.42;
+  --bday:#db2777; --nday:#0d9488;
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark){
@@ -28,6 +29,7 @@
     --we-bg:#1b2331; --we-text:#a3adbb; --hol-bg:#3a1c22; --hol-text:#fca5a5; --good:#4ade80; --warn:#fb923c;
     --map-sea:#1a2638; --map-l1:#46587a; --map-l2:#5f7394; --map-l3:#394a66; --map-home:#3b82f6; --map-hl:#f59e0b;
     --map-night:0 0 0; --map-night-a:.6;
+    --bday:#f472b6; --nday:#2dd4bf;
   }
 }
 *{box-sizing:border-box}
@@ -137,6 +139,7 @@ h2{font-size:21px;margin:30px 0 4px}
 .legend .we{background:var(--we-bg);color:var(--we-text)}
 .legend .hol{background:var(--hol-bg);color:var(--hol-text);font-weight:650}
 .legend .td{box-shadow:inset 0 0 0 2px var(--accent);color:var(--text);font-weight:700}
+.legend b.dot{width:8px;height:8px;margin-right:6px}
 .cal{display:grid;gap:12px;align-items:start}
 .cal.q{grid-template-columns:repeat(3,minmax(0,1fr))}
 .cal.year{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
@@ -153,6 +156,11 @@ h2{font-size:21px;margin:30px 0 4px}
 .mon td.we{background:var(--we-bg);color:var(--we-text)}
 .mon td.hol{background:var(--hol-bg);color:var(--hol-text);font-weight:650}
 .mon td.past{opacity:.5}
+.mon .num{position:relative;display:inline-block}
+.mon .dots{position:absolute;right:calc(100% + 1px);top:-1px;display:flex;gap:2px;pointer-events:none}
+.mon .dots b,.legend b.dot{display:block;width:6px;height:6px;border-radius:50%}
+.dots .db,.legend .db{background:var(--bday)} .dots .dn,.legend .dn{background:var(--nday)}
+.cal.year .mon .dots{top:0;gap:1px} .cal.year .mon .dots b{width:4px;height:4px}
 .mon td.today{box-shadow:inset 0 0 0 2px var(--accent);font-weight:700;color:var(--text)}
 .mon td.hol.today{color:var(--hol-text)}
 .mon td.d:hover{box-shadow:inset 0 0 0 1px var(--soft)}
@@ -171,6 +179,7 @@ h2{font-size:21px;margin:30px 0 4px}
 .hlist li{break-inside:avoid;display:grid;grid-template-columns:76px 1fr;gap:0 10px;padding:5px 0;font-size:14px;line-height:1.35}
 .hlist .hd{color:var(--hol-text);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 .hlist .hd.wkend{color:var(--muted)}
+.hlist .hd.pb{color:var(--bday)} .hlist .hd.pn{color:var(--nday)}
 .hlist .hx{grid-column:2;font-size:12.5px;color:var(--muted)}
 .hlist .hx.good{color:var(--good)}
 .hlist .hx.tip{color:var(--accent)}
@@ -303,10 +312,10 @@ footer a{color:inherit}
   </div>
   <div class="calinfo">
     <div><b id="cal-title"></b> <span class="sum" id="cal-sum"></span></div>
-    <div class="legend"><span><i class="we">So</i>víkend</span><span><i class="hol">17</i>svátek (den pracovního klidu)</span><span><i class="td" id="lg-today"></i>dnes</span></div>
+    <div class="legend"><span><i class="we">So</i>víkend</span><span><i class="hol">17</i>svátek (den pracovního klidu)</span><span><i class="td" id="lg-today"></i>dnes</span><span class="lgp" hidden><b class="dot db"></b>narozeniny</span><span class="lgp" hidden><b class="dot dn"></b>jmeniny</span></div>
   </div>
   <section class="cal q" id="cal"></section>
-  <div class="hbox"><h3>Svátky v zobrazeném období</h3><ul class="hlist" id="cal-hol"></ul></div>
+  <div class="hbox"><h3 id="cal-hol-h">Svátky v zobrazeném období</h3><ul class="hlist" id="cal-hol"></ul></div>
   </div>
 
   <div id="sec-forecast">
@@ -357,6 +366,7 @@ const DEFAULTS = {
   timeFormat: '24h',
   calendarView: '3m',
   sections: { calendar: true, forecast: true, worldMap: true, timeChange: true },
+  people: [],
 };
 const USER_CFG = (window.MY_HOMEPAGE_CONFIG && typeof window.MY_HOMEPAGE_CONFIG === 'object') ? window.MY_HOMEPAGE_CONFIG : {};
 const UP = USER_CFG.place;
@@ -499,6 +509,47 @@ function nameOf(mo, d){
   const v = NAMES[mmdd(mo, d)];
   if (!v) return null;
   return Array.isArray(v) ? v.join(', ') : v;
+}
+
+/* ===== Narozeniny a jmeniny lidí z config.js ===== */
+// osoba: { name, birthday: 'D.M.', nameday: 'D.M.' | false, firstName }; rok se ignoruje, věk se nikde neukazuje
+function parseDM(s){
+  const m = String(s).trim().match(/^(\d{1,2})\s*\.\s*(\d{1,2})\s*\.?(\s*\d{4})?$/);
+  if (!m) return null;
+  const d = +m[1], mo = +m[2];
+  if (mo < 1 || mo > 12 || d < 1 || d > new Date(Date.UTC(2024, mo, 0)).getUTCDate()) return null;   // 2024 je přestupný, projde i 29. 2.
+  return mmdd(mo, d);
+}
+const NAME_DAYS = {};   // jméno malými písmeny → ['MM-DD', …]
+for (const k in NAMES) for (const n of [].concat(NAMES[k])) (NAME_DAYS[n.toLowerCase()] = NAME_DAYS[n.toLowerCase()] || []).push(k);
+const PEOPLE_EV = {};   // 'MM-DD' → { b: [jména s narozeninami], n: [jména se jmeninami] }
+function addEv(key, type, name){ const e = PEOPLE_EV[key] || (PEOPLE_EV[key] = { b: [], n: [] }); if (!e[type].includes(name)) e[type].push(name); }
+(Array.isArray(USER_CFG.people) ? USER_CFG.people : []).forEach((p, i) => {
+  const name = p && p.name ? String(p.name).trim() : '';
+  if (!name) { console.warn('config.js: osoba č. ' + (i + 1) + ' nemá jméno – přeskočeno.'); return; }
+  if (p.birthday) {
+    const k = parseDM(p.birthday);
+    if (k) addEv(k, 'b', name); else console.warn('config.js: ' + name + ' – neplatné datum narozenin „' + p.birthday + '“ (zadejte např. 3.4.).');
+  }
+  if (p.nameday === false) return;
+  if (p.nameday) {
+    const k = parseDM(p.nameday);
+    if (k) addEv(k, 'n', name); else console.warn('config.js: ' + name + ' – neplatné datum jmenin „' + p.nameday + '“ (zadejte např. 23.4.).');
+    return;
+  }
+  const first = String(p.firstName || name.split(/\s+/)[0]).toLowerCase();
+  if (NAME_DAYS[first]) NAME_DAYS[first].forEach(k => addEv(k, 'n', name));
+  else console.warn('config.js: ' + name + ' – jméno „' + first + '“ v kalendáři jmenin není, doplňte nameday nebo firstName.');
+});
+const HAS_PEOPLE = Object.keys(PEOPLE_EV).length > 0;
+// události pro konkrétní den; kdo má 29. 2., slaví v nepřestupném roce 28. 2.
+function peopleOn(y, mo, d){
+  const e = PEOPLE_EV[mmdd(mo, d)];
+  let b = e ? e.b : [], n = e ? e.n : [];
+  if (mo === 2 && d === 28 && new Date(Date.UTC(y, 2, 0)).getUTCDate() === 28 && PEOPLE_EV['02-29']) {
+    b = b.concat(PEOPLE_EV['02-29'].b); n = n.concat(PEOPLE_EV['02-29'].n);
+  }
+  return b.length || n.length ? { b, n } : null;
 }
 
 /* ===== Slunce (algoritmus NOAA Solar Calculator) ===== */
@@ -872,9 +923,13 @@ function monthHTML(y, mo, today, curWeekMon){
       if (i >= 5) cls.push('we');
       if (hol) cls.push('hol');
       if (t === today) cls.push('today'); else if (t < today) cls.push('past');
-      const nm = nameOf(mo, day);
-      const tip = WEEKDAY[(i + 1) % 7] + ' ' + day + '. ' + mo + '. ' + y + (hol ? '\n' + hol : '') + (nm ? '\nSvátek: ' + nm : '') + '\nTýden ' + wk;
-      h += '<td class="' + cls.join(' ') + '" title="' + esc(tip) + '">' + day + '</td>';
+      const nm = nameOf(mo, day), pe = peopleOn(y, mo, day);
+      if (pe) cls.push('ev');
+      const tip = WEEKDAY[(i + 1) % 7] + ' ' + day + '. ' + mo + '. ' + y + (hol ? '\n' + hol : '') +
+        (pe && pe.b.length ? '\nNarozeniny: ' + pe.b.join(', ') : '') + (pe && pe.n.length ? '\nJmeniny: ' + pe.n.join(', ') : '') +
+        (nm ? '\nSvátek: ' + nm : '') + '\nTýden ' + wk;
+      const dots = pe ? '<i class="dots">' + (pe.b.length ? '<b class="db"></b>' : '') + (pe.n.length ? '<b class="dn"></b>' : '') + '</i>' : '';
+      h += '<td class="' + cls.join(' ') + '" title="' + esc(tip) + '">' + (pe ? '<span class="num">' + dots + day + '</span>' : day) + '</td>';
     }
     h += '</tr>';
   }
@@ -915,17 +970,27 @@ function renderCal(){
   // svátky v období
   const t0 = utc(fy, fm, 1), t1 = utc(ly, lm, daysIn(ly, lm));
   const seen = new Set(), items = [];
-  let onWork = 0;
+  let onWork = 0, nHol = 0, nB = 0, nN = 0;
   for (let t = t0; t <= t1; t += D) {
+    const past = t < today ? ' class="past"' : '';
     const hol = holT(t);
-    if (!hol) continue;
-    if (!isWeekend(t)) onWork++;
-    const note = holidayNote(t, seen);
-    items.push('<li' + (t < today ? ' class="past"' : '') + '><span class="hd' + (isWeekend(t) ? ' wkend' : '') + '">' + shortD(t) + '</span><span class="hn">' + esc(hol) + '</span>' +
-      (note ? '<span class="hx ' + note.cls + '">' + esc(note.txt) + '</span>' : '') + '</li>');
+    if (hol) {
+      nHol++;
+      if (!isWeekend(t)) onWork++;
+      const note = holidayNote(t, seen);
+      items.push('<li' + past + '><span class="hd' + (isWeekend(t) ? ' wkend' : '') + '">' + shortD(t) + '</span><span class="hn">' + esc(hol) + '</span>' +
+        (note ? '<span class="hx ' + note.cls + '">' + esc(note.txt) + '</span>' : '') + '</li>');
+    }
+    const p = ymd(t), pe = peopleOn(p.y, p.mo, p.d);
+    if (pe && pe.b.length) { nB += pe.b.length; items.push('<li' + past + '><span class="hd pb">' + shortD(t) + '</span><span class="hn">Narozeniny – ' + esc(pe.b.join(', ')) + '</span></li>'); }
+    if (pe && pe.n.length) { nN += pe.n.length; items.push('<li' + past + '><span class="hd pn">' + shortD(t) + '</span><span class="hn">Jmeniny – ' + esc(pe.n.join(', ')) + '</span></li>'); }
   }
   set($('cal-sum'), '· ' + wsum + ' ' + plural(wsum, 'pracovní den', 'pracovní dny', 'pracovních dní') +
-    (items.length ? ' · ' + items.length + ' ' + plural(items.length, 'svátek', 'svátky', 'svátků') + ' (' + onWork + ' v pracovní den)' : ''));
+    (nHol ? ' · ' + nHol + ' ' + plural(nHol, 'svátek', 'svátky', 'svátků') + ' (' + onWork + ' v pracovní den)' : '') +
+    (nB ? ' · ' + nB + ' ' + plural(nB, 'narozeniny', 'narozeniny', 'narozenin') : '') +
+    (nN ? ' · ' + nN + ' ' + plural(nN, 'jmeniny', 'jmeniny', 'jmenin') : ''));
+  set($('cal-hol-h'), HAS_PEOPLE ? 'Svátky, narozeniny a jmeniny v zobrazeném období' : 'Svátky v zobrazeném období');
+  document.querySelectorAll('.legend .lgp').forEach(el => { el.hidden = !HAS_PEOPLE; });
   setHTML($('cal-hol'), items.length ? items.join('') : '<li class="none">V tomto období nejsou žádné svátky.</li>');
   document.querySelectorAll('#cal-mode button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === calMode)));
 }

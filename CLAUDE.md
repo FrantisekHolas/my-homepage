@@ -7,7 +7,7 @@ Osobní domovská stránka Františka Holase: přesný čas, svátky a jmeniny, 
 | Soubor | Účel |
 |---|---|
 | `index.html` | celá stránka: HTML, CSS i JS v jednom souboru, bez sestavování |
-| `config.js` | volitelné nastavení (místo, formát času, výchozí pohled kalendáře, sekce); výchozí hodnoty v `index.html` (`DEFAULTS`) musí odpovídat `config.js` |
+| `config.js` | volitelné nastavení (místo, formát času, výchozí pohled kalendáře, sekce, lidé s narozeninami a jmeninami); výchozí hodnoty v `index.html` (`DEFAULTS`) musí odpovídat `config.js`, jen `people` je v `DEFAULTS` prázdné |
 | `tools/update-data.mjs` | obnoví data vložená v `index.html` mezi značkami `/*DATA:NAMES*/…/*END:NAMES*/` a `/*DATA:GRID*/…/*END:GRID*/` |
 | `THIRD_PARTY_NOTICES.md` | licence cizích dat a služeb; doplnit při každém novém cizím zdroji |
 | `.nojekyll` | GitHub Pages soubory nepřevádí přes Jekyll |
@@ -20,6 +20,7 @@ Osobní domovská stránka Františka Holase: přesný čas, svátky a jmeniny, 
 - Stránka musí fungovat i bez sítě (hodiny, kalendář, mapa) a na iPhonu/iPadu (Safari); chyba v jedné části nesmí zastavit hodiny.
 - Texty česky. Nepřebírat texty z cas-presny.cz. Schválené znění hlavních textů: „Aktuální čas v České republice“, „Platí zimní čas (SEČ, UTC+1)“, „Hodiny tohoto zařízení se předbíhají/zpožďují o … (přesnost ±…)“, kartičky Dnes / Svátek / Týden / Den v roce / Slunce v Brně (východ – západ) / Počasí v Brně, sekce Plánovací kalendář / Předpověď na týden / Světový čas / Změna času, patička „Vytvořil František Holas“.
 - Barvy jen přes CSS proměnné, světlý i tmavý režim. Rozložení musí fungovat od šířky 360 px.
+- Lidé v `config.js` (`people`): narozeniny jen den a měsíc, věk se nikde nezobrazuje. Jmeniny se dopočítají z jmenného kalendáře podle `firstName` (jinak prvního slova `name`), lze je zadat ručně (`nameday`) nebo vypnout (`false`). V kalendáři tečka vlevo nahoře u čísla dne (narozeniny `--bday`, jmeniny `--nday`), v seznamu pod kalendářem řádek „Narozeniny – jméno“ / „Jmeniny – jméno“. Kdo má narozeniny 29. 2., slaví v nepřestupném roce 28. 2.
 
 ## Testování před commitem
 
@@ -27,6 +28,7 @@ V headless Chromiu (Playwright) s podvrženými odpověďmi Open-Meteo a time.ak
 - žádné chyby JavaScriptu; počítač 1280 px, mobil 390 px, světlý i tmavý režim,
 - bez sítě: hodiny běží, místo počasí je srozumitelná hláška,
 - `config.js` výchozí, chybějící, s jiným místem a s neplatnými souřadnicemi,
+- lidé: dopočet jmenin, přezdívka s `firstName`, ruční a vypnuté jmeniny, neplatné datum a chybějící jméno (jen varování v konzoli), 29. 2. v přestupném i nepřestupném roce,
 - u kalendáře kontrola svátků a počtu pracovních dní (2026: 250, 2027: 252), u mapy bez překryvů bublin měst.
 
 ## Nasazení
