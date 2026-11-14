@@ -1,0 +1,49 @@
+# My Homepage
+
+Domovská stránka s přesným časem, jmeninami, plánovacím kalendářem se svátky, týdenní předpovědí počasí a mapou světového času se dnem a nocí.
+
+Je to jediný soubor `index.html`, bez serveru a bez instalace. Funguje v prohlížeči na počítači, tabletu i mobilu.
+
+## Co stránka umí
+
+| Část | Obsah |
+|---|---|
+| Hodiny | čas v Česku; ověření přesnosti hodin zařízení a oprava odchylky |
+| Kartičky | den, jmeniny dnes a zítra, kalendářní týden, den roku, východ a západ slunce, aktuální počasí |
+| Plánovací kalendář | 3 měsíce nebo celý rok, čísla týdnů, víkendy, svátky, počet pracovních dní, tipy na prodloužené volno |
+| Předpověď na týden | výchozí místo z nastavení; jiné místo hledáním nebo podle polohy zařízení (volba se nepamatuje) |
+| Světový čas | mapa časových pásem se dnem a nocí, jedno hlavní město za každé pásmo, detail po najetí nebo kliknutí |
+| Změna času | aktuální režim a datum další změny letního/zimního času |
+
+## Přizpůsobení
+
+Nastavení je v souboru `config.js` vedle `index.html`:
+
+- `place` – výchozí místo pro počasí, předpověď a východ/západ slunce (název, tvar „v …“ pro popisky a souřadnice),
+- `timeFormat` – `'24h'` nebo `'12h'`,
+- `calendarView` – `'3m'` nebo `'year'`,
+- `sections` – které sekce zobrazit.
+
+Soubor je volitelný: když chybí, platí výchozí hodnoty (Brno, 24 h, 3 měsíce, všechny sekce). Hodiny, svátky a jmeniny jsou vždy české.
+
+## Spuštění
+
+- **Online:** GitHub Pages z větve `main`, složka `/` (kořen).
+- **Lokálně:** otevřít `index.html` v prohlížeči; `config.js` musí ležet ve stejné složce.
+
+## Obnova vložených dat
+
+Jmenný kalendář a data mapy jsou vložená přímo v `index.html` mezi značkami `/*DATA:…*/ … /*END:…*/`. Obnovují se příkazy:
+
+```
+cd tools
+npm install
+npm run update-data
+```
+
+Je potřeba Node.js 20 nebo novější. Spouští se jen při změně zdrojových dat, ne při běžné úpravě stránky.
+
+## Licence
+
+© 2026 František Holas. Všechna práva vyhrazena.
+Použitá díla třetích stran a jejich licence jsou v [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

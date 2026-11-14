@@ -1,0 +1,1327 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Homepage</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#eef0f3; --card:#ffffff; --text:#111827; --muted:#6b7280; --soft:#9ca3af; --line:#e5e7eb;
+  --accent:#2563eb; --pill:#eff6ff; --pill-text:#1d4ed8;
+  --day:#ffffff; --day-text:#111827; --day-muted:#6b7280; --day-border:#e5e7eb;
+  --night:#1f2937; --night-text:#f9fafb; --night-muted:#9ca3af;
+  --sun:#f59e0b; --moon:#c7d2fe; --moon-ic:#6d74d6;
+  --cloud:#9aa8ba; --rain:#2f74e0; --snow:#38bdf8;
+  --we-bg:#eef2f7; --we-text:#475569; --hol-bg:#fde8e8; --hol-text:#c81e1e; --good:#15803d; --warn:#c2410c;
+  --map-sea:#dfe7f1; --map-l1:#9aabc2; --map-l2:#b9c6d9; --map-l3:#8194b0; --map-home:#3f78e0; --map-hl:#f59e0b;
+  --map-night:8 16 34; --map-night-a:.42;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b0f15; --card:#151b24; --text:#e5e7eb; --muted:#8b95a5; --soft:#5d6878; --line:#232b37;
+    --accent:#60a5fa; --pill:#172554; --pill-text:#bfdbfe;
+    --day:#2a3649; --day-text:#f3f4f6; --day-muted:#a3adbb; --day-border:#364560;
+    --night:#121925; --night-text:#e5e7eb; --night-muted:#7c8696; --night-border:#222c3b;
+    --moon-ic:#c7d2fe; --cloud:#a3adbb; --rain:#60a5fa; --snow:#7dd3fc;
+    --we-bg:#1b2331; --we-text:#a3adbb; --hol-bg:#3a1c22; --hol-text:#fca5a5; --good:#4ade80; --warn:#fb923c;
+    --map-sea:#1a2638; --map-l1:#46587a; --map-l2:#5f7394; --map-l3:#394a66; --map-home:#3b82f6; --map-hl:#f59e0b;
+    --map-night:0 0 0; --map-night-a:.6;
+  }
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);
+  font-family:Inter,"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px 32px}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 0 10px}
+.brand{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:17px}
+.brand svg{width:20px;height:20px}
+.toggle{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px}
+.toggle button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;padding:4px 10px;border-radius:999px;cursor:pointer}
+.toggle button[aria-pressed="true"]{background:var(--text);color:var(--bg)}
+
+.hero{background:var(--card);border-radius:16px;padding:22px 16px 22px;text-align:center}
+.hero .label{color:var(--muted);font-size:15px}
+.clock{margin:6px 0 4px;font-size:clamp(64px,15.5vw,196px);font-weight:700;line-height:1.02;
+  letter-spacing:-.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.clock .c{color:var(--soft);font-weight:600;position:relative;top:-.06em;margin:0 .01em}
+.clock .ss{color:var(--muted)}
+.clock .ap{font-size:.24em;font-weight:600;color:var(--muted);letter-spacing:0;margin-left:.15em}
+.hero .dst{color:var(--muted);font-size:14px;margin-top:6px}
+.hero .sync{font-size:15px;margin-top:8px;min-height:1.4em}
+.hero .sync b{font-weight:650}
+
+/* kartičky – čáry mezi buňkami kreslí vnitřní stín, přebytečné okraje ořízne kontejner */
+.cards{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:14px}
+.cards-in{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:0 -1px -1px 0}
+.card{padding:13px 14px 12px;min-width:0;box-shadow:inset -1px 0 0 var(--line),inset 0 -1px 0 var(--line)}
+.card .k{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.card .v{font-size:22px;font-weight:650;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .v.wx{display:flex;align-items:center;gap:7px}
+.card .v.long{white-space:normal;font-size:17px;line-height:1.25}
+.card .s{font-size:13px;color:var(--muted);margin-top:2px}
+.pill{display:inline-block;margin-top:6px;background:var(--hol-bg);color:var(--hol-text);font-size:12px;border-radius:6px;padding:2px 7px}
+
+h2{font-size:21px;margin:30px 0 4px}
+.lead{color:var(--muted);font-size:14px;margin:0 0 12px}
+.sechead{display:flex;align-items:flex-end;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;margin:30px 0 10px}
+.sechead h2{margin:0}
+.sechead .meta{color:var(--muted);font-size:13px;margin-left:10px;font-weight:400}
+
+/* ikony počasí */
+.wi{display:block;overflow:visible;flex:none}
+.wi.sm{width:24px;height:24px}
+.wi.lg{width:42px;height:42px;margin:8px auto 2px}
+.wi .i-sun{fill:var(--sun);stroke:var(--sun);stroke-width:2;stroke-linecap:round}
+.wi .i-moon{fill:var(--moon-ic)}
+.wi .i-cloud{fill:var(--cloud);stroke:var(--card);stroke-width:1.6;paint-order:stroke}
+.wi .i-fog{stroke:var(--cloud);stroke-width:2;stroke-linecap:round;fill:none}
+.wi .i-rain{stroke:var(--rain);stroke-width:2;stroke-linecap:round;fill:none}
+.wi .i-dot{fill:var(--rain)}
+.wi .i-snow{fill:var(--snow)}
+.wi .i-bolt{fill:var(--sun)}
+
+/* předpověď */
+.fc{display:grid;grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:8px}
+.fd{background:var(--card);border-radius:10px;padding:8px 8px 9px;text-align:center;border:1px solid transparent;min-width:0;cursor:default}
+.fd.now{border-color:var(--accent)}
+.fd .fl{display:flex;flex-direction:column;align-items:center;line-height:1.25;border-radius:7px;padding:4px 0}
+.fd .fl b{font-size:14px;font-weight:650}
+.fd .fl span{font-size:12.5px;color:var(--muted)}
+.fd.we .fl{background:var(--we-bg)} .fd.we .fl b{color:var(--we-text)}
+.fd.hol .fl{background:var(--hol-bg)} .fd.hol .fl b{color:var(--hol-text)}
+.fd .fdsc{font-size:12.5px;color:var(--muted);min-height:2.6em;line-height:1.25;display:flex;align-items:center;justify-content:center}
+.fd .ft{font-size:19px;font-variant-numeric:tabular-nums;margin-top:1px;white-space:nowrap}
+.fd .ft b{font-weight:700}
+.fd .ft span{color:var(--muted);margin-left:7px;font-size:15px}
+.fd .fb{position:relative;height:5px;border-radius:3px;background:var(--line);margin:7px 6px 8px}
+.fd .fb i{position:absolute;top:0;bottom:0;border-radius:3px}
+.fd .fp,.fd .fw{font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:1px}
+.fd .fp.wet{color:var(--rain)}
+.fd .fw.warn{color:var(--warn)}
+.fd .fp svg{width:10px;height:10px;vertical-align:-1px;margin-right:2px}
+.fc-empty{background:var(--card);border-radius:10px;padding:18px;color:var(--muted);text-align:center;grid-column:1/-1}
+.fcctl{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fcctl .nav{display:inline-flex;align-items:center;gap:5px}
+.fcctl .nav svg{width:15px;height:15px}
+.fcctl .nav[aria-busy="true"]{opacity:.6;cursor:progress}
+.search{position:relative}
+.search input{font:inherit;font-size:14px;height:30px;width:210px;padding:0 10px;border-radius:8px;border:1px solid var(--line);
+  background:var(--card);color:var(--text);outline:none}
+.search input:focus{border-color:var(--accent)}
+.res{position:absolute;z-index:10;top:34px;left:0;min-width:100%;width:max-content;max-width:min(360px,calc(100vw - 32px));
+  margin:0;padding:4px;list-style:none;background:var(--card);border:1px solid var(--line);border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,.14)}
+.res li{padding:6px 9px;border-radius:7px;cursor:pointer;font-size:14px;line-height:1.3}
+.res li span{display:block;font-size:12px;color:var(--muted)}
+.res li.act{background:var(--we-bg)}
+.res li.none{cursor:default;color:var(--muted)}
+.fcmsg{margin:-4px 0 10px;font-size:13.5px;color:var(--warn)}
+
+/* plánovací kalendář */
+.ctl{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.nav{border:1px solid var(--line);background:var(--card);color:var(--text);font:inherit;font-size:14px;height:30px;min-width:30px;border-radius:8px;cursor:pointer;padding:0 9px;line-height:1}
+.nav:hover{border-color:var(--soft)}
+.ctl .toggle{margin-left:6px}
+.calinfo{display:flex;justify-content:space-between;align-items:center;gap:6px 18px;flex-wrap:wrap;margin:0 0 10px;font-size:14px}
+.calinfo b{font-weight:650}
+.calinfo .sum{color:var(--muted)}
+.legend{display:flex;gap:6px 16px;flex-wrap:wrap;color:var(--muted);font-size:13px}
+.legend span{display:inline-flex;align-items:center}
+.legend i{display:inline-flex;align-items:center;justify-content:center;width:26px;height:20px;border-radius:5px;margin-right:6px;
+  font-style:normal;font-size:11.5px;font-variant-numeric:tabular-nums}
+.legend .we{background:var(--we-bg);color:var(--we-text)}
+.legend .hol{background:var(--hol-bg);color:var(--hol-text);font-weight:650}
+.legend .td{box-shadow:inset 0 0 0 2px var(--accent);color:var(--text);font-weight:700}
+.cal{display:grid;gap:12px;align-items:start}
+.cal.q{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cal.year{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.mon{background:var(--card);border-radius:12px;padding:12px 12px 10px;min-width:0}
+.mh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:0 3px 6px}
+.mh b{font-size:16px;font-weight:650}
+.mh span{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.mon table{width:100%;border-collapse:separate;border-spacing:2px;table-layout:fixed}
+.mon th{font-size:11.5px;font-weight:600;color:var(--muted);padding:2px 0 3px}
+.mon th.we{color:var(--we-text)}
+.mon td{text-align:center;font-size:14px;height:32px;border-radius:6px;font-variant-numeric:tabular-nums;cursor:default;padding:0}
+.mon .wk{width:26px;color:var(--soft);font-size:11px;font-weight:400}
+.mon td.wk.cur{color:var(--accent);font-weight:700}
+.mon td.we{background:var(--we-bg);color:var(--we-text)}
+.mon td.hol{background:var(--hol-bg);color:var(--hol-text);font-weight:650}
+.mon td.past{opacity:.5}
+.mon td.today{box-shadow:inset 0 0 0 2px var(--accent);font-weight:700;color:var(--text)}
+.mon td.hol.today{color:var(--hol-text)}
+.mon td.d:hover{box-shadow:inset 0 0 0 1px var(--soft)}
+.mon td.today:hover{box-shadow:inset 0 0 0 2px var(--accent)}
+.cal.year .mon{padding:9px 7px 7px}
+.cal.year .mh{margin:0 4px 4px}
+.cal.year .mh b{font-size:14px}
+.cal.year .mh span{font-size:11.5px}
+.cal.year .mon table{border-spacing:1px}
+.cal.year .mon td{height:23px;font-size:12px;border-radius:4px}
+.cal.year .mon th{font-size:10.5px}
+.cal.year .mon .wk{width:20px;font-size:10px}
+.hbox{background:var(--card);border-radius:12px;padding:12px 16px 10px;margin-top:12px}
+.hbox h3{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:0 0 4px}
+.hlist{list-style:none;margin:0;padding:0;columns:2 360px;column-gap:32px}
+.hlist li{break-inside:avoid;display:grid;grid-template-columns:76px 1fr;gap:0 10px;padding:5px 0;font-size:14px;line-height:1.35}
+.hlist .hd{color:var(--hol-text);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hlist .hd.wkend{color:var(--muted)}
+.hlist .hx{grid-column:2;font-size:12.5px;color:var(--muted)}
+.hlist .hx.good{color:var(--good)}
+.hlist .hx.tip{color:var(--accent)}
+.hlist li.past{opacity:.5}
+.hlist li.none{display:block;color:var(--muted)}
+
+/* světové časy */
+/* mapa světového času */
+.wmwrap{position:relative}
+.wmap{position:relative;aspect-ratio:8/3;border-radius:14px;overflow:hidden;background:var(--map-sea);user-select:none;-webkit-user-select:none}
+.wmap canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair}
+.wm-pins{position:absolute;inset:0;pointer-events:none}
+.pin{position:absolute;width:0;height:0}
+.pin .dot{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#fff;
+  box-shadow:0 0 0 1.5px rgba(15,23,42,.6);pointer-events:auto;cursor:pointer}
+.pin.home .dot{background:var(--map-home);box-shadow:0 0 0 2px #fff}
+.pin .bub{position:absolute;pointer-events:auto;cursor:pointer;border:0;margin:0;font:inherit;text-align:left;white-space:nowrap;
+  padding:3px 7px 4px;border-radius:8px;line-height:1.2;box-shadow:0 1px 4px rgba(0,0,0,.28)}
+.pin.day .bub{background:rgba(255,255,255,.95);color:#111827}
+.pin.night .bub{background:rgba(17,24,39,.92);color:#f3f4f6;box-shadow:0 0 0 1px rgba(255,255,255,.16),0 1px 4px rgba(0,0,0,.28)}
+.pin.home .bub{box-shadow:0 0 0 2px var(--map-home),0 1px 4px rgba(0,0,0,.28)}
+.pin .bub:hover,.pin .bub:focus-visible{outline:2px solid var(--map-hl);outline-offset:1px}
+.bub .l1{display:flex;align-items:center;gap:4px;font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.bub .l1 .wi{width:16px;height:16px}
+.bub .l2{display:block;font-size:11.5px;opacity:.8}
+.bub .l2 em{font-style:normal;margin-left:5px;font-variant-numeric:tabular-nums}
+.pin .wi .i-cloud{stroke:none}
+.pin.night .wi .i-moon{fill:#c7d2fe}
+.a-n .bub{left:0;bottom:7px;transform:translateX(-50%)}
+.a-s .bub{left:0;top:7px;transform:translateX(-50%)}
+.a-e .bub{left:8px;top:0;transform:translateY(-50%)}
+.a-w .bub{right:8px;top:0;transform:translateY(-50%)}
+.a-ne .bub{left:5px;bottom:5px} .a-nw .bub{right:5px;bottom:5px}
+.a-se .bub{left:5px;top:5px} .a-sw .bub{right:5px;top:5px}
+.wmwrap.narrow .bub{padding:1px 4px 2px;border-radius:5px}
+.wmwrap.narrow .bub .l1{font-size:10px;gap:0} .wmwrap.narrow .bub .l2,.wmwrap.narrow .bub .wi{display:none}
+.wmwrap.narrow .pin:not(.p1) .bub{display:none}
+.wmwrap.narrow .pin .dot{left:-3px;top:-3px;width:6px;height:6px}
+.wm-tip{position:absolute;z-index:6;pointer-events:none;background:rgba(17,24,39,.94);color:#f9fafb;font-size:12.5px;
+  padding:5px 9px;border-radius:7px;white-space:nowrap;line-height:1.4}
+.wm-tip b{font-size:14px}
+.wm-pop{position:absolute;z-index:7;width:268px;max-width:calc(100% - 8px);padding:12px 14px 11px;border-radius:12px;background:var(--card);color:var(--text);
+  box-shadow:0 12px 32px rgba(0,0,0,.28);pointer-events:none;font-size:13px;line-height:1.4;border:1px solid var(--line)}
+.wm-pop .ph b{font-size:15px} .wm-pop .ph span{color:var(--muted);margin-left:6px}
+.wm-pop .pt{font-size:36px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1.1;margin-top:2px}
+.wm-pop .pt small{font-size:19px;color:var(--muted);font-weight:600;letter-spacing:0}
+.wm-pop .pd,.wm-pop .po,.wm-pop .ps{color:var(--muted)}
+.wm-pop .pw{display:flex;align-items:center;gap:6px;margin-top:5px}
+.wm-pop .pw .wi{width:22px;height:22px}
+.pbar{position:relative;height:10px;border-radius:5px;background:#26324a;margin:10px 0 3px}
+.pbar i{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,#fde68a,#fbbf24 50%,#fde68a);border-radius:5px}
+.pbar b{position:absolute;top:-4px;bottom:-4px;width:3px;margin-left:-1.5px;background:var(--map-hl);border-radius:2px;box-shadow:0 0 0 2px var(--card)}
+.pticks{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.wm-pop .ps{margin-top:5px}
+.wmlegend{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--muted);font-size:13px;margin-top:8px}
+.wmlegend span{display:inline-flex;align-items:center;gap:6px}
+.wmlegend i{display:inline-block;width:10px;height:10px;border-radius:50%}
+.wmlegend .lh{background:var(--map-home)} .wmlegend .lz{background:var(--map-hl)}
+.wmlegend .ln{width:22px;height:10px;border-radius:3px;background:linear-gradient(90deg,var(--map-l2),rgb(var(--map-night)))}
+.wmlegend .ls{background:var(--sun);box-shadow:0 0 0 4px rgba(253,224,71,.35)}
+
+.dstbox{background:var(--card);border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.55}
+.dstbox p{margin:0 0 6px} .dstbox p:last-child{margin:0;color:var(--muted);font-size:13.5px}
+footer{color:var(--muted);font-size:12.5px;margin-top:26px;line-height:1.6}
+footer a{color:inherit}
+
+@media (max-width:900px){
+  .cal.q{grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+  .cal.year{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .card .v{font-size:19px}
+  .sechead .meta{display:block;margin:3px 0 0}
+  .fcctl{width:100%} .search{flex:1;min-width:140px} .search input{width:100%}
+  .fd .fp{white-space:nowrap}
+  .fc{grid-template-columns:1fr;gap:6px}
+  .fd{display:grid;grid-template-columns:84px 30px 1fr auto;align-items:center;gap:0 10px;text-align:left;padding:7px 10px}
+  .fd .fl{align-items:flex-start;padding:0;background:none!important}
+  .wi.lg{width:28px;height:28px;margin:0}
+  .fd .fdsc,.fd .fb,.fd .fw{display:none}
+  .fd .ft{font-size:16px;margin:0}
+  .fd .fp{text-align:right}
+  .cal.year{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .cal.year .mon td{height:21px;font-size:11px}
+  .hlist li{grid-template-columns:68px 1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3 2"/></svg>
+      My Homepage
+    </div>
+    <div class="toggle" id="hfmt" role="group" aria-label="Formát času">
+      <button type="button" data-h="24" aria-pressed="true">24 h</button>
+      <button type="button" data-h="12" aria-pressed="false">12 h</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="label">Aktuální čas v České republice</div>
+    <div class="clock" id="clock"><span id="hh">--</span><span class="c">:</span><span id="mm">--</span><span class="c">:</span><span class="ss" id="ss">--</span><span class="ap" id="ap"></span></div>
+    <div class="dst" id="regime"></div>
+    <div class="sync" id="sync">Měřím odchylku hodin tohoto zařízení…</div>
+  </section>
+
+  <section class="cards"><div class="cards-in">
+    <div class="card"><div class="k">Dnes</div><div class="v" id="c-day"></div><div class="s" id="c-date"></div><div id="c-hol"></div></div>
+    <div class="card"><div class="k" id="c-nd-k">Svátek</div><div class="v" id="c-nd"></div><div class="s" id="c-nd2"></div></div>
+    <div class="card"><div class="k">Týden</div><div class="v" id="c-week"></div><div class="s" id="c-month"></div></div>
+    <div class="card"><div class="k">Den v roce</div><div class="v" id="c-doy"></div><div class="s" id="c-left"></div></div>
+    <div class="card"><div class="k" id="c-sun-k">Slunce</div><div class="v" id="c-sun"></div><div class="s">východ – západ</div></div>
+    <div class="card"><div class="k" id="wx-home-k">Počasí</div><div class="v wx"><svg class="wi sm" viewBox="0 0 24 24" id="wx-home-ic"></svg><span id="wx-home">–</span></div><div class="s" id="wx-home-s">načítám…</div></div>
+  </div></section>
+
+  <div id="sec-calendar">
+  <div class="sechead">
+    <h2>Plánovací kalendář</h2>
+    <div class="ctl">
+      <button type="button" class="nav" id="cal-prev" aria-label="Zpět" title="Zpět">‹</button>
+      <button type="button" class="nav" id="cal-today">Dnes</button>
+      <button type="button" class="nav" id="cal-next" aria-label="Dál" title="Dál">›</button>
+      <div class="toggle" id="cal-mode" role="group" aria-label="Rozsah kalendáře">
+        <button type="button" data-m="q">3 měsíce</button>
+        <button type="button" data-m="year">Rok</button>
+      </div>
+    </div>
+  </div>
+  <div class="calinfo">
+    <div><b id="cal-title"></b> <span class="sum" id="cal-sum"></span></div>
+    <div class="legend"><span><i class="we">So</i>víkend</span><span><i class="hol">17</i>svátek (den pracovního klidu)</span><span><i class="td" id="lg-today"></i>dnes</span></div>
+  </div>
+  <section class="cal q" id="cal"></section>
+  <div class="hbox"><h3>Svátky v zobrazeném období</h3><ul class="hlist" id="cal-hol"></ul></div>
+  </div>
+
+  <div id="sec-forecast">
+  <div class="sechead">
+    <h2>Předpověď na týden <span class="meta" id="fc-meta"></span></h2>
+    <div class="fcctl">
+      <button type="button" class="nav" id="fc-home" title="Zpět na výchozí místo" hidden>‹ Výchozí místo</button>
+      <div class="search">
+        <input type="search" id="fc-q" placeholder="Jiné místo…" autocomplete="off" spellcheck="false" aria-label="Hledat místo" aria-controls="fc-res">
+        <ul class="res" id="fc-res" role="listbox" hidden></ul>
+      </div>
+      <button type="button" class="nav" id="fc-geo" title="Předpověď pro aktuální polohu tohoto zařízení"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg><span>Moje poloha</span></button>
+    </div>
+  </div>
+  <div class="fcmsg" id="fc-msg" hidden></div>
+  <section class="fc" id="fc"></section>
+  </div>
+
+  <div id="sec-world">
+  <h2>Světový čas</h2>
+  <p class="lead">Pevnina je rozdělená podle skutečných časových pásem, tmavší část mapy je noc. Najeďte na mapu pro čas v daném pásmu, na město pro detail; kliknutím detail podržíte.</p>
+  <div class="wmwrap" id="wmwrap">
+    <section class="wmap" id="wmap"><canvas id="wm-canvas"></canvas><div class="wm-pins" id="wm-pins"></div></section>
+    <div class="wm-tip" id="wm-tip" hidden></div>
+    <div class="wm-pop" id="wm-pop" hidden></div>
+  </div>
+  <div class="wmlegend"><span><i class="lh"></i>vaše pásmo</span><span><i class="lz"></i>pásmo pod kurzorem</span><span><i class="ln"></i>den → noc</span><span><i class="ls"></i>Slunce v nadhlavníku</span></div>
+  </div>
+
+  <div id="sec-timechange">
+  <h2>Změna času</h2>
+  <div class="dstbox" id="dstbox"></div>
+  </div>
+
+  <footer id="foot"></footer>
+</div>
+
+<!-- Volitelné nastavení (místo, formát času, sekce). Když soubor chybí, platí výchozí hodnoty níže. -->
+<script src="config.js"></script>
+<script>
+(() => {
+'use strict';
+
+/* ===== Nastavení ===== */
+// Výchozí hodnoty; přepisuje je soubor config.js (window.MY_HOMEPAGE_CONFIG)
+const DEFAULTS = {
+  place: { name: 'Brno', nameIn: 'v Brně', lat: 49.1951, lon: 16.6068 },
+  timeFormat: '24h',
+  calendarView: '3m',
+  sections: { calendar: true, forecast: true, worldMap: true, timeChange: true },
+};
+const USER_CFG = (window.MY_HOMEPAGE_CONFIG && typeof window.MY_HOMEPAGE_CONFIG === 'object') ? window.MY_HOMEPAGE_CONFIG : {};
+const UP = USER_CFG.place;
+const CFG = {
+  place: UP && Number.isFinite(+UP.lat) && Number.isFinite(+UP.lon) && Math.abs(+UP.lat) <= 90 && Math.abs(+UP.lon) <= 180
+    ? { name: String(UP.name || 'Moje místo'), nameIn: UP.nameIn ? String(UP.nameIn) : '', lat: +UP.lat, lon: +UP.lon } : DEFAULTS.place,
+  timeFormat: USER_CFG.timeFormat === '12h' ? '12h' : '24h',
+  calendarView: USER_CFG.calendarView === 'year' ? 'year' : '3m',
+  sections: Object.assign({}, DEFAULTS.sections, USER_CFG.sections || {}),
+};
+if (UP && CFG.place === DEFAULTS.place) console.warn('config.js: místo nemá platné souřadnice lat/lon – použito výchozí místo.');
+// Místo pro kartičky Slunce a Počasí a pro týdenní předpověď
+const HOME_WX = CFG.place;
+const SUN_AT = CFG.place;
+// popisek kartiček: „v Brně“, když je v configu nameIn, jinak „· Brno“
+const PLACE_IN = CFG.place.nameIn || '· ' + CFG.place.name;
+const TZ = 'Europe/Prague';
+
+// Jedno hlavní město za každé časové pásmo:
+// [název, země, IANA pásmo, zeměpisná šířka, délka, umístění bubliny (n/s/e/w/ne/nw/se/sw), priorita na úzké obrazovce]
+const CITIES = [
+  ['Honolulu','USA – Havaj','Pacific/Honolulu',21.3069,-157.8583,'e',0],
+  ['Anchorage','USA – Aljaška','America/Anchorage',61.2181,-149.9003,'e',0],
+  ['Los Angeles','USA','America/Los_Angeles',34.0522,-118.2437,'w',1],
+  ['Denver','USA','America/Denver',39.7392,-104.9903,'n',0],
+  ['Mexiko','Mexiko','America/Mexico_City',19.4326,-99.1332,'s',0],
+  ['New York','USA','America/New_York',40.7128,-74.0060,'e',1],
+  ['Caracas','Venezuela','America/Caracas',10.4806,-66.9036,'e',0],
+  ['São Paulo','Brazílie','America/Sao_Paulo',-23.5505,-46.6333,'e',1],
+  ['Nuuk','Grónsko','America/Nuuk',64.1814,-51.6941,'w',0],
+  ['Praia','Kapverdy','Atlantic/Cape_Verde',14.9330,-23.5133,'e',0],
+  ['Londýn','Velká Británie','Europe/London',51.5074,-0.1278,'w',1],
+  ['Praha','Česko','Europe/Prague',50.0755,14.4378,'n',1],
+  ['Johannesburg','JAR','Africa/Johannesburg',-26.2041,28.0473,'e',0],
+  ['Moskva','Rusko','Europe/Moscow',55.7558,37.6173,'e',1],
+  ['Dubaj','SAE','Asia/Dubai',25.2048,55.2708,'w',1],
+  ['Male','Maledivy','Indian/Maldives',4.1755,73.5093,'w',0],
+  ['Nové Dillí','Indie','Asia/Kolkata',28.6139,77.2090,'n',1],
+  ['Bangkok','Thajsko','Asia/Bangkok',13.7563,100.5018,'s',0],
+  ['Peking','Čína','Asia/Shanghai',39.9042,116.4074,'n',1],
+  ['Tokio','Japonsko','Asia/Tokyo',35.6762,139.6503,'e',1],
+  ['Sydney','Austrálie','Australia/Sydney',-33.8688,151.2093,'s',1],
+  ['Auckland','Nový Zéland','Pacific/Auckland',-36.8485,174.7633,'nw',0],
+];
+
+// Jmenný kalendář ČR – zdroj: balíček namedays-cs (Roman Ožana, licence MIT)
+const NAMES = /*DATA:NAMES*/{"01-02":"Karina","01-03":["Radmila","Radomil"],"01-04":"Diana","01-05":"Dalimil","01-06":["Kašpar","Melichar","Baltazar"],"01-07":"Vilma","01-08":"Čestmír","01-09":["Vladan","Valtr"],"01-10":"Břetislav","01-11":"Bohdana","01-12":"Pravoslav","01-13":"Edita","01-14":"Radovan","01-15":"Alice","01-16":"Ctirad","01-17":"Drahoslav","01-18":["Vladislav","Vladislava"],"01-19":"Doubravka","01-20":["Ilona","Sebastián"],"01-21":"Běla","01-22":["Slavomír","Slavomíra"],"01-23":"Zdeněk","01-24":"Milena","01-25":"Miloš","01-26":"Zora","01-27":"Ingrid","01-28":"Otýlie","01-29":"Zdislava","01-30":["Robin","Erna"],"01-31":["Marika","Spytihněv"],"02-01":"Hynek","02-02":["Nela","Hromnice"],"02-03":"Blažej","02-04":"Jarmila","02-05":"Dobromila","02-06":"Vanda","02-07":"Veronika","02-08":"Milada","02-09":"Apolena","02-10":"Mojmír","02-11":"Božena","02-12":["Slavěna","Slávka"],"02-13":["Věnceslav","Věnceslava"],"02-14":["Valentýn","Valentýna"],"02-15":"Jiřina","02-16":"Ljuba","02-17":"Miloslava","02-18":"Gizela","02-19":"Patrik","02-20":"Oldřich","02-21":["Lenka","Eleonora"],"02-22":"Petr","02-23":"Svatopluk","02-24":["Matěj","Matyáš"],"02-25":"Liliana","02-26":"Dorota","02-27":"Alexandr","02-28":"Lumír","02-29":"Horymír","03-01":["Bedřich","Bedřiška"],"03-02":"Anežka","03-03":["Kamil","Kunhuta"],"03-04":"Stela","03-05":"Kazimír","03-06":"Miroslav","03-07":"Tomáš","03-08":["Gabriela","Zoltán"],"03-09":"Františka","03-10":"Viktorie","03-11":"Anděla","03-12":"Řehoř","03-13":"Růžena","03-14":["Rút","Matylda"],"03-15":"Ida","03-16":["Elena","Herbert"],"03-17":["Vlastimil","Vlastimila"],"03-18":"Eduard","03-19":["Josef","Josefa"],"03-20":"Světlana","03-21":"Radek","03-22":["Leona","Leontina","Lea"],"03-23":"Ivona","03-24":"Gabriel","03-25":"Marián","03-26":"Emanuel","03-27":"Dita","03-28":"Soňa","03-29":"Taťána","03-30":["Arnošt","Ernest"],"03-31":"Kvido","04-01":"Hugo","04-02":"Erika","04-03":"Richard","04-04":"Ivana","04-05":["Miroslava","Mirka"],"04-06":["Vendula","Venuše"],"04-07":["Heřman","Hermína"],"04-08":"Ema","04-09":"Dušan","04-10":"Darja","04-11":"Izabela","04-12":"Julius","04-13":"Aleš","04-14":"Vincenc","04-15":"Anastázie","04-16":["Irena","Bernadeta"],"04-17":"Rudolf","04-18":"Valérie","04-19":"Rostislav","04-20":"Marcela","04-21":"Alexandra","04-22":"Evženie","04-23":"Vojtěch","04-24":"Jiří","04-25":"Marek","04-26":"Oto","04-27":"Jaroslav","04-28":"Vlastislav","04-29":"Robert","04-30":"Blahoslav","05-02":"Zikmund","05-03":["Alexej","Alex"],"05-04":"Květoslav","05-05":"Klaudie","05-06":"Radoslav","05-07":"Stanislav","05-09":"Ctibor","05-10":"Blažena","05-11":"Svatava","05-12":"Pankrác","05-13":"Servác","05-14":"Bonifác","05-15":["Žofie","Sofie"],"05-16":"Přemysl","05-17":"Aneta","05-18":"Nataša","05-19":"Ivo","05-20":"Zbyšek","05-21":"Monika","05-22":"Emil","05-23":["Vladimír","Vladimíra"],"05-24":["Jana","Vanesa"],"05-25":"Viola","05-26":"Filip","05-27":"Valdemar","05-28":"Vilém","05-29":["Maxmilián","Maxim"],"05-30":"Ferdinand","05-31":"Kamila","06-01":"Laura","06-02":"Jarmil","06-03":["Tamara","Kevin"],"06-04":"Dalibor","06-05":["Dobroslav","Dobroslava"],"06-06":"Norbert","06-07":["Iveta","Slavoj"],"06-08":"Medard","06-09":"Stanislava","06-10":["Gita","Margita"],"06-11":"Bruno","06-12":"Antonie","06-13":"Antonín","06-14":["Roland","Herta"],"06-15":"Vít","06-16":"Zbyněk","06-17":"Adolf","06-18":["Milan","Milana"],"06-19":["Leoš","Leo"],"06-20":["Květa","Květuše"],"06-21":["Alois","Aloisie"],"06-22":"Pavla","06-23":"Zdeňka","06-24":"Jan","06-25":"Ivan","06-26":["Adriana","Adrian"],"06-27":["Ladislav","Ladislava"],"06-28":"Lubomír","06-29":["Petr","Pavel"],"06-30":"Šárka","07-01":"Jaroslava","07-02":"Patricie","07-03":["Radomír","Radomíra"],"07-04":"Prokop","07-05":["Cyril","Metoděj"],"07-07":"Bohuslava","07-08":"Nora","07-09":["Drahoslava","Drahuše"],"07-10":["Libuše","Amálie"],"07-11":["Olga","Helga"],"07-12":"Bořek","07-13":"Markéta","07-14":"Karolína","07-15":"Jindřich","07-16":"Luboš","07-17":"Martina","07-18":["Drahomíra","Drahomír"],"07-19":"Čeněk","07-20":"Ilja","07-21":["Vítězslav","Vítězslava"],"07-22":["Magdaléna","Magda"],"07-23":"Libor","07-24":"Kristýna","07-25":"Jakub","07-26":["Anna","Anita"],"07-27":"Věroslav","07-28":["Viktor","Alina"],"07-29":"Marta","07-30":"Bořivoj","07-31":"Ignác","08-01":"Oskar","08-02":"Gustav","08-03":"Miluše","08-04":["Dominik","Dominika"],"08-05":"Kristián","08-06":"Oldřiška","08-07":"Lada","08-08":"Soběslav","08-09":"Roman","08-10":"Vavřinec","08-11":"Zuzana","08-12":"Klára","08-13":"Alena","08-14":"Alan","08-15":"Hana","08-16":"Jáchym","08-17":"Petra","08-18":["Helena","Jelena"],"08-19":"Ludvík","08-20":"Bernard","08-21":"Johana","08-22":"Bohuslav","08-23":"Sandra","08-24":"Bartoloměj","08-25":"Radim","08-26":"Luděk","08-27":"Otakar","08-28":"Augustýn","08-29":"Evelína","08-30":"Vladěna","08-31":"Pavlína","09-01":["Linda","Samuel"],"09-02":"Adéla","09-03":["Bronislav","Bronislava"],"09-04":["Jindřiška","Rozálie"],"09-05":"Boris","09-06":"Boleslav","09-07":"Regína","09-08":"Mariana","09-09":"Daniela","09-10":"Irma","09-11":["Denisa","Denis"],"09-12":"Marie","09-13":"Lubor","09-14":"Radka","09-15":"Jolana","09-16":["Ludmila","Lidmila"],"09-17":["Naděžda","Naďa"],"09-18":"Kryštof","09-19":"Zita","09-20":"Oleg","09-21":"Matouš","09-22":"Darina","09-23":"Berta","09-24":["Jaromír","Jaromíra"],"09-25":["Zlata","Zlatuše"],"09-26":"Andrea","09-27":"Jonáš","09-28":["Václav","Václava"],"09-29":["Michal","Michael"],"09-30":["Jeroným","Ráchel"],"10-01":"Igor","10-02":["Olívie","Oliver"],"10-03":"Bohumil","10-04":"František","10-05":"Eliška","10-06":"Hanuš","10-07":"Justýna","10-08":"Věra","10-09":["Štefan","Sára"],"10-10":"Marina","10-11":"Andrej","10-12":"Marcel","10-13":"Renáta","10-14":"Agáta","10-15":["Tereza","Terezie"],"10-16":["Havel","Galina"],"10-17":"Hedvika","10-18":"Lukáš","10-19":["Michaela","Michala"],"10-20":"Vendelín","10-21":"Brigita","10-22":"Sabina","10-23":"Teodor","10-24":"Nina","10-25":"Beáta","10-26":"Erik","10-27":["Šarlota","Zoe"],"10-28":["Jidáš","Alfréd"],"10-29":["Silvie","Sylva"],"10-30":"Tadeáš","10-31":"Štěpánka","11-01":"Felix","11-02":"Tobiáš","11-03":"Hubert","11-04":["Karel","Karla"],"11-05":"Miriam","11-06":["Liběna","Leonard"],"11-07":"Saskie","11-08":["Bohumír","Bohumíra"],"11-09":"Bohdan","11-10":"Evžen","11-11":"Martin","11-12":"Benedikt","11-13":"Tibor","11-14":"Sáva","11-15":"Leopold","11-16":"Otmar","11-17":["Mahulena","Gertruda"],"11-18":"Romana","11-19":"Alžběta","11-20":"Nikola","11-21":"Albert","11-22":"Cecílie","11-23":"Klement","11-24":"Emílie","11-25":"Kateřina","11-26":"Artur","11-27":"Xenie","11-28":"René","11-29":"Zina","11-30":"Ondřej","12-01":"Iva","12-02":"Blanka","12-03":"Svatoslav","12-04":"Barbora","12-05":"Jitka","12-06":"Mikuláš","12-07":["Ambrož","Benjamín"],"12-08":"Květoslava","12-09":"Vratislav","12-10":"Julie","12-11":["Dana","Danuše"],"12-12":"Simona","12-13":"Lucie","12-14":"Lýdie","12-15":["Radana","Radan"],"12-16":"Albína","12-17":"Daniel","12-18":"Miloslav","12-19":"Ester","12-20":"Dagmar","12-21":"Natálie","12-22":"Šimon","12-23":"Vlasta","12-24":["Adam","Eva"],"12-26":"Štěpán","12-27":"Žaneta","12-28":"Bohumila","12-29":"Judita","12-30":"David","12-31":"Silvestr"}/*END:NAMES*/;
+const NO_NAME = {'01-01':'Nový rok','05-01':'Svátek práce','05-08':'Den vítězství','07-06':'Mistr Jan Hus','12-25':'Boží hod vánoční'};
+// Státní a ostatní svátky ČR (zákon č. 245/2000 Sb.) – pevná data; Velikonoce se počítají
+const HOLIDAYS = {
+  '01-01':'Den obnovy samostatného českého státu, Nový rok',
+  '05-01':'Svátek práce','05-08':'Den vítězství',
+  '07-05':'Den slovanských věrozvěstů Cyrila a Metoděje','07-06':'Den upálení mistra Jana Husa',
+  '09-28':'Den české státnosti','10-28':'Den vzniku samostatného československého státu',
+  '11-17':'Den boje za svobodu a demokracii',
+  '12-24':'Štědrý den','12-25':'1. svátek vánoční','12-26':'2. svátek vánoční',
+};
+
+const WEEKDAY = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
+const WEEKDAY_IN = ['v neděli','v pondělí','v úterý','ve středu','ve čtvrtek','v pátek','v sobotu'];
+const WD_SHORT = ['ne','po','út','st','čt','pá','so'];
+const WD_HEAD = ['Po','Út','St','Čt','Pá','So','Ne'];
+const MONTH = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
+const MONTH_GEN = ['ledna','února','března','dubna','května','června','července','srpna','září','října','listopadu','prosince'];
+const WMO = {0:'jasno',1:'skoro jasno',2:'polojasno',3:'zataženo',45:'mlha',48:'mlha s námrazou',
+  51:'slabé mrholení',53:'mrholení',55:'silné mrholení',56:'mrznoucí mrholení',57:'mrznoucí mrholení',
+  61:'slabý déšť',63:'déšť',65:'silný déšť',66:'mrznoucí déšť',67:'mrznoucí déšť',
+  71:'slabé sněžení',73:'sněžení',75:'silné sněžení',77:'sněhová zrna',
+  80:'přeháňky',81:'přeháňky',82:'silné přeháňky',85:'sněhové přeháňky',86:'sněhové přeháňky',
+  95:'bouřka',96:'bouřka s kroupami',99:'bouřka s kroupami'};
+
+const SUN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>';
+const MOON_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/></svg>';
+const DROP_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.7c-3.6 4.6-6.3 8.4-6.3 11.8a6.3 6.3 0 0 0 12.6 0c0-3.4-2.7-7.2-6.3-11.8z"/></svg>';
+
+/* ===== Pomocné funkce ===== */
+const $ = id => document.getElementById(id);
+const set = (el, txt) => { if (el.textContent !== txt) el.textContent = txt; };
+const setHTML = (el, html) => { if (el.innerHTML !== html) el.innerHTML = html; };
+const pad = n => String(n).padStart(2, '0');
+const dec = (x, d) => x.toFixed(d).replace('.', ',');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const MINUS = '−';
+const D = 864e5;
+const store = {
+  get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } },
+  set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+  del(k){ try { localStorage.removeItem(k); } catch(e){} },
+};
+function plural(n, one, few, many){ return n === 1 ? one : (n >= 2 && n <= 4 ? few : many); }
+const dny = n => n + ' ' + plural(n, 'den', 'dny', 'dní');
+
+const fmtCache = {};
+const WDMAP = {Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+function parts(tz, ms){
+  const f = fmtCache[tz] || (fmtCache[tz] = new Intl.DateTimeFormat('en-GB', {timeZone:tz, hourCycle:'h23',
+    year:'numeric', month:'numeric', day:'numeric', hour:'numeric', minute:'numeric', second:'numeric', weekday:'short'}));
+  const o = {};
+  for (const p of f.formatToParts(ms)) o[p.type] = p.value;
+  return {y:+o.year, mo:+o.month, d:+o.day, h:(+o.hour)%24, mi:+o.minute, s:+o.second, wd:WDMAP[o.weekday]};
+}
+// posun pásma vůči UTC v minutách
+function offsetMin(tz, ms){
+  const p = parts(tz, ms);
+  return Math.round((Date.UTC(p.y, p.mo-1, p.d, p.h, p.mi, p.s) - Math.floor(ms/1000)*1000) / 60000);
+}
+const dayKey = p => p.y*10000 + p.mo*100 + p.d;
+const mmdd = (mo, d) => pad(mo) + '-' + pad(d);
+// kalendářní den jako UTC půlnoc (pro počítání s daty bez časových pásem)
+const utc = (y, mo, d) => Date.UTC(y, mo-1, d);
+const ymd = t => { const x = new Date(t); return { y:x.getUTCFullYear(), mo:x.getUTCMonth()+1, d:x.getUTCDate(), wd:x.getUTCDay() }; };
+const shortD = t => { const p = ymd(t); return WD_SHORT[p.wd] + ' ' + p.d + '. ' + p.mo + '.'; };
+
+function isoWeek(y, mo, d){
+  const t = new Date(Date.UTC(y, mo-1, d));
+  t.setUTCDate(t.getUTCDate() - ((t.getUTCDay()+6)%7) + 3);       // čtvrtek téhož týdne
+  const f = new Date(Date.UTC(t.getUTCFullYear(), 0, 4));
+  f.setUTCDate(f.getUTCDate() - ((f.getUTCDay()+6)%7) + 3);       // čtvrtek 1. týdne
+  return 1 + Math.round((t - f) / 6048e5);
+}
+const easterCache = {};
+function easter(y){ // gregoriánský algoritmus (Meeus/Jones/Butcher)
+  if (easterCache[y]) return easterCache[y];
+  const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),
+    h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),
+    mo=Math.floor((h+l-7*m+114)/31),da=((h+l-7*m+114)%31)+1;
+  return (easterCache[y] = Date.UTC(y, mo-1, da));
+}
+function holidayOf(y, mo, d){
+  const k = mmdd(mo, d); if (HOLIDAYS[k]) return HOLIDAYS[k];
+  const t = Date.UTC(y, mo-1, d), e = easter(y);
+  if (t === e - 2*D) return 'Velký pátek';
+  if (t === e + D) return 'Velikonoční pondělí';
+  return '';
+}
+const holT = t => { const p = ymd(t); return holidayOf(p.y, p.mo, p.d); };
+const isWeekend = t => { const w = new Date(t).getUTCDay(); return w === 0 || w === 6; };
+const isFree = t => isWeekend(t) || !!holT(t);
+function nameOf(mo, d){
+  const v = NAMES[mmdd(mo, d)];
+  if (!v) return null;
+  return Array.isArray(v) ? v.join(', ') : v;
+}
+
+/* ===== Slunce (algoritmus NOAA Solar Calculator) ===== */
+const RAD = Math.PI/180;
+function solar(ms){ // deklinace [rad] a časová rovnice [min]
+  const jc = (ms/864e5 + 2440587.5 - 2451545) / 36525;
+  const L0 = ((280.46646 + jc*(36000.76983 + jc*0.0003032)) % 360) * RAD;
+  const M = (357.52911 + jc*(35999.05029 - 0.0001537*jc)) * RAD;
+  const e = 0.016708634 - jc*(0.000042037 + 0.0000001267*jc);
+  const C = Math.sin(M)*(1.914602 - jc*(0.004817 + 0.000014*jc)) + Math.sin(2*M)*(0.019993 - 0.000101*jc) + Math.sin(3*M)*0.000289;
+  const om = (125.04 - 1934.136*jc) * RAD;
+  const lam = (L0/RAD + C - 0.00569 - 0.00478*Math.sin(om)) * RAD;
+  const eps = (23 + (26 + (21.448 - jc*(46.815 + jc*(0.00059 - jc*0.001813)))/60)/60 + 0.00256*Math.cos(om)) * RAD;
+  const decl = Math.asin(Math.sin(eps)*Math.sin(lam));
+  const y = Math.tan(eps/2)**2;
+  const eqt = 4/RAD*(y*Math.sin(2*L0) - 2*e*Math.sin(M) + 4*e*y*Math.sin(M)*Math.cos(2*L0) - 0.5*y*y*Math.sin(4*L0) - 1.25*e*e*Math.sin(2*M));
+  return { decl, eqt };
+}
+function sunAltitude(ms, lat, lon){ // výška Slunce nad obzorem [°]
+  const { decl, eqt } = solar(ms), phi = lat*RAD;
+  const tst = ((((ms % 864e5) + 864e5) % 864e5)/60000 + eqt + 4*lon) % 1440;
+  const ha = (tst/4 - 180) * RAD;
+  const cz = Math.sin(phi)*Math.sin(decl) + Math.cos(phi)*Math.cos(decl)*Math.cos(ha);
+  return 90 - Math.acos(Math.max(-1, Math.min(1, cz)))/RAD;
+}
+function sunTimes(y, mo, d, lat, lon){ // východ/západ pro místní datum; null = polární den/noc
+  const day0 = Date.UTC(y, mo-1, d), phi = lat*RAD;
+  const ev = sign => {
+    let t = day0 + (720 - 4*lon)*60000;
+    for (let i = 0; i < 3; i++) {
+      const { decl, eqt } = solar(t);
+      const c = Math.cos(90.833*RAD)/(Math.cos(phi)*Math.cos(decl)) - Math.tan(phi)*Math.tan(decl);
+      if (c < -1 || c > 1) return null;
+      t = day0 + (720 - 4*lon - eqt + sign*4*Math.acos(c)/RAD)*60000;
+    }
+    return t;
+  };
+  const rise = ev(-1), set = ev(1);
+  return (rise === null || set === null) ? null : { rise, set };
+}
+const hm = (tz, ms) => { const p = parts(tz, ms + 30000); return p.h + ':' + pad(p.mi); }; // zaokrouhlení na minuty
+const hoursTxt = x => dec(Math.abs(x), Number.isInteger(x) ? 0 : (Math.abs(x*4) % 2 ? 2 : 1));
+
+/* ===== Ověření času: měření odchylky hodin zařízení (podobně jako NTP) ===== */
+const SOURCES = [
+  { name:'time.akamai.com', url:'https://time.akamai.com/?iso&ms',
+    parse: async r => Date.parse((await r.text()).trim()) },
+  { name:'worldtimeapi.org', url:'https://worldtimeapi.org/api/timezone/Etc/UTC',
+    parse: async r => Date.parse((await r.json()).utc_datetime.replace(/(\.\d{3})\d+/, '$1')) },
+  { name:'timeapi.io', url:'https://timeapi.io/api/time/current/zone?timeZone=UTC',
+    parse: async r => Date.parse((await r.json()).dateTime.replace(/(\.\d{3})\d*/, '$1') + 'Z') },
+];
+let offset = 0, syncInfo = null, lastSyncAt = 0, syncing = false;
+const now = () => Date.now() + offset;
+
+async function sample(src){
+  const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 4000);
+  try {
+    const t0 = performance.now(), w0 = Date.now();
+    const r = await fetch(src.url, { cache:'no-store', signal:ctl.signal });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const server = await src.parse(r);
+    const rtt = performance.now() - t0;
+    if (!Number.isFinite(server)) throw new Error('parse');
+    return { off: server - (w0 + rtt/2), rtt };
+  } finally { clearTimeout(to); }
+}
+async function syncTime(){
+  if (syncing) return; syncing = true;
+  try {
+    for (const src of SOURCES) {
+      const res = [];
+      for (let i = 0; i < 5; i++) {
+        try { res.push(await sample(src)); } catch(e) { if (!res.length) break; }
+      }
+      if (res.length) {
+        const best = res.reduce((a, b) => b.rtt < a.rtt ? b : a);
+        offset = best.off; lastSyncAt = Date.now();
+        syncInfo = { src: src.name, off: best.off/1000, prec: Math.max(best.rtt/2000, 0.005) };
+        renderSync(); return;
+      }
+    }
+    syncInfo = { fail: true }; offset = 0; lastSyncAt = Date.now() - 25*60000; // zkusit znovu za ~5 min
+    renderSync();
+  } finally { syncing = false; }
+}
+function renderSync(){
+  const el = $('sync');
+  if (!syncInfo) return;
+  if (syncInfo.fail) { el.innerHTML = 'Přesný čas se nepodařilo ověřit – zobrazuji čas tohoto zařízení.'; return; }
+  const a = Math.abs(syncInfo.off), p = syncInfo.prec, d = (p < 0.1) ? 2 : 1;
+  const prec = '(přesnost ±' + dec(p, d) + ' s)';
+  el.innerHTML = (a <= Math.max(p, 0.05))
+    ? 'Hodiny tohoto zařízení <b>jdou přesně</b> ' + prec
+    : 'Hodiny tohoto zařízení se <b>' + (syncInfo.off < 0 ? 'předbíhají' : 'zpožďují') + ' o ' + dec(a, a < 10 ? d : 0) + ' s</b> ' + prec;
+  setFooter();
+}
+
+/* ===== Ikony počasí (WMO kódy) ===== */
+const CLOUD = 'M6.5 19h11a4.5 4.5 0 0 0 .4-8.98 6 6 0 0 0-11.6 1.6A3.7 3.7 0 0 0 6.5 19z';
+const IC_SUN = '<g class="i-sun"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3L7 7M17 17l1.7 1.7M5.3 18.7L7 17M17 7l1.7-1.7"/></g>';
+const IC_MOON = '<path class="i-moon" d="M19.5 14.9A8 8 0 0 1 9.1 4.5a8 8 0 1 0 10.4 10.4z"/>';
+function wxIcon(code, isDay){
+  const sky = isDay === false ? IC_MOON : IC_SUN;
+  const cloudUp = '<path class="i-cloud" transform="translate(1.2 -2.6) scale(.9)" d="' + CLOUD + '"/>';
+  if (code === 0) return sky;
+  if (code <= 2) return '<g transform="translate(-2.2 -2.4) scale(.72)">' + sky + '</g><path class="i-cloud" transform="translate(4.4 4.6) scale(.82)" d="' + CLOUD + '"/>';
+  if (code === 3) return '<path class="i-cloud" transform="translate(0 -1)" d="' + CLOUD + '"/>';
+  if (code <= 48) return cloudUp + '<path class="i-fog" d="M4 18.6h16M6.5 22h11"/>';
+  if (code <= 57) return cloudUp + '<g class="i-dot"><circle cx="8.5" cy="19.6" r="1.1"/><circle cx="12.5" cy="21.6" r="1.1"/><circle cx="16.5" cy="19.6" r="1.1"/></g>';
+  if ((code >= 71 && code <= 77) || code === 85 || code === 86)
+    return cloudUp + '<g class="i-snow"><circle cx="8" cy="19.4" r="1.4"/><circle cx="12" cy="21.9" r="1.4"/><circle cx="16" cy="19.4" r="1.4"/></g>';
+  if (code >= 95) return cloudUp + '<path class="i-bolt" d="M12.9 14.6l-3.2 4.6h2.9l-1.5 4 4.3-5.4h-3l1.7-3.2z"/>';
+  return cloudUp + '<path class="i-rain" d="M8.6 17.8l-1.3 3.8M12.6 17.8l-1.3 3.8M16.6 17.8l-1.3 3.8"/>';
+}
+// barva teploty pro pruh rozpětí
+const TSTOPS = [[-15,[99,102,241]],[0,[96,165,250]],[10,[52,211,153]],[20,[245,158,11]],[30,[239,68,68]]];
+function tcol(t){
+  if (t <= TSTOPS[0][0]) return 'rgb(' + TSTOPS[0][1] + ')';
+  for (let i = 1; i < TSTOPS.length; i++) {
+    const [t1, c1] = TSTOPS[i];
+    if (t <= t1) { const [t0, c0] = TSTOPS[i-1], f = (t - t0)/(t1 - t0); return 'rgb(' + c0.map((v, k) => Math.round(v + (c1[k] - v)*f)) + ')'; }
+  }
+  return 'rgb(' + TSTOPS[TSTOPS.length-1][1] + ')';
+}
+const rnd = t => { const r = Math.round(t); return r === 0 ? 0 : r; };
+const tempTxt = t => (rnd(t) < 0 ? MINUS + Math.abs(rnd(t)) : String(rnd(t))) + ' °C';
+const deg = t => (rnd(t) < 0 ? MINUS + Math.abs(rnd(t)) : String(rnd(t))) + '°';
+const clockTxt = ms => { const p = parts(TZ, ms); return p.h + ':' + pad(p.mi); };
+
+/* ===== Počasí (Open-Meteo) ===== */
+// Dva dotazy: (1) aktuální teplota měst na mapě, (2) aktuální stav + denní předpověď pro Brno.
+// Výsledek se ukládá do localStorage a sdílí mezi záložkami; nový dotaz nejdřív za 15 minut a jen u viditelné stránky.
+const API = 'https://api.open-meteo.com/v1/forecast';
+const GEO_API = 'https://geocoding-api.open-meteo.com/v1/search';
+const WX_KEY = 'pc_wx5:' + HOME_WX.lat.toFixed(3) + ',' + HOME_WX.lon.toFixed(3), WX_TTL = 15*60000;
+['pc_wx', 'pc_wx2', 'pc_wx3', 'pc_wx4', 'pc_fc'].forEach(store.del); // úložiště ze starších verzí
+let wx = store.get(WX_KEY) || {}, wxTried = false, wxLoading = false;
+
+async function getJSON(url){
+  const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 10000);
+  try {
+    const r = await fetch(url, { cache:'no-store', signal:ctl.signal });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return await r.json();
+  } finally { clearTimeout(to); }
+}
+const coords = pts => 'latitude=' + pts.map(p => p[0]).join(',') + '&longitude=' + pts.map(p => p[1]).join(',');
+const DAILY = 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,snowfall_sum,wind_speed_10m_max,wind_gusts_10m_max';
+const fcURL = (lat, lon, tz) => API + '?' + coords([[lat, lon]]) + '&current=temperature_2m,weather_code,is_day&daily=' + DAILY +
+  '&forecast_days=8&timezone=' + encodeURIComponent(tz);
+function parsePlace(x){
+  const d = x.daily, c = x.current;
+  return {
+    tz: x.timezone || TZ,
+    cur: { temp: c.temperature_2m, code: c.weather_code, isDay: c.is_day !== 0 },
+    daily: d.time.map((date, i) => ({ date, code: d.weather_code[i], tmax: d.temperature_2m_max[i], tmin: d.temperature_2m_min[i],
+      prec: d.precipitation_sum[i] || 0, prob: d.precipitation_probability_max[i], snow: d.snowfall_sum[i] || 0,
+      wind: d.wind_speed_10m_max[i], gust: d.wind_gusts_10m_max[i] })),
+  };
+}
+async function loadWeather(){
+  const cached = store.get(WX_KEY);
+  if (cached && cached.tc && cached.tp && Date.now() - cached.tc < WX_TTL && Date.now() - cached.tp < WX_TTL) {
+    wx = cached; wxTried = true; renderWeather();
+  } else if (!wxLoading && !(document.visibilityState === 'hidden' && wxTried)) {
+    wxLoading = true;
+    try {
+      const urlC = API + '?' + coords(CITIES.map(c => [c[3], c[4]])) + '&current=temperature_2m,weather_code&timezone=GMT';
+      const [rc, rp] = await Promise.allSettled([CFG.sections.worldMap === false ? Promise.reject(0) : getJSON(urlC), getJSON(fcURL(HOME_WX.lat, HOME_WX.lon, TZ))]);
+      const nw = Object.assign({}, cached || wx);
+      if (rc.status === 'fulfilled') {
+        const j = [].concat(rc.value);
+        if (j.length === CITIES.length) { nw.cities = j.map(x => ({ temp: x.current.temperature_2m, code: x.current.weather_code })); nw.tc = Date.now(); }
+      }
+      if (rp.status === 'fulfilled') { try { nw.home = parsePlace([].concat(rp.value)[0]); nw.tp = Date.now(); } catch(e) {} }
+      wx = nw; store.set(WX_KEY, wx);
+    } finally { wxLoading = false; wxTried = true; }
+    renderWeather();
+  }
+  if (fcLoc && fcLoc.t && Date.now() - fcLoc.t > WX_TTL && document.visibilityState !== 'hidden') loadLoc(fcLoc, true);
+}
+function renderWeather(){
+  const age = t => t ? Date.now() - t : Infinity;
+  const okC = wx.cities && wx.cities.length === CITIES.length && age(wx.tc) < 3*3600e3;
+  if (okC || wx.cities) updatePins(now());
+  const ic = $('wx-home-ic'), v = $('wx-home'), s = $('wx-home-s');
+  if (wx.home && age(wx.tp) < 3*3600e3) {
+    const c = wx.home.cur;
+    setHTML(ic, wxIcon(c.code, c.isDay)); set(v, tempTxt(c.temp));
+    set(s, (WMO[c.code] || '') + ' · ' + clockTxt(wx.tp));
+  } else {
+    setHTML(ic, ''); set(v, '–'); set(s, wxTried ? 'nedostupné' : 'načítám…');
+  }
+  renderForecast();
+}
+
+/* ===== Předpověď na týden: Brno, nebo jiné místo (hledání / poloha) – volba se nepamatuje ===== */
+let fcLoc = null;   // { name, sub, lat, lon, data, t, loading, error }
+function fcMsg(txt){ const el = $('fc-msg'); el.hidden = !txt; set(el, txt || ''); }
+async function loadLoc(loc, quiet){
+  if (!quiet) { loc.loading = true; renderForecast(); }
+  try {
+    const j = [].concat(await getJSON(fcURL(loc.lat, loc.lon, 'auto')))[0];
+    if (fcLoc !== loc) return;   // mezitím zvoleno jiné místo
+    loc.data = parsePlace(j); loc.t = Date.now(); loc.error = false;
+  } catch(e) {
+    if (fcLoc !== loc) return;
+    if (!loc.data) loc.error = true;
+  }
+  loc.loading = false;
+  renderForecast();
+}
+function selectLoc(loc){
+  fcMsg('');
+  fcLoc = loc;
+  loadLoc(loc);
+}
+function goHome(){ fcLoc = null; fcMsg(''); renderForecast(); }
+
+function renderForecast(){
+  const box = $('fc'), meta = $('fc-meta');
+  $('fc-home').hidden = !fcLoc;
+  const src = fcLoc
+    ? { name: fcLoc.name, sub: fcLoc.sub, lat: fcLoc.lat, lon: fcLoc.lon, data: fcLoc.data, t: fcLoc.t, loading: fcLoc.loading, failed: fcLoc.error }
+    : { name: HOME_WX.name, sub: '', lat: HOME_WX.lat, lon: HOME_WX.lon, data: wx.home, t: wx.tp, loading: !wxTried, failed: wxTried };
+  const tz = (src.data && src.data.tz) || TZ, czech = tz === TZ;
+  const tp = parts(tz, now()), today = utc(tp.y, tp.mo, tp.d);
+  const todayIso = tp.y + '-' + pad(tp.mo) + '-' + pad(tp.d);
+  const fresh = src.data && src.t && Date.now() - src.t < 24*3600e3;
+  const days = fresh ? src.data.daily.filter(d => d.date >= todayIso && d.tmax != null).slice(0, 8) : [];
+  if (src.loading || !days.length) {
+    setHTML(box, '<div class="fc-empty">' + (src.loading ? 'Načítám předpověď – ' + esc(src.name) + '…' :
+      'Předpověď pro ' + esc(src.name) + ' se nepodařilo načíst.') + '</div>');
+    set(meta, fcLoc ? src.name : '');
+    return;
+  }
+  const lo = Math.min(...days.map(d => d.tmin)), hi = Math.max(...days.map(d => d.tmax)), span = Math.max(hi - lo, 1);
+  let h = '';
+  for (const d of days) {
+    const [y, mo, dd] = d.date.split('-').map(Number);
+    const t = utc(y, mo, dd), wd = new Date(t).getUTCDay(), hol = czech ? holidayOf(y, mo, dd) : '';
+    const rel = Math.round((t - today) / D);
+    const label = rel === 0 ? 'Dnes' : rel === 1 ? 'Zítra' : WEEKDAY[wd];
+    const cls = ['fd']; if (rel === 0) cls.push('now'); if (hol) cls.push('hol'); else if (wd === 0 || wd === 6) cls.push('we');
+    const st = sunTimes(y, mo, dd, src.lat, src.lon);
+    const prob = d.prob == null ? null : Math.round(d.prob);
+    const tip = WEEKDAY[wd] + ' ' + dd + '. ' + mo + '. ' + y + (hol ? ' – ' + hol : '') + '\n' +
+      (WMO[d.code] || '') + ', ' + tempTxt(d.tmax) + ' / ' + tempTxt(d.tmin) + '\n' +
+      'Srážky ' + dec(d.prec, 1) + ' mm' + (prob != null ? ' (pravděpodobnost ' + prob + ' %)' : '') + (d.snow > 0 ? ', sníh ' + dec(d.snow, 1) + ' cm' : '') + '\n' +
+      'Vítr až ' + Math.round(d.wind) + ' km/h, nárazy ' + Math.round(d.gust) + ' km/h' +
+      (st ? '\nVýchod slunce ' + hm(tz, st.rise) + ', západ ' + hm(tz, st.set) + (czech ? '' : ' (místního času)') : '');
+    const wet = d.prec >= 0.1 || (prob != null && prob >= 30);
+    const NB = ' ';
+    const amount = d.snow >= 0.5 ? 'sníh' + NB + dec(d.snow, d.snow < 10 ? 1 : 0) + NB + 'cm' : dec(d.prec, d.prec < 10 ? 1 : 0) + NB + 'mm';
+    const precTxt = wet ? amount + (prob != null ? ' · ' + prob + NB + '%' : '') : 'bez srážek';
+    const left = (d.tmin - lo) / span * 100, width = Math.max((d.tmax - d.tmin) / span * 100, 4);
+    const gust = Math.round(d.gust);
+    const windTxt = gust >= 60 ? 'nárazy ' + gust + ' km/h' : 'vítr ' + Math.round(d.wind) + ' km/h';
+    h += '<div class="' + cls.join(' ') + '" title="' + esc(tip) + '">' +
+      '<div class="fl"><b>' + label + '</b><span>' + dd + '. ' + mo + '.</span></div>' +
+      '<svg class="wi lg" viewBox="0 0 24 24">' + wxIcon(d.code, true) + '</svg>' +
+      '<div class="fdsc">' + (WMO[d.code] || '') + '</div>' +
+      '<div class="ft"><b>' + deg(d.tmax) + '</b><span>' + deg(d.tmin) + '</span></div>' +
+      '<div class="fb"><i style="left:' + left.toFixed(1) + '%;width:' + width.toFixed(1) + '%;background:linear-gradient(90deg,' + tcol(d.tmin) + ',' + tcol(d.tmax) + ')"></i></div>' +
+      '<div class="fp' + (wet ? ' wet' : '') + '">' + (wet ? DROP_SVG : '') + precTxt + '</div>' +
+      '<div class="fw' + (gust >= 60 ? ' warn' : '') + '">' + windTxt + '</div></div>';
+  }
+  setHTML(box, h);
+  const upd = parts(TZ, src.t), c = src.data.cur;
+  set(meta, src.name + (src.sub ? ', ' + src.sub : '') + ' · nyní ' + tempTxt(c.temp) + ', ' + (WMO[c.code] || '') +
+    ' · aktualizováno ' + (dayKey(upd) === dayKey(parts(TZ, now())) ? '' : upd.d + '. ' + upd.mo + '. ') + upd.h + ':' + pad(upd.mi));
+}
+
+// hledání místa (Open-Meteo Geocoding)
+let resList = [], resAct = -1, qSeq = 0, qTimer = 0;
+const qEl = $('fc-q'), resEl = $('fc-res');
+function showRes(items, note){
+  resList = items; resAct = items.length ? 0 : -1;
+  if (!items.length && !note) { resEl.hidden = true; return; }
+  resEl.innerHTML = items.length
+    ? items.map((r, i) => '<li role="option" data-i="' + i + '"' + (i === resAct ? ' class="act"' : '') + '>' + esc(r.name) + '<span>' + esc(r.sub) + '</span></li>').join('')
+    : '<li class="none">' + esc(note) + '</li>';
+  resEl.hidden = false;
+}
+function moveAct(dir){
+  if (!resList.length) return;
+  resAct = (resAct + dir + resList.length) % resList.length;
+  resEl.querySelectorAll('li').forEach((li, i) => li.classList.toggle('act', i === resAct));
+}
+function pickRes(i){
+  const r = resList[i]; if (!r) return;
+  showRes([]); qEl.value = ''; qEl.blur();
+  selectLoc({ name: r.name, sub: r.short, lat: r.lat, lon: r.lon });
+}
+async function search(q){
+  const seq = ++qSeq;
+  try {
+    const j = await getJSON(GEO_API + '?name=' + encodeURIComponent(q) + '&count=8&language=cs&format=json');
+    if (seq !== qSeq) return;
+    const items = (j.results || []).map(r => {
+      const area = [r.admin1, r.country].filter((x, i, a) => x && a.indexOf(x) === i && x !== r.name);
+      return { name: r.name, lat: r.latitude, lon: r.longitude,
+        sub: area.join(', ') + (r.elevation != null ? ' · ' + Math.round(r.elevation) + ' m n. m.' : ''),
+        short: r.country_code === 'CZ' ? (r.admin1 || '') : (r.country || '') };
+    });
+    showRes(items, 'Nic nenalezeno');
+  } catch(e) {
+    if (seq === qSeq) showRes([], 'Hledání se nepodařilo (offline?)');
+  }
+}
+qEl.addEventListener('input', () => {
+  clearTimeout(qTimer);
+  const q = qEl.value.trim();
+  if (q.length < 2) { qSeq++; showRes([]); return; }
+  qTimer = setTimeout(() => search(q), 300);
+});
+qEl.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { e.preventDefault(); moveAct(1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); moveAct(-1); }
+  else if (e.key === 'Enter') { e.preventDefault(); if (resAct >= 0) pickRes(resAct); }
+  else if (e.key === 'Escape') { showRes([]); qEl.value = ''; }
+});
+qEl.addEventListener('blur', () => setTimeout(() => showRes([]), 150));
+resEl.addEventListener('mousedown', e => {
+  const li = e.target.closest('li[data-i]');
+  if (li) { e.preventDefault(); pickRes(+li.dataset.i); }
+});
+$('fc-home').addEventListener('click', goHome);
+
+// poloha zařízení
+$('fc-geo').addEventListener('click', () => {
+  const btn = $('fc-geo');
+  if (!navigator.geolocation) { fcMsg('Tento prohlížeč neumí zjistit polohu – zadejte místo ručně.'); return; }
+  btn.setAttribute('aria-busy', 'true'); fcMsg('');
+  navigator.geolocation.getCurrentPosition(pos => {
+    btn.removeAttribute('aria-busy');
+    const { latitude: lat, longitude: lon } = pos.coords;
+    selectLoc({ name: 'Moje poloha', sub: dec(Math.abs(lat), 3) + '° ' + (lat >= 0 ? 's. š.' : 'j. š.') + ', ' + dec(Math.abs(lon), 3) + '° ' + (lon >= 0 ? 'v. d.' : 'z. d.'), lat, lon });
+  }, err => {
+    btn.removeAttribute('aria-busy');
+    fcMsg(err.code === 1 ? 'Přístup k poloze je zakázaný – povolte ho v nastavení prohlížeče pro tuto stránku, nebo zadejte místo ručně.'
+      : 'Polohu se nepodařilo zjistit – zadejte místo ručně.');
+  }, { enableHighAccuracy: false, timeout: 15000, maximumAge: 10*60000 });
+});
+
+/* ===== Plánovací kalendář ===== */
+let calMode = (store.get('pc_calmode') || (CFG.calendarView === 'year' ? 'year' : 'q')) === 'year' ? 'year' : 'q';
+let calY = 0, calM = 1; // první zobrazený měsíc (3 měsíce) nebo rok
+const todayP = () => parts(TZ, now());
+function calReset(){ const p = todayP(); calY = p.y; calM = calMode === 'year' ? 1 : p.mo; }
+const daysIn = (y, mo) => new Date(Date.UTC(y, mo, 0)).getUTCDate();
+function workDays(y, mo){
+  let n = 0;
+  for (let d = 1, n2 = daysIn(y, mo); d <= n2; d++) if (!isFree(utc(y, mo, d))) n++;
+  return n;
+}
+function monthHTML(y, mo, today, curWeekMon){
+  const days = daysIn(y, mo), lead = (new Date(utc(y, mo, 1)).getUTCDay() + 6) % 7;
+  const wdays = workDays(y, mo);
+  let h = '<div class="mon"><div class="mh"><b>' + MONTH[mo-1] + ' ' + y + '</b><span title="Pracovní dny (bez víkendů a svátků)">' +
+    wdays + ' ' + plural(wdays, 'prac. den', 'prac. dny', 'prac. dní') + '</span></div><table><thead><tr><th class="wk" title="Číslo týdne">T</th>' +
+    WD_HEAD.map((w, i) => '<th' + (i >= 5 ? ' class="we"' : '') + '>' + w + '</th>').join('') + '</tr></thead><tbody>';
+  for (let day = 1 - lead; day <= days; ) {
+    const mon = utc(y, mo, day), mp = ymd(mon);
+    const wk = isoWeek(mp.y, mp.mo, mp.d);
+    h += '<tr><td class="wk' + (mon === curWeekMon ? ' cur' : '') + '" title="Týden ' + wk + '">' + wk + '</td>';
+    for (let i = 0; i < 7; i++, day++) {
+      if (day < 1 || day > days) { h += '<td></td>'; continue; }
+      const t = utc(y, mo, day), hol = holidayOf(y, mo, day), cls = ['d'];
+      if (i >= 5) cls.push('we');
+      if (hol) cls.push('hol');
+      if (t === today) cls.push('today'); else if (t < today) cls.push('past');
+      const nm = nameOf(mo, day);
+      const tip = WEEKDAY[(i + 1) % 7] + ' ' + day + '. ' + mo + '. ' + y + (hol ? '\n' + hol : '') + (nm ? '\nSvátek: ' + nm : '') + '\nTýden ' + wk;
+      h += '<td class="' + cls.join(' ') + '" title="' + esc(tip) + '">' + day + '</td>';
+    }
+    h += '</tr>';
+  }
+  return h + '</tbody></table></div>';
+}
+// souvislý blok volných dnů (víkendy + svátky) kolem dne t
+function freeBlock(t){ let a = t, b = t; while (isFree(a - D)) a -= D; while (isFree(b + D)) b += D; return [a, b]; }
+function holidayNote(t, seen){
+  if (isWeekend(t)) return { txt: 'připadá na ' + (new Date(t).getUTCDay() === 6 ? 'sobotu' : 'neděli'), cls: '' };
+  const [a, b] = freeBlock(t);
+  if (seen.has(a)) return null;
+  seen.add(a);
+  const len = Math.round((b - a) / D) + 1;
+  let best = null; // „most“ – jeden pracovní den, který spojí dva volné bloky
+  if (isFree(a - 2*D)) { const [a2] = freeBlock(a - 2*D); best = { day: a - D, tot: Math.round((b - a2) / D) + 1 }; }
+  if (isFree(b + 2*D)) { const [, b2] = freeBlock(b + 2*D); const tot = Math.round((b2 - a) / D) + 1; if (!best || tot > best.tot) best = { day: b + D, tot }; }
+  const out = [];
+  if (len >= 3) out.push(dny(len) + ' volna (' + shortD(a) + ' – ' + shortD(b) + ')');
+  if (best && best.tot >= 4) out.push('s 1 dnem dovolené (' + shortD(best.day) + ') ' + dny(best.tot) + ' volna');
+  return out.length ? { txt: out.join(' · '), cls: len >= 3 ? 'good' : 'tip' } : null;
+}
+function renderCal(){
+  if (!calY) calReset();
+  const tp = todayP(), today = utc(tp.y, tp.mo, tp.d);
+  const curWeekMon = today - ((new Date(today).getUTCDay() + 6) % 7) * D;
+  const months = [];
+  if (calMode === 'year') for (let m = 1; m <= 12; m++) months.push([calY, m]);
+  else for (let k = 0; k < 3; k++) { const x = new Date(Date.UTC(calY, calM - 1 + k, 1)); months.push([x.getUTCFullYear(), x.getUTCMonth() + 1]); }
+  const box = $('cal');
+  box.className = 'cal ' + calMode;
+  set($('lg-today'), String(tp.d));
+  setHTML(box, months.map(([y, m]) => monthHTML(y, m, today, curWeekMon)).join(''));
+
+  // souhrn období
+  const wsum = months.reduce((s, [y, m]) => s + workDays(y, m), 0);
+  const [fy, fm] = months[0], [ly, lm] = months[months.length - 1];
+  set($('cal-title'), calMode === 'year' ? 'Rok ' + calY : MONTH[fm-1] + (fy !== ly ? ' ' + fy : '') + ' – ' + MONTH[lm-1].toLowerCase() + ' ' + ly);
+  // svátky v období
+  const t0 = utc(fy, fm, 1), t1 = utc(ly, lm, daysIn(ly, lm));
+  const seen = new Set(), items = [];
+  let onWork = 0;
+  for (let t = t0; t <= t1; t += D) {
+    const hol = holT(t);
+    if (!hol) continue;
+    if (!isWeekend(t)) onWork++;
+    const note = holidayNote(t, seen);
+    items.push('<li' + (t < today ? ' class="past"' : '') + '><span class="hd' + (isWeekend(t) ? ' wkend' : '') + '">' + shortD(t) + '</span><span class="hn">' + esc(hol) + '</span>' +
+      (note ? '<span class="hx ' + note.cls + '">' + esc(note.txt) + '</span>' : '') + '</li>');
+  }
+  set($('cal-sum'), '· ' + wsum + ' ' + plural(wsum, 'pracovní den', 'pracovní dny', 'pracovních dní') +
+    (items.length ? ' · ' + items.length + ' ' + plural(items.length, 'svátek', 'svátky', 'svátků') + ' (' + onWork + ' v pracovní den)' : ''));
+  setHTML($('cal-hol'), items.length ? items.join('') : '<li class="none">V tomto období nejsou žádné svátky.</li>');
+  document.querySelectorAll('#cal-mode button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === calMode)));
+}
+function calShift(dir){
+  if (calMode === 'year') calY += dir;
+  else { const x = new Date(Date.UTC(calY, calM - 1 + dir, 1)); calY = x.getUTCFullYear(); calM = x.getUTCMonth() + 1; }
+  renderCal();
+}
+$('cal-prev').addEventListener('click', () => calShift(-1));
+$('cal-next').addEventListener('click', () => calShift(1));
+$('cal-today').addEventListener('click', () => { calReset(); renderCal(); });
+document.querySelectorAll('#cal-mode button').forEach(b => b.addEventListener('click', () => {
+  if (b.dataset.m === calMode) return;
+  calMode = b.dataset.m; store.set('pc_calmode', calMode);
+  if (calMode === 'q') { const p = todayP(); calM = calY === p.y ? p.mo : 1; }
+  renderCal();
+}));
+
+/* ===== Vykreslení ===== */
+let h12 = (() => { const s = store.get('pc_h12'); return typeof s === 'boolean' ? s : CFG.timeFormat === '12h'; })();
+
+function fmtH(h){ return h12 ? String(h % 12 || 12) : pad(h); }
+const ampm = h => h12 ? (h < 12 ? 'dop.' : 'odp.') : '';
+
+/* ===== Mapa světového času ===== */
+// Mřížka pevniny 1,5° × 1,5°: každá tečka nese IANA časové pásmo (Natural Earth 1:50m + tz-lookup).
+// Aktuální posun pásma (včetně letního času) počítá prohlížeč, takže se mapa sama přebarví při změnách času.
+const GRID = /*DATA:GRID*/{"step":1.5,"top":78,"rows":90,"cols":240,"tz":["America/Inuvik","America/Edmonton","America/Cambridge_Bay","America/Rankin_Inlet","America/Iqaluit","America/Thule","America/Nuuk","America/Danmarkshavn","Arctic/Longyearbyen","Europe/Moscow","Asia/Krasnoyarsk","Asia/Yakutsk","America/Scoresbysund","Asia/Yekaterinburg","Asia/Vladivostok","Asia/Srednekolymsk","Asia/Anadyr","America/Nome","Etc/GMT+11","America/Anchorage","Etc/GMT+9","Europe/Oslo","Etc/GMT","Etc/GMT-2","Etc/GMT-11","America/Dawson","America/Whitehorse","Etc/GMT+1","Atlantic/Reykjavik","America/Atikokan","Europe/Stockholm","Europe/Helsinki","Asia/Khandyga","Asia/Ust-Nera","Asia/Magadan","Asia/Kamchatka","America/Toronto","Atlantic/Faroe","Asia/Irkutsk","Europe/London","Europe/Kirov","Asia/Tomsk","America/Yakutat","America/Vancouver","America/Juneau","America/Fort_Nelson","America/Regina","America/Winnipeg","Europe/Tallinn","America/Sitka","America/Dawson_Creek","America/Goose_Bay","Europe/Copenhagen","Europe/Riga","Europe/Samara","Asia/Omsk","Asia/Chita","Asia/Novosibirsk","Asia/Novokuznetsk","Europe/Dublin","Europe/Berlin","Europe/Warsaw","Europe/Kaliningrad","Europe/Vilnius","Europe/Minsk","Asia/Almaty","Asia/Sakhalin","America/Swift_Current","Europe/Amsterdam","Europe/Ulyanovsk","Asia/Qostanay","Asia/Barnaul","Asia/Shanghai","America/Adak","America/Blanc-Sablon","America/St_Johns","Europe/Brussels","Europe/Kyiv","Europe/Saratov","Asia/Ulaanbaatar","Europe/Paris","Europe/Prague","Europe/Volgograd","Asia/Oral","Asia/Aqtobe","Asia/Hovd","America/Los_Angeles","America/Creston","America/Denver","Europe/Bratislava","America/North_Dakota/Beulah","America/Chicago","America/Detroit","America/New_York","America/Moncton","America/Halifax","Europe/Zurich","Europe/Vienna","Europe/Budapest","Europe/Bucharest","Europe/Chisinau","Europe/Astrakhan","Asia/Atyrau","Asia/Urumqi","America/Boise","America/Menominee","America/Glace_Bay","Europe/Rome","Europe/Ljubljana","Europe/Zagreb","Europe/Belgrade","Europe/Simferopol","Asia/Aqtau","Asia/Qyzylorda","Asia/Tokyo","Europe/Sarajevo","Asia/Samarkand","Europe/Madrid","Europe/Podgorica","Europe/Sofia","Asia/Tbilisi","Asia/Ashgabat","Asia/Bishkek","America/Indiana/Indianapolis","Europe/Lisbon","Europe/Tirane","Europe/Skopje","Europe/Athens","Europe/Istanbul","Asia/Baku","Asia/Tashkent","Asia/Pyongyang","Asia/Yerevan","America/Indiana/Marengo","Atlantic/Azores","Asia/Tehran","Asia/Dushanbe","Asia/Kabul","Asia/Seoul","America/Kentucky/Monticello","Africa/Algiers","Africa/Tunis","Asia/Damascus","Asia/Baghdad","Asia/Karachi","America/Phoenix","Africa/Casablanca","Asia/Nicosia","Asia/Famagusta","Asia/Kolkata","Asia/Jerusalem","America/Tijuana","America/Hermosillo","Atlantic/Madeira","Africa/Tripoli","Asia/Hebron","Asia/Amman","America/Ciudad_Juarez","Africa/Cairo","Asia/Riyadh","America/Chihuahua","America/Ojinaga","America/Matamoros","Asia/Kuwait","Asia/Kathmandu","America/Mazatlan","America/Monterrey","Atlantic/Canary","Africa/El_Aaiun","Asia/Thimphu","Asia/Yangon","America/Nassau","Africa/Nouakchott","Asia/Qatar","Asia/Dubai","Asia/Muscat","Asia/Dhaka","Asia/Taipei","America/Mexico_City","America/Havana","Africa/Bamako","Africa/Niamey","Asia/Bangkok","Pacific/Honolulu","America/Merida","Africa/Ndjamena","Africa/Khartoum","Asia/Vientiane","America/Cancun","America/Port-au-Prince","America/Jamaica","America/Santo_Domingo","America/Puerto_Rico","Asia/Manila","America/Guatemala","Africa/Asmara","Asia/Aden","America/Tegucigalpa","Atlantic/Cape_Verde","Africa/Dakar","Asia/Ho_Chi_Minh","America/Managua","Africa/Ouagadougou","Africa/Addis_Ababa","Asia/Phnom_Penh","America/El_Salvador","America/Bogota","America/St_Vincent","Africa/Bissau","Africa/Conakry","Africa/Lagos","Africa/Douala","America/Costa_Rica","America/Caracas","America/Port_of_Spain","Africa/Djibouti","Africa/Mogadishu","America/Panama","Africa/Abidjan","Africa/Accra","Africa/Lome","Africa/Porto-Novo","Africa/Juba","Asia/Colombo","America/Guyana","Africa/Freetown","Africa/Monrovia","Africa/Bangui","Asia/Kuala_Lumpur","Asia/Kuching","America/Boa_Vista","America/Paramaribo","America/Cayenne","Africa/Kinshasa","Africa/Lubumbashi","Asia/Jakarta","Asia/Brunei","Africa/Malabo","Asia/Makassar","America/Belem","Africa/Brazzaville","Africa/Kampala","Africa/Nairobi","Asia/Jayapura","America/Guayaquil","America/Manaus","America/Santarem","Africa/Libreville","Asia/Pontianak","Pacific/Galapagos","America/Fortaleza","America/Lima","Africa/Kigali","Africa/Dar_es_Salaam","Pacific/Port_Moresby","Africa/Bujumbura","America/Eirunepe","Pacific/Bougainville","Africa/Luanda","Pacific/Guadalcanal","America/Rio_Branco","America/Porto_Velho","America/Araguaina","America/Recife","Asia/Dili","America/La_Paz","America/Cuiaba","America/Bahia","America/Maceio","Africa/Lusaka","Australia/Brisbane","Australia/Darwin","Africa/Blantyre","Africa/Maputo","Indian/Antananarivo","America/Sao_Paulo","Australia/Perth","Africa/Harare","Pacific/Efate","Pacific/Tahiti","America/Campo_Grande","Africa/Windhoek","Africa/Gaborone","Pacific/Fiji","America/Santiago","America/Asuncion","Indian/Mauritius","Pacific/Noumea","Indian/Reunion","America/Argentina/Jujuy","America/Argentina/Salta","America/Argentina/Cordoba","Africa/Johannesburg","America/Argentina/Catamarca","America/Argentina/Tucuman","Australia/Adelaide","America/Argentina/San_Juan","America/Argentina/La_Rioja","Africa/Maseru","Australia/Sydney","America/Montevideo","America/Argentina/Mendoza","America/Argentina/San_Luis","Australia/Eucla","America/Argentina/Buenos_Aires","Australia/Melbourne","Pacific/Auckland","Australia/Hobart","America/Coyhaique","Pacific/Chatham","America/Argentina/Rio_Gallegos","Indian/Kerguelen","America/Punta_Arenas","Atlantic/Stanley","America/Argentina/Ushuaia","Atlantic/South_Georgia"],"rle":[[0,39,1,1,2,7,0,5,3,1,0,2,4,3,0,1,4,5,5,4,0,5,6,3,7,29,8,3,0,22,9,3,0,1,9,3,0,27,10,2,0,13,11,1,0,7,11,5,0,48],[0,38,1,2,2,7,3,6,4,2,0,1,4,8,5,3,0,7,6,3,0,2,7,26,8,2,7,1,0,50,10,7,0,14,11,17,0,14,12,9,0,21],[0,37,1,3,2,6,0,6,4,12,5,3,0,15,7,25,0,49,10,4,0,17,11,17,12,1,0,17,12,1,0,1,12,1,0,25],[0,36,1,4,2,7,3,3,0,2,3,6,4,1,0,1,4,4,5,6,0,13,7,21,13,1,0,50,10,3,0,8,14,3,0,1,14,3,11,21,12,13,0,5,15,5,0,1,16,1,0,21],[0,2,17,3,18,5,19,3,20,12,21,5,1,10,2,6,3,12,4,6,5,16,7,24,13,1,7,5,22,10,23,5,22,5,9,5,22,5,24,5,10,18,14,10,11,21,12,14,15,8,16,9,25,5,17,9,0,1],[0,11,18,2,20,14,26,1,0,1,1,11,3,1,0,1,2,4,3,7,0,1,3,6,0,2,4,2,5,12,0,7,7,21,0,27,22,10,10,2,0,9,10,2,0,5,10,4,14,11,11,20,12,15,15,6,16,13,17,5,0,1,17,6],[0,1,17,4,18,8,20,13,26,2,27,1,1,11,3,21,4,3,5,16,7,25,13,3,28,2,22,10,23,5,22,7,0,13,10,10,0,1,10,4,0,5,14,1,0,2,14,2,0,1,14,1,0,68],[0,3,17,5,18,5,20,13,26,2,27,3,1,9,2,3,3,10,4,11,5,16,7,20,29,13,28,2,23,5,22,10,0,12,10,3,0,1,10,6,0,14,14,1,0,1,14,2,0,70],[17,6,18,7,20,13,26,2,27,5,1,7,2,9,3,4,4,10,30,3,5,14,7,20,29,13,28,2,23,5,22,9,31,7,32,4,10,20,14,17,11,15,12,17,33,5,34,3,16,5,35,7,36,1,17,10],[0,6,18,2,0,3,18,2,20,13,26,2,27,5,1,7,2,9,3,4,4,10,30,3,0,1,5,2,0,2,5,6,0,8,7,8,0,12,29,5,0,15,22,3,31,6,0,1,32,5,10,20,14,16,11,15,12,18,33,5,34,2,16,5,35,8,36,1,17,10],[0,9,18,4,20,13,26,2,27,6,1,6,2,13,4,6,0,5,30,2,5,1,0,1,5,3,37,1,5,4,0,10,7,6,0,23,38,1,0,7,22,5,31,4,0,2,32,6,10,20,14,16,11,15,39,2,12,17,33,4,34,2,35,13,36,5,17,6],[0,9,18,4,20,13,26,2,27,8,1,4,2,13,4,5,0,10,5,1,37,4,5,1,0,2,5,1,0,10,7,5,0,27,40,1,0,3,22,5,31,5,0,1,32,5,10,12,41,2,10,3,14,15,42,1,14,1,42,1,14,2,11,14,39,4,12,3,39,1,12,11,33,4,15,5,35,7,0,1,35,2,36,7,0,5],[0,12,20,6,0,1,20,1,0,7,43,1,44,1,45,1,44,5,46,5,2,6,47,7,48,4,0,10,37,7,5,1,0,1,37,2,0,39,40,1,0,5,22,5,31,5,0,2,49,4,10,12,41,5,14,14,42,9,11,11,39,9,12,10,15,9,35,5,0,3,36,4,0,10],[0,14,20,5,0,10,50,2,44,7,51,2,2,6,47,7,48,6,0,9,37,10,52,1,0,36,40,4,0,5,22,2,53,1,31,4,0,1,31,1,0,1,54,3,49,1,10,14,41,2,55,2,14,12,56,3,42,8,11,7,39,12,57,2,12,8,15,6,0,10,36,5,0,11],[0,12,18,1,20,2,0,1,20,1,0,13,50,2,44,6,51,2,2,6,47,7,48,6,4,2,37,2,0,4,5,1,37,10,52,2,0,35,40,4,0,6,53,2,0,1,53,1,31,2,0,3,54,5,10,14,41,1,55,2,14,12,56,3,58,2,42,4,59,1,42,1,11,6,39,13,57,2,12,8,15,5,0,10,36,6,0,11],[0,10,18,2,20,1,0,18,50,1,44,7,51,1,2,6,47,6,48,8,37,4,5,1,0,2,5,1,37,10,52,4,0,32,60,1,40,5,0,5,61,2,53,1,0,2,62,3,63,2,64,2,65,4,10,15,14,9,66,3,56,3,58,6,59,2,11,5,39,14,57,3,12,7,15,3,0,4,67,1,0,7,36,5,0,2,36,1,0,9],[0,33,44,7,2,7,68,2,47,4,48,7,37,5,5,1,0,1,5,1,37,7,52,8,0,30,60,3,0,1,40,4,0,2,69,2,61,5,62,6,65,6,10,9,70,1,55,3,14,6,71,3,66,8,72,6,59,1,11,6,39,11,57,5,73,3,12,4,15,6,67,2,0,8,36,3,0,8,74,1,0,4],[0,3,74,1,0,31,44,6,2,5,68,3,47,4,48,7,37,7,5,1,37,10,75,3,52,1,76,1,0,30,60,3,0,1,40,4,0,1,77,1,69,1,61,6,62,6,78,2,65,2,78,3,10,5,79,6,14,7,71,3,66,9,72,6,11,6,80,3,39,6,57,7,73,4,12,3,15,6,67,2,0,8,36,2,0,14],[0,34,44,9,2,3,68,3,47,4,48,7,37,18,75,3,76,2,0,33,40,4,81,3,77,1,61,4,82,4,62,4,78,8,10,4,83,4,79,1,84,3,85,5,71,4,66,13,72,2,86,4,80,9,57,2,80,3,57,1,73,6,12,3,15,6,67,2,0,7,16,1,36,1,0,15],[0,36,44,2,87,1,44,1,87,2,88,1,2,1,89,1,2,1,68,3,47,4,48,7,37,17,0,1,37,1,0,2,76,4,0,32,81,8,61,4,82,2,90,4,78,12,10,1,83,3,84,5,85,5,71,4,66,13,72,2,86,4,80,9,57,2,80,3,73,8,12,2,15,6,67,3,0,23],[0,37,87,6,89,9,91,1,92,7,93,3,37,11,94,1,95,2,96,1,0,2,76,5,0,33,81,6,97,2,98,5,99,4,100,3,101,2,78,6,10,5,102,2,103,3,85,7,66,15,104,2,86,3,80,16,73,11,15,3,0,1,67,2,0,5,35,1,0,18],[0,37,87,5,105,1,87,1,89,9,92,8,106,1,93,2,37,9,94,2,95,2,96,2,107,1,0,39,81,6,108,4,109,1,110,3,111,1,100,5,78,3,112,3,10,7,102,1,0,1,113,4,85,2,114,5,66,10,104,6,86,2,80,15,73,11,15,3,0,2,115,1,0,25],[0,37,87,5,105,4,89,7,92,9,93,3,37,4,94,7,96,2,0,41,81,6,108,4,0,1,110,1,116,2,111,2,100,5,0,2,112,1,0,2,10,7,0,2,113,4,117,3,114,4,66,9,104,10,80,10,73,14,15,3,0,3,115,3,35,2,0,21],[0,37,87,4,105,5,89,7,92,9,93,3,37,2,94,6,0,41,118,5,81,3,118,1,81,4,108,3,0,1,116,1,119,1,111,2,120,4,0,8,121,2,10,3,0,2,113,1,122,1,113,2,117,6,66,5,123,3,66,1,104,10,73,6,80,4,73,14,15,3,0,3,115,4,0,23],[0,37,87,7,89,9,92,9,124,1,93,1,94,10,0,40,125,2,118,6,0,3,108,2,0,1,108,4,0,1,126,1,127,1,120,1,128,1,120,1,129,10,121,3,130,2,0,2,122,1,113,2,117,1,122,1,117,4,66,2,131,1,123,6,104,10,73,6,80,2,73,13,132,3,0,6,115,2,0,25],[0,37,87,7,89,9,92,9,124,1,94,8,0,42,125,2,118,5,0,5,108,2,0,3,108,3,128,4,129,13,133,1,130,2,0,2,122,7,117,3,131,1,123,3,104,11,73,23,132,3,0,7,115,2,0,25],[0,37,87,7,89,9,92,9,134,1,94,7,0,31,135,1,0,1,135,1,0,10,125,1,118,5,0,8,108,3,0,2,128,3,0,2,129,12,136,3,0,3,122,8,117,1,137,2,138,1,137,2,104,10,73,20,0,3,132,2,139,1,0,6,115,3,0,25],[0,38,87,6,89,8,92,11,140,1,94,6,0,44,125,1,118,4,0,1,141,6,142,1,0,2,108,1,0,4,128,2,0,2,129,6,143,2,129,1,143,1,144,2,136,10,122,3,138,5,137,1,145,1,104,4,73,28,0,2,139,3,0,4,115,3,0,26],[0,39,87,5,146,3,89,4,92,12,94,7,0,45,147,4,141,7,142,2,0,8,128,2,0,3,148,1,149,1,0,1,143,4,144,3,136,10,122,1,138,6,145,3,150,2,73,27,0,4,139,3,0,1,115,6,0,26],[0,40,87,4,146,3,89,4,92,12,94,5,0,46,147,5,141,6,142,3,0,15,151,1,143,3,144,3,136,10,138,7,145,2,150,1,145,1,150,2,73,28,0,3,139,1,0,1,115,5,0,29],[0,42,152,1,153,1,146,4,89,3,92,12,94,4,0,41,154,1,0,4,147,6,141,7,142,2,155,3,0,2,155,4,0,6,156,1,157,2,144,6,136,8,138,6,145,4,150,3,73,29,0,3,115,3,0,32],[0,42,152,2,153,4,158,2,92,13,94,3,0,47,147,5,141,8,155,10,159,7,151,1,157,1,160,4,144,3,136,9,138,3,145,6,150,4,73,27,0,6,115,1,0,32],[0,43,152,1,153,4,161,1,162,2,163,2,92,8,0,3,94,2,0,46,147,3,141,11,155,11,159,6,157,1,160,6,144,1,164,2,136,8,145,8,150,4,165,3,73,7,150,1,73,18,0,38],[0,43,166,2,153,3,161,3,163,1,167,1,92,3,0,9,94,2,0,41,168,1,0,2,147,2,169,1,141,12,155,10,159,7,160,10,0,1,136,8,145,5,150,8,165,4,170,2,150,3,171,2,73,15,0,5,115,1,0,33],[0,44,166,2,0,1,153,1,161,1,167,5,92,1,163,1,0,9,94,2,172,1,0,42,169,4,173,1,141,11,155,10,159,7,0,1,160,10,174,1,0,1,136,1,0,1,136,4,145,4,150,11,165,2,150,4,171,3,73,14,0,40],[0,45,166,4,167,6,0,11,94,1,0,42,169,4,173,3,141,10,155,10,159,8,160,11,0,1,175,1,176,1,0,2,136,2,0,2,145,4,150,11,177,3,150,1,171,2,73,15,178,1,0,39],[0,46,166,1,0,2,166,1,167,1,179,2,167,2,0,9,180,3,0,42,169,2,173,5,181,3,141,9,182,1,155,7,159,8,0,1,160,10,175,2,176,3,0,5,150,14,177,2,150,2,171,3,73,4,183,1,73,7,0,2,178,1,0,39],[0,14,184,1,0,34,166,2,179,4,0,5,185,2,0,1,180,6,0,39,169,3,173,5,181,4,141,6,182,4,186,4,155,2,187,4,159,1,187,4,0,1,160,12,176,2,0,6,150,13,177,3,171,4,73,2,188,1,183,2,73,5,0,44],[0,15,184,2,0,32,179,7,0,3,185,2,189,1,0,6,180,4,190,1,0,36,173,7,181,7,141,1,182,6,186,6,187,9,0,1,160,10,176,3,0,9,150,10,0,3,171,6,188,3,183,1,0,1,73,2,0,46],[0,16,184,1,0,33,179,9,185,2,189,1,0,5,191,2,0,1,190,3,192,2,193,2,0,32,173,7,181,7,141,1,182,6,186,6,187,10,0,1,160,9,176,3,0,9,150,9,0,5,171,3,183,3,188,2,183,1,0,1,73,2,0,6,194,2,0,38],[0,52,179,7,195,2,0,48,173,7,181,7,182,7,186,6,187,9,196,1,0,2,160,1,197,1,160,3,197,2,176,2,0,11,150,8,0,7,171,3,183,4,188,2,0,8,194,2,0,38],[0,54,179,5,195,2,198,3,0,40,199,1,0,3,200,3,173,5,181,7,182,7,186,6,187,8,196,3,0,1,197,7,0,14,150,5,0,9,171,1,0,1,171,1,183,4,188,2,201,1,0,7,194,2,0,38],[0,58,195,3,198,2,202,2,0,43,200,4,181,7,203,1,182,9,186,6,187,9,196,1,204,2,196,1,197,5,0,16,150,5,0,11,171,1,183,4,205,1,188,1,201,1,0,7,194,1,0,1,194,1,0,37],[0,61,206,1,202,3,0,7,207,1,0,6,208,1,0,29,200,1,209,1,210,2,181,4,203,4,182,2,211,3,182,1,211,2,212,1,186,5,187,9,204,4,196,1,197,2,0,19,150,4,0,11,171,1,183,2,205,4,201,1,0,7,194,1,0,1,194,2,0,36],[0,62,202,2,213,1,0,5,207,2,214,3,0,4,215,1,0,29,209,2,210,2,181,4,203,4,182,2,211,7,186,5,187,9,204,4,216,1,217,1,0,1,217,3,0,16,150,4,0,7,150,1,0,3,171,1,183,1,0,1,205,3,201,2,0,8,194,3,0,36],[0,62,213,3,0,1,218,2,0,1,207,2,214,9,0,30,210,4,219,3,203,2,220,1,221,1,222,2,211,6,186,6,187,4,223,1,187,1,223,2,204,6,217,5,0,16,150,3,224,1,0,11,183,1,0,3,205,1,201,1,0,7,194,1,0,3,194,2,0,36],[0,64,213,1,218,4,207,3,214,8,225,1,0,30,226,2,227,1,210,1,219,3,220,3,222,1,211,6,212,2,186,2,228,4,223,7,204,7,217,4,0,17,150,1,0,1,224,2,0,10,183,2,0,14,194,4,0,35],[0,68,207,6,214,5,225,3,0,30,226,1,227,1,219,4,220,2,221,1,222,1,211,6,212,2,228,8,223,5,204,8,217,2,0,20,224,2,0,11,229,1,183,1,0,9,230,2,0,3,194,3,0,35],[0,68,207,7,214,4,231,1,225,1,232,3,233,2,0,27,227,2,219,3,220,2,0,3,211,3,212,4,228,3,234,1,228,2,235,3,223,5,204,5,217,4,0,30,236,3,0,1,229,2,0,7,237,1,230,3,0,40],[0,68,207,7,214,4,231,1,225,1,232,3,233,2,0,39,238,1,212,4,228,3,234,1,228,1,235,5,223,4,204,5,217,3,0,32,236,3,229,2,0,6,230,3,239,1,0,41],[0,67,207,8,214,3,231,2,225,3,232,1,233,1,240,2,0,39,238,1,212,4,241,2,234,3,235,5,242,3,243,4,217,3,0,34,236,3,229,2,0,3,230,3,239,3,0,6,244,1,0,34],[0,66,245,2,207,6,246,5,231,2,247,3,240,3,0,39,248,3,241,3,234,3,235,5,242,3,243,5,217,2,0,36,236,3,0,3,249,4,239,3,0,1,239,4,0,1,244,1,0,34],[0,59,250,1,0,6,245,4,207,4,246,7,247,4,240,4,251,1,0,36,248,3,241,3,234,4,235,4,242,3,243,5,217,1,0,36,236,5,0,2,249,6,239,4,0,2,244,2,0,1,244,4,0,29],[0,66,245,3,252,4,207,1,246,9,247,2,240,4,251,3,0,34,248,2,241,3,234,3,235,5,253,2,254,3,243,4,0,38,236,6,0,1,249,4,239,1,0,1,239,3,0,1,244,1,0,2,244,1,0,1,244,6,255,1,0,25],[0,66,252,1,245,1,252,5,207,1,246,9,247,2,240,4,251,6,0,32,248,1,241,3,234,3,235,6,256,1,254,4,243,2,0,41,236,3,0,3,249,2,239,2,0,1,239,3,0,2,244,3,0,1,244,6,255,3,0,4,255,1,0,18],[0,66,252,7,257,1,246,7,247,4,240,3,251,9,0,31,234,5,235,7,254,7,0,42,236,2,0,8,239,3,0,7,244,1,0,1,244,3,255,4,0,1,255,3,0,1,258,1,0,16],[0,66,252,5,257,3,246,7,247,4,240,3,251,9,0,31,259,3,234,3,235,6,254,7,0,43,236,5,0,12,244,1,0,1,244,1,0,2,244,2,255,5,0,4,260,2,0,15],[0,67,252,4,261,3,257,1,246,3,262,1,246,2,247,4,240,3,263,1,251,4,264,4,0,31,259,7,235,6,254,6,0,46,236,3,239,1,0,1,239,5,265,2,0,7,244,2,255,5,0,6,260,1,0,1,260,1,0,12],[0,67,252,6,261,2,266,1,262,3,267,7,263,3,251,1,268,5,269,2,0,31,259,7,235,4,270,4,254,4,0,53,239,1,0,1,239,2,0,10,271,1,0,3,255,3,0,19],[0,68,252,5,261,1,266,2,262,3,267,7,263,3,251,1,268,4,269,2,0,33,259,6,235,4,270,4,254,4,0,59,272,2,0,6,271,2,0,12,260,1,0,11],[0,68,252,6,266,4,262,2,267,6,263,3,268,6,0,33,259,8,270,3,235,1,270,2,273,1,274,4,0,5,275,2,0,52,272,6,0,2,271,2,0,24],[0,69,252,5,266,6,267,6,276,3,268,5,0,34,259,7,270,6,274,1,273,2,274,4,0,4,275,2,0,49,277,3,272,5,0,3,271,3,0,23],[0,70,252,4,266,6,267,5,276,8,268,1,0,34,259,7,270,5,278,1,274,2,273,1,274,3,0,2,275,5,0,49,277,3,272,6,0,2,271,3,0,14,279,1,0,8],[0,26,280,1,0,44,252,3,266,7,281,4,276,8,268,1,0,34,282,2,259,1,282,2,259,2,283,1,270,2,278,5,274,3,0,3,275,4,0,48,277,5,272,7,271,5,0,14,279,1,0,5,284,2],[0,73,285,1,266,7,281,4,276,9,0,34,282,5,259,2,283,2,278,6,274,2,0,4,275,4,0,48,277,5,272,7,271,5,0,22],[0,73,285,1,266,5,286,2,281,5,276,8,0,34,282,6,283,4,278,4,274,2,0,5,275,4,0,5,287,1,0,38,277,9,272,6,271,7,0,10,288,1,0,10],[0,73,285,1,266,4,286,3,281,4,276,8,0,36,282,5,283,5,278,2,274,3,0,5,275,4,0,4,289,1,0,38,277,10,272,7,271,7,0,10,288,2,0,8],[0,73,285,2,290,2,291,1,292,1,286,4,281,1,276,8,0,37,282,5,283,4,293,3,274,3,0,5,275,3,0,43,277,11,272,7,271,8,0,19],[0,73,285,2,291,3,292,3,286,3,276,5,0,40,282,5,283,3,293,4,274,3,0,5,275,3,0,43,277,11,272,7,271,9,0,18],[0,73,285,2,291,3,292,3,286,2,292,1,276,4,0,42,282,4,283,2,293,5,274,1,0,53,277,11,272,7,271,9,0,18],[0,72,285,2,294,2,295,1,292,4,286,2,276,5,0,42,282,4,293,8,0,54,277,10,296,8,271,9,0,17],[0,72,285,1,297,1,298,2,294,1,292,5,276,6,0,43,293,7,299,1,293,3,0,54,277,10,296,8,300,9,0,17],[0,72,285,1,297,2,298,1,292,5,301,2,276,3,0,45,293,10,0,55,277,10,296,8,300,8,0,18],[0,72,285,1,297,1,302,1,303,2,292,4,301,3,276,2,0,46,293,8,0,57,277,7,304,2,0,2,296,6,300,8,0,18],[0,72,285,1,302,2,303,2,292,4,301,4,0,47,293,7,0,57,277,7,0,7,296,4,300,7,0,19],[0,71,285,2,302,2,303,2,291,1,305,4,0,1,301,1,0,113,277,2,0,12,296,3,306,1,300,6,0,14,307,2,0,3],[0,71,285,2,302,1,291,4,305,4,0,131,296,1,306,5,300,1,0,16,307,2,0,2],[0,71,285,2,291,5,305,4,0,131,296,1,306,5,0,17,307,3,0,1],[0,71,285,1,291,6,305,1,0,139,308,1,0,17,307,2,0,2],[0,70,285,2,291,6,305,1,0,137,308,3,0,15,307,4,0,2],[0,70,309,1,285,1,294,6,0,139,308,2,0,14,307,3,0,4],[0,2,310,1,0,68,309,2,294,4,0,154,307,5,0,4],[0,70,309,2,294,4,0,155,307,3,0,6],[0,70,309,1,311,5,0,164],[0,69,309,2,311,5,0,90,312,1,0,73],[0,69,313,2,311,4,0,155,307,1,0,9],[0,70,313,3,311,2,0,5,314,1,0,159],[0,71,313,3,315,1,0,165],[0,73,315,1,313,1,315,2,0,18,316,1,0,144],[0,240]]}/*END:GRID*/;
+const NC = GRID.cols, NR = GRID.rows, MAP_TOP = GRID.top, MAP_SPAN = GRID.rows * GRID.step;
+const cI = [], cJ = [], cTz = [], cLat = [], cLon = [];
+const cellAt = new Int32Array(NC * NR).fill(-1);
+GRID.rle.forEach((r, j) => {
+  let i = 0;
+  for (let k = 0; k < r.length; k += 2) {
+    const v = r[k], n = r[k + 1];
+    if (v) for (let m = 0; m < n; m++) {
+      cellAt[j * NC + i + m] = cI.length;
+      cI.push(i + m); cJ.push(j); cTz.push(v - 1);
+      cLat.push(MAP_TOP - (j + 0.5) * GRID.step); cLon.push(-180 + (i + m + 0.5) * GRID.step);
+    }
+    i += n;
+  }
+});
+const NCELL = cI.length;
+// starší Safari/iOS nemusí znát novější názvy pásem – použít starší alias, jinak UTC
+const TZ_ALIAS = { 'America/Nuuk': 'America/Godthab', 'Asia/Kolkata': 'Asia/Calcutta', 'Asia/Ho_Chi_Minh': 'Asia/Saigon' };
+const tzOk = tz => { try { new Intl.DateTimeFormat('en', { timeZone: tz }); return true; } catch(e) { return false; } };
+CITIES.forEach(c => { if (!tzOk(c[2])) c[2] = tzOk(TZ_ALIAS[c[2]] || '') ? TZ_ALIAS[c[2]] : 'UTC'; });
+// neplatné názvy pásem (starší prohlížeč) nahradit nominálním pásmem podle délky
+const TZN = GRID.tz.map((tz, k) => {
+  try { new Intl.DateTimeFormat('en', { timeZone: tz }); return tz; }
+  catch(e) { const lon = cLon[cTz.indexOf(k)] || 0, o = Math.round(lon / 15); return o === 0 ? 'UTC' : 'Etc/GMT' + (o > 0 ? '-' : '+') + Math.abs(o); }
+});
+const tzOff = new Int16Array(TZN.length);
+let tzOffMin = -1;
+function updateTzOffsets(ms){
+  const m = Math.floor(ms / 60000);
+  if (m === tzOffMin) return;
+  tzOffMin = m;
+  for (let k = 0; k < TZN.length; k++) tzOff[k] = offsetMin(TZN[k], ms);
+}
+const tzLabel = k => { const n = TZN[k]; return n.startsWith('Etc/') || n === 'UTC' ? '' : n.split('/').pop().replace(/_/g, ' '); };
+const utcTxt = off => 'UTC' + (off === 0 ? '' : (off > 0 ? '+' : MINUS) + Math.floor(Math.abs(off) / 60) + (Math.abs(off) % 60 ? ':' + pad(Math.abs(off) % 60) : ''));
+function diffTxt(diffMin){
+  if (diffMin === 0) return 'stejný čas jako v Česku';
+  const h = Math.abs(diffMin) / 60, t = hoursTxt(h) + ' h';
+  return diffMin > 0 ? 'o ' + t + ' napřed oproti Česku' : 'o ' + t + ' pozadu za Českem';
+}
+
+// Slunce: deklinace a časová rovnice jednou za vykreslení, výška Slunce pro každý bod rychle
+function sunState(ms){
+  const { decl, eqt } = solar(ms);
+  return { eqt, utcMin: (((ms % D) + D) % D) / 60000, sinD: Math.sin(decl), cosD: Math.cos(decl), decl };
+}
+function altFast(s, lat, lon){
+  const ha = ((s.utcMin + s.eqt + 4 * lon) / 4 - 180) * RAD, phi = lat * RAD;
+  return Math.asin(Math.sin(phi) * s.sinD + Math.cos(phi) * s.cosD * Math.cos(ha)) / RAD;
+}
+
+const mapWrap = $('wmwrap'), mapEl = $('wmap'), cv = $('wm-canvas'), cx = cv.getContext('2d');
+const nightCv = document.createElement('canvas'); nightCv.width = 360; nightCv.height = Math.round(MAP_SPAN);
+const nctx = nightCv.getContext('2d'), nimg = nctx.createImageData(nightCv.width, nightCv.height);
+let mapW = 0, mapH = 0, hoverOff = null, mapCol = null, nightMin = -1;
+function readMapColors(){
+  const cs = getComputedStyle(document.documentElement), g = n => cs.getPropertyValue(n).trim();
+  return { sea: g('--map-sea'), land: [g('--map-l1'), g('--map-l2'), g('--map-l3')], home: g('--map-home'), hl: g('--map-hl'),
+    night: g('--map-night').split(/[ ,]+/).map(Number), nightA: parseFloat(g('--map-night-a')) || 0.45, sun: g('--sun') };
+}
+function updateNight(s, col){
+  const W = nightCv.width, H = nightCv.height, d = nimg.data, [r, g, b] = col.night, A = col.nightA * 255;
+  for (let y = 0; y < H; y++) {
+    const lat = MAP_TOP - (y + 0.5) * MAP_SPAN / H;
+    for (let x = 0; x < W; x++) {
+      const alt = altFast(s, lat, -180 + (x + 0.5) * 360 / W);
+      // plynulý přechod: plné světlo nad +1°, plná noc pod −12° (konec nautického soumraku)
+      let f = (1 - alt) / 13; f = f < 0 ? 0 : f > 1 ? 1 : f; f = f * f * (3 - 2 * f);
+      const o = (y * W + x) * 4; d[o] = r; d[o + 1] = g; d[o + 2] = b; d[o + 3] = A * f;
+    }
+  }
+  nctx.putImageData(nimg, 0, 0);
+}
+function drawMap(ms){
+  if (!mapW) return;
+  const col = mapCol || (mapCol = readMapColors());
+  updateTzOffsets(ms);
+  const s = sunState(ms), m = Math.floor(ms / 60000);
+  if (m !== nightMin) { nightMin = m; updateNight(s, col); }
+  const W = cv.width, H = cv.height, cw = W / NC, ch = H / NR, rad = Math.max(0.6, Math.min(cw, ch) * 0.34);
+  const homeOff = offsetMin(TZ, ms);
+  const paths = {};
+  for (let k = 0; k < NCELL; k++) {
+    const off = tzOff[cTz[k]];
+    const key = off === hoverOff ? 'hl' : off === homeOff ? 'home' : 'l' + ((Math.round(off / 30) % 3 + 3) % 3);
+    const p = paths[key] || (paths[key] = new Path2D());
+    const x = (cI[k] + 0.5) * cw, y = (cJ[k] + 0.5) * ch;
+    p.moveTo(x + rad, y); p.arc(x, y, rad, 0, 2 * Math.PI);
+  }
+  cx.fillStyle = col.sea; cx.fillRect(0, 0, W, H);
+  ['l0', 'l1', 'l2'].forEach((key, i) => { if (paths[key]) { cx.fillStyle = col.land[i]; cx.fill(paths[key]); } });
+  if (paths.home) { cx.fillStyle = col.home; cx.fill(paths.home); }
+  cx.imageSmoothingEnabled = true;
+  cx.drawImage(nightCv, 0, 0, W, H);
+  if (paths.hl) { cx.fillStyle = col.hl; cx.fill(paths.hl); }
+  // bod, kde je Slunce v nadhlavníku
+  let sl = -(s.utcMin + s.eqt - 720) / 4; sl = ((sl + 540) % 360) - 180;
+  const sx = (sl + 180) / 360 * W, sy = (MAP_TOP - s.decl / RAD) / MAP_SPAN * H, R = 22 * (W / mapW);
+  const gr = cx.createRadialGradient(sx, sy, 0, sx, sy, R);
+  gr.addColorStop(0, 'rgba(253,224,71,.55)'); gr.addColorStop(1, 'rgba(253,224,71,0)');
+  cx.fillStyle = gr; cx.beginPath(); cx.arc(sx, sy, R, 0, 2 * Math.PI); cx.fill();
+  cx.fillStyle = col.sun; cx.beginPath(); cx.arc(sx, sy, 4.5 * (W / mapW), 0, 2 * Math.PI); cx.fill();
+}
+function resizeMap(){
+  const w = mapEl.clientWidth, h = mapEl.clientHeight;
+  if (!w || (w === mapW && h === mapH)) return;
+  mapW = w; mapH = h;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  mapWrap.classList.toggle('narrow', w < 720);
+  drawMap(now());
+  if (popIdx !== null) placePop();
+}
+if (window.ResizeObserver) new ResizeObserver(resizeMap).observe(mapEl); else window.addEventListener('resize', resizeMap);
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { mapCol = null; nightMin = -1; drawMap(now()); }); } catch(e) {}
+
+// najetí na pevninu: zvýraznit celé pásmo a ukázat jeho čas
+const tipEl = $('wm-tip');
+function cellFromEvent(e){
+  const r = cv.getBoundingClientRect();
+  const fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+  const i = Math.floor(fx * NC), j = Math.floor(fy * NR);
+  let best = -1;
+  for (let dj = 0; dj <= 1 && best < 0; dj++) for (const [a, b] of dj ? [[1,0],[-1,0],[0,1],[0,-1]] : [[0,0]]) {
+    const ii = i + a, jj = j + b;
+    if (ii >= 0 && ii < NC && jj >= 0 && jj < NR && cellAt[jj * NC + ii] >= 0) { best = cellAt[jj * NC + ii]; break; }
+  }
+  return { k: best, x: e.clientX - mapWrap.getBoundingClientRect().left, y: e.clientY - mapWrap.getBoundingClientRect().top };
+}
+cv.addEventListener('mousemove', e => {
+  const { k, x, y } = cellFromEvent(e);
+  const off = k >= 0 ? tzOff[cTz[k]] : null;
+  if (off !== hoverOff) { hoverOff = off; drawMap(now()); }
+  if (k < 0) { tipEl.hidden = true; return; }
+  const ms = now(), q = parts(TZN[cTz[k]], ms), lab = tzLabel(cTz[k]);
+  tipEl.innerHTML = '<b>' + fmtH(q.h) + ':' + pad(q.mi) + (h12 ? ' ' + ampm(q.h) : '') + '</b> ' + utcTxt(off) +
+    '<br>' + diffTxt(off - offsetMin(TZ, ms)) + (lab ? ' · ' + esc(lab) : '');
+  tipEl.hidden = false;
+  const tw = tipEl.offsetWidth, th = tipEl.offsetHeight;
+  tipEl.style.left = Math.max(4, Math.min(x + 14, mapW - tw - 4)) + 'px';
+  tipEl.style.top = Math.max(4, y - th - 10) + 'px';
+});
+cv.addEventListener('mouseleave', () => { tipEl.hidden = true; if (hoverOff !== null) { hoverOff = null; drawMap(now()); } });
+
+// města – jedno hlavní město za každé pásmo
+const pinEls = CITIES.map((c, i) => {
+  const el = document.createElement('div');
+  el.className = 'pin a-' + c[5] + (c[6] ? ' p1' : '') + (c[2] === TZ ? ' home' : '');
+  el.style.left = ((c[4] + 180) / 360 * 100).toFixed(3) + '%';
+  el.style.top = ((MAP_TOP - c[3]) / MAP_SPAN * 100).toFixed(3) + '%';
+  el.innerHTML = '<i class="dot"></i><button type="button" class="bub"><span class="l1"><svg class="wi" viewBox="0 0 24 24"></svg><b></b></span>' +
+    '<span class="l2"><span class="nm"></span><em></em></span></button>';
+  el.querySelector('.nm').textContent = c[0];
+  $('wm-pins').appendChild(el);
+  const bub = el.querySelector('.bub'), dot = el.querySelector('.dot');
+  bub.setAttribute('aria-label', c[0] + ', ' + c[1]);
+  for (const t of [bub, dot]) {
+    t.addEventListener('mouseenter', () => { if (popPinned === null) showPop(i); });
+    t.addEventListener('mouseleave', () => { if (popPinned === null) hidePop(); });
+    t.addEventListener('click', e => { e.stopPropagation(); if (popPinned === i) { popPinned = null; hidePop(); } else { popPinned = i; showPop(i); } });
+  }
+  bub.addEventListener('focus', () => { if (popPinned === null) showPop(i); });
+  bub.addEventListener('blur', () => { if (popPinned === null) hidePop(); });
+  return { el, ic: el.querySelector('.wi'), tm: el.querySelector('.l1 b'), tp: el.querySelector('em'), day: null, icKey: '' };
+});
+document.addEventListener('click', () => { if (popPinned !== null) { popPinned = null; hidePop(); } });
+
+function cityWx(i){
+  return wx.cities && wx.cities.length === CITIES.length && wx.tc && Date.now() - wx.tc < 3*3600e3 ? wx.cities[i] : null;
+}
+function updatePins(ms){
+  const s = sunState(ms);
+  pinEls.forEach((p, i) => {
+    const c = CITIES[i], q = parts(c[2], ms);
+    set(p.tm, fmtH(q.h) + ':' + pad(q.mi) + (h12 ? ' ' + ampm(q.h) : ''));
+    const isDay = altFast(s, c[3], c[4]) > -0.833;
+    if (isDay !== p.day) { p.day = isDay; p.el.classList.toggle('day', isDay); p.el.classList.toggle('night', !isDay); }
+    const w = cityWx(i), icKey = (w ? w.code : 'x') + (isDay ? 'd' : 'n');
+    if (icKey !== p.icKey) { p.icKey = icKey; p.ic.innerHTML = wxIcon(w ? w.code : 0, isDay); }
+    set(p.tp, w ? deg(w.temp) : '');
+  });
+}
+
+// detail města (najetí / kliknutí)
+const popEl = $('wm-pop');
+let popIdx = null, popPinned = null;
+function showPop(i){ popIdx = i; renderPop(now()); popEl.hidden = false; placePop(); }
+function hidePop(){ popIdx = null; popEl.hidden = true; }
+function placePop(){
+  if (popIdx === null) return;
+  const c = CITIES[popIdx], pw = popEl.offsetWidth, ph = popEl.offsetHeight;
+  const px = (c[4] + 180) / 360 * mapW, py = (MAP_TOP - c[3]) / MAP_SPAN * mapH;
+  let x, y;
+  if (mapWrap.classList.contains('narrow')) { x = Math.max(0, Math.min(px - pw / 2, mapW - pw)); y = mapH + 8; }
+  else {
+    const a = c[5], toLeft = a.includes('e') ? true : a.includes('w') ? false : px > mapW / 2;
+    x = toLeft ? px - pw - 16 : px + 16;
+    if (x < 4) x = px + 16; if (x + pw > mapW - 4) x = px - pw - 16;
+    y = Math.max(-8, Math.min(py - ph / 2, mapH - ph + 8));
+  }
+  popEl.style.left = x + 'px'; popEl.style.top = y + 'px';
+}
+function renderPop(ms){
+  if (popIdx === null) return;
+  const i = popIdx, c = CITIES[i], q = parts(c[2], ms), off = offsetMin(c[2], ms), hp = parts(TZ, ms);
+  const rel = dayKey(q) === dayKey(hp) ? 'dnes' : dayKey(q) > dayKey(hp) ? 'zítra' : 'včera';
+  const s = sunState(ms), isDay = altFast(s, c[3], c[4]) > -0.833;
+  const st = sunTimes(q.y, q.mo, q.d, c[3], c[4]);
+  const pct = t => { const p = parts(c[2], t); return (p.h * 60 + p.mi) / 14.4; };
+  const seg = (a, w) => '<i style="left:' + a.toFixed(2) + '%;width:' + w.toFixed(2) + '%"></i>';
+  let bar = '', sun = '';
+  if (st) {
+    const a = pct(st.rise), b = pct(st.set);
+    bar = b >= a ? seg(a, b - a) : seg(0, b) + seg(a, 100 - a);
+    const len = Math.round((st.set - st.rise) / 60000);
+    sun = 'Východ ' + hm(c[2], st.rise) + ' · západ ' + hm(c[2], st.set) + ' · den ' + Math.floor(len / 60) + ' h ' + pad(len % 60) + ' min';
+  } else {
+    const polarDay = altFast(sunState(utc(q.y, q.mo, q.d) + (720 - 4 * c[4]) * 60000), c[3], c[4]) > 0;
+    bar = polarDay ? seg(0, 100) : ''; sun = polarDay ? 'Polární den' : 'Polární noc';
+  }
+  const w = cityWx(i);
+  const nowPct = (q.h * 60 + q.mi + q.s / 60) / 14.4;
+  setHTML(popEl,
+    '<div class="ph"><b>' + esc(c[0]) + '</b><span>' + esc(c[1]) + '</span></div>' +
+    '<div class="pt">' + fmtH(q.h) + ':' + pad(q.mi) + '<small>:' + pad(q.s) + (h12 ? ' ' + ampm(q.h) : '') + '</small></div>' +
+    '<div class="pd">' + WEEKDAY[q.wd] + ' ' + q.d + '. ' + q.mo + '. · ' + rel + ' · ' + (isDay ? 'den' : 'noc') + '</div>' +
+    '<div class="po">' + utcTxt(off) + ' · ' + diffTxt(off - offsetMin(TZ, ms)) + '</div>' +
+    (w ? '<div class="pw"><svg class="wi" viewBox="0 0 24 24">' + wxIcon(w.code, isDay) + '</svg><b>' + tempTxt(w.temp) + '</b> ' + (WMO[w.code] || '') + '</div>' : '') +
+    '<div class="pbar">' + bar + '<b style="left:' + nowPct.toFixed(2) + '%"></b></div>' +
+    '<div class="pticks"><span>0</span><span>6</span><span>12</span><span>18</span><span>24</span></div>' +
+    '<div class="ps">' + sun + '</div>');
+}
+
+let lastDay = 0, lastMin = -1;
+function render(ms){
+  const p = parts(TZ, ms);
+  set($('hh'), fmtH(p.h)); set($('mm'), pad(p.mi)); set($('ss'), pad(p.s)); set($('ap'), ampm(p.h));
+  document.title = fmtH(p.h) + ':' + pad(p.mi) + ':' + pad(p.s) + ' – My Homepage';
+
+  const pragueOff = offsetMin(TZ, ms);
+  const minuteKey = Math.floor(ms / 60000);
+  const k = dayKey(p);
+  if (k !== lastDay) { const first = !lastDay; lastDay = k; renderDay(p, ms, first); }
+
+  if (minuteKey !== lastMin) { try { updatePins(ms); drawMap(ms); } catch(e) { console.error(e); } }
+  try { renderPop(ms); } catch(e) { console.error(e); }
+  if (minuteKey !== lastMin) { renderDst(ms, pragueOff); lastMin = minuteKey; }
+}
+
+function renderDay(p, ms, first){
+  set($('c-day'), WEEKDAY[p.wd]);
+  set($('c-date'), p.d + '. ' + MONTH_GEN[p.mo-1] + ' ' + p.y);
+  const hol = holidayOf(p.y, p.mo, p.d);
+  $('c-hol').innerHTML = hol ? '<span class="pill"></span>' : '';
+  if (hol) $('c-hol').firstChild.textContent = hol;
+
+  const nm = nameOf(p.mo, p.d), ndTxt = nm || NO_NAME[mmdd(p.mo, p.d)] || '–';
+  set($('c-nd-k'), 'Svátek');
+  set($('c-nd'), ndTxt);
+  $('c-nd').classList.toggle('long', ndTxt.length > 13);
+  const t = new Date(Date.UTC(p.y, p.mo-1, p.d + 1));
+  const tm = t.getUTCMonth()+1, td = t.getUTCDate();
+  set($('c-nd2'), 'zítra ' + (nameOf(tm, td) || NO_NAME[mmdd(tm, td)] || '–'));
+
+  set($('c-week'), isoWeek(p.y, p.mo, p.d) + '.');
+  const md = daysIn(p.y, p.mo);
+  set($('c-month'), MONTH[p.mo-1] + ' má ' + md + ' dní');
+  const doy = Math.round((Date.UTC(p.y, p.mo-1, p.d) - Date.UTC(p.y, 0, 0)) / D);
+  const len = Math.round((Date.UTC(p.y+1, 0, 1) - Date.UTC(p.y, 0, 1)) / D);
+  const left = len - doy;
+  set($('c-doy'), doy + '.');
+  set($('c-left'), left === 0 ? 'poslední den roku' : plural(left, 'zbývá 1 den', 'zbývají ' + left + ' dny', 'zbývá ' + left + ' dní'));
+
+  set($('c-sun-k'), 'Slunce ' + PLACE_IN);
+  const st = sunTimes(p.y, p.mo, p.d, SUN_AT.lat, SUN_AT.lon);
+  set($('c-sun'), st ? hm(TZ, st.rise) + ' – ' + hm(TZ, st.set) : '–');
+
+  if (first) calReset();
+  renderCal();
+  renderForecast();
+}
+
+let dstCache = null;
+function nextTransition(ms){
+  const base = offsetMin(TZ, ms);
+  let lo = ms, hi = null;
+  for (let d = 1; d <= 400; d++) {
+    const t = ms + d*D;
+    if (offsetMin(TZ, t) !== base) { hi = t; lo = t - D; break; }
+  }
+  if (hi === null) return null;
+  while (hi - lo > 1000) { const mid = Math.floor((lo + hi) / 2); if (offsetMin(TZ, mid) === base) lo = mid; else hi = mid; }
+  hi = Math.round(hi / 60000) * 60000;
+  return { at: hi, from: base, to: offsetMin(TZ, hi) };
+}
+function regimeTxt(off){
+  if (off === 60) return 'zimní čas (SEČ, UTC+1)';
+  if (off === 120) return 'letní čas (SELČ, UTC+2)';
+  return 'UTC' + (off >= 0 ? '+' : MINUS) + dec(Math.abs(off)/60, 0);
+}
+function renderDst(ms, off){
+  set($('regime'), 'Platí ' + regimeTxt(off));
+  if (!dstCache || ms >= dstCache.at || dstCache.from !== off) dstCache = nextTransition(ms);
+  const box = $('dstbox');
+  let html = '<p>Teď platí <b>' + regimeTxt(off) + '</b>.</p>';
+  if (dstCache) {
+    const tr = dstCache, before = parts('UTC', tr.at + tr.from*60000), after = parts('UTC', tr.at + tr.to*60000);
+    const fwd = tr.to > tr.from;
+    const today = parts(TZ, ms);
+    const days = Math.round((Date.UTC(before.y, before.mo-1, before.d) - Date.UTC(today.y, today.mo-1, today.d)) / D);
+    const when = days === 0 ? 'dnes' : days === 1 ? 'zítra' : plural(days, 'za 1 den', 'za ' + days + ' dny', 'za ' + days + ' dní');
+    html += '<p>Další změna: <b>' + WEEKDAY[before.wd].toLowerCase() + ' ' + before.d + '. ' + MONTH_GEN[before.mo-1] + ' ' + before.y + ', ' +
+      before.h + ':' + pad(before.mi) + ' → ' + after.h + ':' + pad(after.mi) + '</b> (' + when + '). ' +
+      (fwd ? 'Začíná letní čas, noc bude o hodinu kratší.' : 'Začíná zimní čas, noc bude o hodinu delší.') + '</p>';
+  } else {
+    html += '<p>V příštích 12 měsících se čas měnit nebude.</p>';
+  }
+  html += '<p>V EU platí letní čas od poslední neděle v březnu do poslední neděle v říjnu, přechod je vždy v 1:00 UTC. Ostatní země mají vlastní pravidla; mapa světového času je bere z časových pásem prohlížeče.</p>';
+  if (box.innerHTML !== html) box.innerHTML = html;
+}
+
+function setFooter(){
+  const src = syncInfo && syncInfo.src ? syncInfo.src : 'time.akamai.com (záložně worldtimeapi.org, timeapi.io)';
+  $('foot').innerHTML = '<b>Vytvořil František Holas.</b>' +
+    '<br>Zdroje: čas ' + src + ' · počasí, předpověď a hledání míst <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0)' +
+    ' · mapa Natural Earth (volné dílo) a tz-lookup (CC0) · jmenný kalendář namedays-cs (MIT) · svátky podle zákona č. 245/2000 Sb. · východ a západ slunce výpočtem podle NOAA.' +
+    '<br>Soukromí: stránka nemá vlastní server a nepoužívá cookies. Pro počasí a ověření času se váš prohlížeč připojuje k Open-Meteo a time.akamai.com, polohu odešle jen po kliknutí na „Moje poloha“. ' +
+    'Volby (formát času, pohled kalendáře) a poslední stažené počasí si pamatuje jen váš prohlížeč. Hosting (GitHub Pages) může zaznamenávat IP adresy návštěvníků.';
+}
+
+/* ===== 24 h / 12 h ===== */
+function applyMode(){
+  document.querySelectorAll('#hfmt button').forEach(b => b.setAttribute('aria-pressed', String((b.dataset.h === '12') === h12)));
+}
+document.querySelectorAll('#hfmt button').forEach(b => b.addEventListener('click', () => {
+  h12 = b.dataset.h === '12'; store.set('pc_h12', h12); applyMode(); render(now());
+}));
+
+/* ===== Smyčka ===== */
+let lastWall = Date.now(), lastPerf = performance.now();
+function tick(){
+  const w = Date.now(), pf = performance.now();
+  if (Math.abs((w - lastWall) - (pf - lastPerf)) > 2000) syncTime();   // probuzení ze spánku / změna hodin
+  lastWall = w; lastPerf = pf;
+  const n = now();
+  try { render(n); } catch(e) { console.error(e); }   // chyba v jedné části nesmí zastavit hodiny
+  setTimeout(tick, 1000 - (n % 1000) + 3);
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  if (Date.now() - lastSyncAt > 10*60000) syncTime();
+  loadWeather();
+  render(now());
+});
+setInterval(() => { if (Date.now() - lastSyncAt > 30*60000) syncTime(); }, 60000);
+setInterval(loadWeather, 5*60000);   // skutečný dotaz jen když jsou data starší než 15 min
+
+applyMode();
+set($('wx-home-k'), 'Počasí ' + PLACE_IN);
+set($('fc-home'), '‹ ' + HOME_WX.name);
+[['calendar', 'sec-calendar'], ['forecast', 'sec-forecast'], ['worldMap', 'sec-world'], ['timeChange', 'sec-timechange']]
+  .forEach(([k, id]) => { if (CFG.sections[k] === false) $(id).hidden = true; });
+setFooter();
+tick();
+renderWeather();
+syncTime();
+loadWeather();
+})();
+</script>
+</body>
+</html>

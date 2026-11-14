@@ -1,0 +1,15 @@
+{
+  "name": "my-homepage-tools",
+  "private": true,
+  "type": "module",
+  "description": "Nástroje pro obnovu dat vložených v index.html (jmeniny, mapa časových pásem).",
+  "scripts": {
+    "update-data": "node update-data.mjs"
+  },
+  "dependencies": {
+    "@photostructure/tz-lookup": "11.8.0",
+    "namedays-cs": "3.0.0",
+    "topojson-client": "3.1.0",
+    "world-atlas": "2.0.2"
+  }
+}
