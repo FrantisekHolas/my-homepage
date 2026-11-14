@@ -6,17 +6,22 @@ Osobní domovská stránka Františka Holase: přesný čas, svátky (jmenný ka
 
 | Soubor | Účel |
 |---|---|
-| `index.html` | celá stránka: HTML, CSS i JS v jednom souboru, bez sestavování |
-| `config.js` | volitelné nastavení (místo, formát času, výchozí pohled kalendáře, sekce, lidé s narozeninami a svátky); výchozí hodnoty v `index.html` (`DEFAULTS`) musí odpovídat `config.js`, jen `people` je v `DEFAULTS` prázdné |
-| `tools/update-data.mjs` | obnoví data vložená v `index.html` mezi značkami `/*DATA:NAMES*/…/*END:NAMES*/` a `/*DATA:GRID*/…/*END:GRID*/` |
+| `index.html` | kostra stránky (HTML); načítá `styl.css` a skripty v pořadí `config.js` → `data/jmeniny.js` → `data/mapa.js` → `app.js` |
+| `styl.css` | vzhled stránky (světlý i tmavý režim) |
+| `app.js` | logika stránky; výchozí nastavení `DEFAULTS` |
+| `config.js` | volitelné nastavení (místo, formát času, výchozí pohled kalendáře, sekce, lidé s narozeninami a svátky); výchozí hodnoty v `app.js` (`DEFAULTS`) musí odpovídat `config.js`, jen `people` je v `DEFAULTS` prázdné |
+| `data/jmeniny.js`, `data/mapa.js` | jmenný kalendář (`window.HOMEPAGE_JMENINY`) a mapa pevniny s časovými pásmy (`window.HOMEPAGE_MAPA`); generuje je `tools/update-data.mjs`, ručně neupravovat |
+| `tools/update-data.mjs` | obnoví soubory v `data/` |
+| `favicon-32.png`, `favicon-64.png` | ikony do záložky: lístek Františka z rodinného stromu holasovi.net se zlatým F |
 | `THIRD_PARTY_NOTICES.md` | licence cizích dat a služeb; doplnit při každém novém cizím zdroji |
 | `.nojekyll` | GitHub Pages soubory nepřevádí přes Jekyll |
 | `CNAME` | vlastní doména `frantisek.holasovi.net`; spravuje ji GitHub (Settings → Pages), ručně neměnit ani nemazat |
-| `apple-touch-icon.png` | ikona pro plochu iPhonu/iPadu (180 × 180, čtverec bez průhlednosti): lístek Františka z rodinného stromu holasovi.net se zlatým F; malé ikony do záložky (32 a 64 px) jsou vložené přímo v `index.html` jako data URI |
+| `apple-touch-icon.png` | ikona pro plochu iPhonu/iPadu (180 × 180, čtverec bez průhlednosti, stejný lístek) |
 
 ## Pravidla
 
-- Stránka zůstává jeden soubor bez sestavování a bez knihoven z CDN. Výjimkou je jen `apple-touch-icon.png`, který iOS spolehlivě načte jen jako samostatný soubor. Vložená data se mění jen přes `tools/update-data.mjs`, ne ručně.
+- Stránka je bez sestavování a bez knihoven z CDN: jen soubory v tabulce výše. Skripty jsou klasické (`<script src>`, ne moduly ES) a odkazy relativní, aby stránka šla otevřít i dvojklikem na `index.html` bez serveru. Logiku nedělit do dalších souborů; nový soubor jen s dobrým důvodem a s doplněním této tabulky.
+- Data v `data/` se mění jen přes `tools/update-data.mjs`, ne ručně. Když se datový soubor nenačte, stránka nesmí spadnout (jmeniny prázdné, mapa prázdná, hodiny běží).
 - Název stránky „František Homepage“ (záložka, záhlaví, `apple-mobile-web-app-title` pro název na ploše iPhonu, protože záložka se každou sekundu přepisuje podle hodin).
 - Externí služby jen bez klíčů a s povoleným voláním z prohlížeče (CORS): Open-Meteo (počasí, předpověď, hledání míst; zdarma jen nekomerčně, uvádět CC BY 4.0), time.akamai.com se zálohou worldtimeapi.org a timeapi.io. Žádné API klíče ani tokeny v repozitáři – repozitář je veřejný.
 - Stránka musí fungovat i bez sítě (hodiny, kalendář, mapa) a na iPhonu/iPadu (Safari); chyba v jedné části nesmí zastavit hodiny.

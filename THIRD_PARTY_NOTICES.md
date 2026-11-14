@@ -1,8 +1,8 @@
 # Použitá díla třetích stran
 
-Stránka `index.html` obsahuje nebo používá následující cizí díla. Vlastní kód stránky je © 2026 František Holas.
+Stránka (`index.html` s připojenými soubory) obsahuje nebo používá následující cizí díla. Vlastní kód stránky je © 2026 František Holas.
 
-## Data vložená do stránky
+## Data stránky (složka `data/`)
 
 ### Jmenný kalendář: namedays-cs 3.0.0
 Zdroj: https://github.com/OzzyCzech/namedays-cs · licence MIT
@@ -65,4 +65,4 @@ Přiřazení časového pásma každé tečce mapy. Licence CC0 1.0 (volné díl
 - Výpočet východu a západu slunce podle algoritmu NOAA Solar Calculator (U.S. National Oceanic and Atmospheric Administration).
 - Státní a ostatní svátky podle zákona č. 245/2000 Sb. (úřední dílo, nechráněné autorským zákonem).
 
-Nástroje ve složce `tools/` používají navíc topojson-client 3.1.0 (licence ISC, © Michael Bostock); do stránky se nevkládá.
+Nástroje ve složce `tools/` používají navíc topojson-client 3.1.0 (licence ISC, © Michael Bostock); do stránky se nepřenáší.

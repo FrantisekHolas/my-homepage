@@ -1,7 +1,7 @@
-// Obnoví data vložená v ../index.html:
-//   NAMES – jmenný kalendář (balíček namedays-cs)
-//   GRID  – tečková mapa pevniny 1,5° × 1,5° s časovým pásmem každé tečky
-//           (Natural Earth 1:50m přes world-atlas, pásma přes @photostructure/tz-lookup)
+// Obnoví datové soubory stránky:
+//   ../data/jmeniny.js – jmenný kalendář (balíček namedays-cs)
+//   ../data/mapa.js    – tečková mapa pevniny 1,5° × 1,5° s časovým pásmem každé tečky
+//                        (Natural Earth 1:50m přes world-atlas, pásma přes @photostructure/tz-lookup)
 // Použití:  cd tools && npm install && npm run update-data
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
@@ -9,7 +9,7 @@ import { feature } from 'topojson-client';
 import tzlookup from '@photostructure/tz-lookup';
 
 const require = createRequire(import.meta.url);
-const INDEX = new URL('../index.html', import.meta.url);
+const DATA = new URL('../data/', import.meta.url);
 
 // --- jmenný kalendář ---
 // balíček nezveřejňuje names.json přes "exports", proto cesta přímo v node_modules
@@ -52,14 +52,11 @@ for (let j = 0; j < ROWS; j++) {
 }
 const grid = { step: STEP, top: LAT_TOP, rows: ROWS, cols: COLS, tz: tzNames, rle };
 
-// --- vložení do index.html mezi značky /*DATA:X*/ … /*END:X*/ ---
-let html = fs.readFileSync(INDEX, 'utf8');
-const put = (key, value) => {
-  const re = new RegExp('/\\*DATA:' + key + '\\*/[\\s\\S]*?/\\*END:' + key + '\\*/');
-  if (!re.test(html)) throw new Error('V index.html chybí značky pro ' + key);
-  html = html.replace(re, () => '/*DATA:' + key + '*/' + JSON.stringify(value) + '/*END:' + key + '*/');
-};
-put('NAMES', names);
-put('GRID', grid);
-fs.writeFileSync(INDEX, html);
+// --- zápis datových souborů (klasické skripty, aby stránka šla otevřít i dvojklikem bez serveru) ---
+const HLAVA = '// Vygenerováno nástrojem tools/update-data.mjs – ručně neupravovat.\n';
+const write = (file, popis, global, value) => fs.writeFileSync(new URL(file, DATA),
+  HLAVA + '// ' + popis + '\nwindow.' + global + ' = ' + JSON.stringify(value) + ';\n');
+fs.mkdirSync(DATA, { recursive: true });
+write('jmeniny.js', 'Jmenný kalendář: den MM-DD → jméno nebo seznam jmen (balíček namedays-cs, viz THIRD_PARTY_NOTICES.md).', 'HOMEPAGE_JMENINY', names);
+write('mapa.js', 'Tečková mapa pevniny 1,5° × 1,5° s časovým pásmem každé tečky (Natural Earth, tz-lookup, viz THIRD_PARTY_NOTICES.md).', 'HOMEPAGE_MAPA', grid);
 console.log('Hotovo: jmeniny ' + Object.keys(names).length + ' dní, mapa ' + rle.flat().filter((v, i) => i % 2 === 0 && v).length + ' úseků pevniny, ' + tzNames.length + ' časových pásem.');

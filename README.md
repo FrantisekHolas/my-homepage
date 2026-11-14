@@ -2,7 +2,16 @@
 
 Domovská stránka s přesným časem, svátky, plánovacím kalendářem se státními svátky, týdenní předpovědí počasí a mapou světového času se dnem a nocí.
 
-Je to jediný soubor `index.html`, bez serveru a bez instalace. Funguje v prohlížeči na počítači, tabletu i mobilu.
+Je to statická stránka bez serveru, bez sestavování a bez instalace. Funguje v prohlížeči na počítači, tabletu i mobilu.
+
+| Soubor | Obsah |
+|---|---|
+| `index.html` | kostra stránky |
+| `styl.css` | vzhled |
+| `app.js` | logika stránky |
+| `config.js` | nastavení (viz níže) |
+| `data/` | jmenný kalendář a mapa časových pásem (generuje `tools/update-data.mjs`) |
+| `favicon-*.png`, `apple-touch-icon.png` | ikony do záložky a na plochu iPhonu |
 
 ## Co stránka umí
 
@@ -30,11 +39,11 @@ Soubor je volitelný: když chybí, platí výchozí hodnoty (Brno, 24 h, 3 měs
 ## Spuštění
 
 - **Online:** https://frantisek.holasovi.net/ (GitHub Pages z větve `main`, složka `/`; vlastní doména je v souboru `CNAME`).
-- **Lokálně:** otevřít `index.html` v prohlížeči; `config.js` musí ležet ve stejné složce.
+- **Lokálně:** otevřít `index.html` v prohlížeči (stačí dvojklik); ostatní soubory a složka `data/` musí ležet vedle něj.
 
-## Obnova vložených dat
+## Obnova dat
 
-Jmenný kalendář a data mapy jsou vložená přímo v `index.html` mezi značkami `/*DATA:…*/ … /*END:…*/`. Obnovují se příkazy:
+Jmenný kalendář a data mapy jsou v souborech `data/jmeniny.js` a `data/mapa.js`. Ručně se neupravují, obnovují se příkazy:
 
 ```
 cd tools

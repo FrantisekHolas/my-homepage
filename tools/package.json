@@ -2,7 +2,7 @@
   "name": "my-homepage-tools",
   "private": true,
   "type": "module",
-  "description": "Nástroje pro obnovu dat vložených v index.html (jmeniny, mapa časových pásem).",
+  "description": "Nástroje pro obnovu datových souborů stránky v ../data/ (jmeniny, mapa časových pásem).",
   "scripts": {
     "update-data": "node update-data.mjs"
   },
