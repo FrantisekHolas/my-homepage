@@ -12,6 +12,7 @@ Je to statická stránka bez serveru, bez sestavování a bez instalace. Funguje
 | `config.js` | nastavení (viz níže) |
 | `data/` | jmenný kalendář a mapa časových pásem (generuje `tools/update-data.mjs`) |
 | `favicon-*.png`, `apple-touch-icon.png` | ikony do záložky a na plochu iPhonu |
+| `holasovi-strom.webp` | ikona rodinného stromu v záhlaví, odkaz na holasovi.net |
 
 ## Co stránka umí
 
@@ -24,6 +25,7 @@ Je to statická stránka bez serveru, bez sestavování a bez instalace. Funguje
 | Světový čas | mapa časových pásem se dnem a nocí, jedno hlavní město za každé pásmo, detail po najetí nebo kliknutí |
 | Změna času | aktuální režim a datum další změny letního/zimního času |
 | Vzhled | světlý a tmavý režim podle systému; tlačítkem vedle 24 h / 12 h ho lze přepnout (volba se pamatuje) |
+| Rodinný strom | ikona stromu vpravo v záhlaví vede na holasovi.net |
 
 ## Přizpůsobení
 

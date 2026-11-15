@@ -17,6 +17,7 @@ Osobní domovská stránka Františka Holase: přesný čas, svátky (jmenný ka
 | `.nojekyll` | GitHub Pages soubory nepřevádí přes Jekyll |
 | `CNAME` | vlastní doména `frantisek.holasovi.net`; spravuje ji GitHub (Settings → Pages), ručně neměnit ani nemazat |
 | `apple-touch-icon.png` | ikona pro plochu iPhonu/iPadu (180 × 180, čtverec bez průhlednosti, stejný lístek) |
+| `holasovi-strom.webp` | ikona rodinného stromu vpravo v záhlaví za přepínačem režimu, odkaz na https://holasovi.net (96 × 96, zmenšená ikona holasovi.net) |
 
 ## Pravidla
 

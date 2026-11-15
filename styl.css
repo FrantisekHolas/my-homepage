@@ -62,10 +62,18 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .theme-btn svg{width:16px;height:16px}
 .theme-btn .th-sun,:root[data-scheme="dark"] .theme-btn .th-moon{display:none}
 :root[data-scheme="dark"] .theme-btn .th-sun{display:block}
+.strom{display:block;flex:none;width:31px;height:31px;border:1px solid var(--line);border-radius:50%;overflow:hidden;background:var(--card)}
+.strom img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .2s ease}
+.strom:hover img{transform:scale(1.12)}
 .brand,.toggle button{white-space:nowrap}
-@media (max-width:380px){
+/* záhlaví na telefonu na jednom řádku (od 360 px) */
+@media (max-width:440px){
   .brand{font-size:15px;gap:6px}
   .hdr-ctl{gap:6px}
+  header .toggle button{padding:4px 8px}
+}
+@media (max-width:380px){
+  .brand svg{display:none}
   .toggle button{padding:4px 8px}
 }
 
