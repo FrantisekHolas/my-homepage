@@ -18,6 +18,7 @@ Osobní domovská stránka Františka Holase: přesný čas, svátky (jmenný ka
 | `CNAME` | vlastní doména `frantisek.holasovi.net`; spravuje ji GitHub (Settings → Pages), ručně neměnit ani nemazat |
 | `apple-touch-icon.png` | ikona pro plochu iPhonu/iPadu (180 × 180, čtverec bez průhlednosti, stejný lístek) |
 | `holasovi-strom.webp` | ikona rodinného stromu vpravo v záhlaví za přepínačem režimu, odkaz na https://holasovi.net (96 × 96, zmenšená ikona holasovi.net) |
+| `.github/workflows/zverejneni.yml` | zveřejnění na GitHub Pages: web se sestaví z repozitáře bez `README.md`, `CLAUDE.md`, `THIRD_PARTY_NOTICES.md`, `tools/` a nastavení repozitáře (seznam `VYNECHAT`); nový soubor, který na web nepatří, doplnit do seznamu |
 
 ## Pravidla
 
@@ -42,6 +43,6 @@ V headless Chromiu (Playwright) s podvrženými odpověďmi Open-Meteo a time.ak
 
 ## Nasazení
 
-Commit do `main` a push; GitHub Pages stránku zveřejní zhruba do minuty: https://frantisek.holasovi.net/ (původní adresa frantisekholas.github.io/my-homepage/ na ni přesměrovává).
+Commit do `main` a push; úloha GitHub Actions „Zveřejnění webu“ stránku zveřejní zhruba do minuty (v Settings → Pages je Source: GitHub Actions): https://frantisek.holasovi.net/ (původní adresa frantisekholas.github.io/my-homepage/ na ni přesměrovává).
 
 DNS (u správce domény holasovi.net): CNAME `frantisek` → `frantisekholas.github.io`, TXT `_github-pages-challenge-FrantisekHolas` pro ověření domény na GitHubu – oba záznamy ponechat.

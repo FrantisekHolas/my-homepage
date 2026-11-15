@@ -13,6 +13,7 @@ Je to statická stránka bez serveru, bez sestavování a bez instalace. Funguje
 | `data/` | jmenný kalendář a mapa časových pásem (generuje `tools/update-data.mjs`) |
 | `favicon-*.png`, `apple-touch-icon.png` | ikony do záložky a na plochu iPhonu |
 | `holasovi-strom.webp` | ikona rodinného stromu v záhlaví, odkaz na holasovi.net |
+| `.github/workflows/zverejneni.yml` | zveřejnění na GitHub Pages jen se soubory webu (bez návodů, licencí a nástrojů) |
 
 ## Co stránka umí
 
@@ -41,7 +42,7 @@ Soubor je volitelný: když chybí, platí výchozí hodnoty (Brno, 24 h, 3 měs
 
 ## Spuštění
 
-- **Online:** https://frantisek.holasovi.net/ (GitHub Pages z větve `main`, složka `/`; vlastní doména je v souboru `CNAME`).
+- **Online:** https://frantisek.holasovi.net/ (GitHub Pages: po každém nahrání do `main` web zveřejní úloha GitHub Actions „Zveřejnění webu“, jen se soubory stránky; vlastní doména je v nastavení Pages a v souboru `CNAME`).
 - **Lokálně:** otevřít `index.html` v prohlížeči (stačí dvojklik); ostatní soubory a složka `data/` musí ležet vedle něj.
 
 ## Obnova dat
