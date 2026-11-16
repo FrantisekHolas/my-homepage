@@ -1014,7 +1014,7 @@ function setFooter(){
   const src = syncInfo && syncInfo.src ? syncInfo.src : 'time.akamai.com (záložně worldtimeapi.org, timeapi.io)';
   $('foot').innerHTML = '<b>Vytvořil František Holas.</b>' +
     '<br>Zdroje: čas ' + src + ' · počasí, předpověď a hledání míst <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0)' +
-    ' · mapa Natural Earth (volné dílo) a tz-lookup (CC0) · jmenný kalendář namedays-cs (MIT) · svátky podle zákona č. 245/2000 Sb. · východ a západ slunce výpočtem podle NOAA.' +
+    ' · mapa Natural Earth (volné dílo) a tz-lookup (CC0) · jmenný kalendář namedays-cs (MIT) · písmo hodin Michroma (OFL) · svátky podle zákona č. 245/2000 Sb. · východ a západ slunce výpočtem podle NOAA.' +
     '<br>Soukromí: stránka nemá vlastní server a nepoužívá cookies. Pro počasí a ověření času se váš prohlížeč připojuje k Open-Meteo a time.akamai.com, polohu odešle jen po kliknutí na „Moje poloha“. ' +
     'Volby (formát času, světlý/tmavý režim, pohled kalendáře) a poslední stažené počasí si pamatuje jen váš prohlížeč. Hosting (GitHub Pages) může zaznamenávat IP adresy návštěvníků.';
 }

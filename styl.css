@@ -42,6 +42,8 @@
 }
 :root[data-theme="light"]{color-scheme:light}
 :root[data-theme="dark"]{color-scheme:dark}
+/* písmo velkých hodin: Michroma (SIL OFL 1.1, viz THIRD_PARTY_NOTICES.md); má jen normální řez, tučné dopočítá prohlížeč */
+@font-face{font-family:Michroma;src:url(michroma.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{margin:0}
@@ -79,9 +81,15 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 
 .hero{background:var(--card);border-radius:16px;padding:22px 16px 22px;text-align:center}
 .hero .label{color:var(--muted);font-size:15px}
-.clock{margin:6px 0 4px;font-size:clamp(64px,15.5vw,196px);font-weight:700;line-height:1.02;
-  letter-spacing:-.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
-.clock .c{color:var(--soft);font-weight:600;position:relative;top:-.06em;margin:0 .01em}
+.clock{margin:4px 0 8px;font-family:Michroma,Inter,"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+  font-size:clamp(44px,12.4vw,158px);font-weight:700;line-height:1.3;letter-spacing:0;font-variant-numeric:tabular-nums;white-space:nowrap}
+/* Michroma nemá číslice stejně široké (4, 7 a 9 jsou širší): pevná šířka dvojic, aby hodiny při změně neposkakovaly */
+.clock #hh,.clock #mm,.clock #ss{display:inline-block;width:2.11ch;text-align:center}
+/* 12h formát: přípona dop./odp. je v Michromě široká, hodiny o 10 % menší, aby se vešly (i na 360 px) */
+.clock:has(.ap:not(:empty)){font-size:clamp(40px,11.2vw,142px)}
+/* 12h: hodina bývá jednociferná (2:47), bez pevné šířky by před dvojtečkou zůstala mezera; mění se jen jednou za hodinu */
+.clock:has(.ap:not(:empty)) #hh{width:auto}
+.clock .c{color:var(--soft);font-weight:700;margin:0 .01em}
 .clock .ss{color:var(--muted)}
 .clock .ap{font-size:.24em;font-weight:600;color:var(--muted);letter-spacing:0;margin-left:.15em}
 .hero .dst{color:var(--muted);font-size:14px;margin-top:6px}

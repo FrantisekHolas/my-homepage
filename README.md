@@ -12,6 +12,7 @@ Je to statická stránka bez serveru, bez sestavování a bez instalace. Funguje
 | `config.js` | nastavení (viz níže) |
 | `data/` | jmenný kalendář a mapa časových pásem (generuje `tools/update-data.mjs`) |
 | `favicon-*.png`, `apple-touch-icon.png` | ikony do záložky a na plochu iPhonu |
+| `michroma.woff2` | písmo velkých hodin (Michroma, SIL OFL 1.1) |
 | `holasovi-strom.webp` | ikona rodinného stromu v záhlaví, odkaz na holasovi.net |
 | `.github/workflows/zverejneni.yml` | zveřejnění na GitHub Pages jen se soubory webu (bez návodů, licencí a nástrojů) |
 

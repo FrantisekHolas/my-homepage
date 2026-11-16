@@ -17,6 +17,7 @@ Osobní domovská stránka Františka Holase: přesný čas, svátky (jmenný ka
 | `.nojekyll` | GitHub Pages soubory nepřevádí přes Jekyll |
 | `CNAME` | vlastní doména `frantisek.holasovi.net`; spravuje ji GitHub (Settings → Pages), ručně neměnit ani nemazat |
 | `apple-touch-icon.png` | ikona pro plochu iPhonu/iPadu (180 × 180, čtverec bez průhlednosti, stejný lístek) |
+| `michroma.woff2` | písmo velkých hodin Michroma (latinka, SIL OFL 1.1, licence v `THIRD_PARTY_NOTICES.md`); má jen normální řez, tučné dopočítá prohlížeč; číslice nemají stejnou šířku, proto pevná šířka dvojic v `.clock` |
 | `holasovi-strom.webp` | ikona rodinného stromu vpravo v záhlaví za přepínačem režimu, odkaz na https://holasovi.net (96 × 96, zmenšená ikona holasovi.net) |
 | `.github/workflows/zverejneni.yml` | zveřejnění na GitHub Pages: web se sestaví z repozitáře bez `README.md`, `CLAUDE.md`, `THIRD_PARTY_NOTICES.md`, `tools/` a nastavení repozitáře (seznam `VYNECHAT`); nový soubor, který na web nepatří, doplnit do seznamu |
 
