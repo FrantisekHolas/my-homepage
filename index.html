@@ -32,6 +32,8 @@ try { var t = JSON.parse(localStorage.getItem('pc_theme')); if (t === 'light' ||
     </div>
   </header>
 
+  <!-- sloupce pro širokou obrazovku (styl.css, „Široké obrazovky“); na užších obrazovkách bez vlivu -->
+  <div class="col">
   <section class="hero">
     <div class="label">Aktuální čas v České republice</div>
     <div class="clock" id="clock"><span id="hh">--</span><span class="c">:</span><span id="mm">--</span><span class="c">:</span><span class="ss" id="ss">--</span><span class="ap" id="ap"></span></div>
@@ -68,6 +70,9 @@ try { var t = JSON.parse(localStorage.getItem('pc_theme')); if (t === 'light' ||
   <section class="cal q" id="cal"></section>
   <div class="hbox"><h3 id="cal-hol-h">Události ve zvoleném období</h3><ul class="hlist" id="cal-hol"></ul><p class="hnote" id="cal-shopnote" hidden>Obchody: platí pro prodejny nad 200 m² (zákon č. 223/2016 Sb.). Menší obchody, lékárny, benzinky a prodejny na nádražích, letištích a v nemocnicích mohou mít otevřeno.</p></div>
   </div>
+  </div>
+
+  <div class="col">
 
   <div id="sec-forecast">
   <div class="sechead">
@@ -99,6 +104,7 @@ try { var t = JSON.parse(localStorage.getItem('pc_theme')); if (t === 'light' ||
   <div id="sec-timechange">
   <h2>Změna času</h2>
   <div class="dstbox" id="dstbox"></div>
+  </div>
   </div>
 
   <footer id="foot"></footer>

@@ -782,7 +782,8 @@ function resizeMap(){
   const w = mapEl.clientWidth, h = mapEl.clientHeight;
   if (!w || (w === mapW && h === mapH)) return;
   mapW = w; mapH = h;
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  // zvětšení stránky přes CSS (zoom na široké obrazovce): plátno v rozlišení, v jakém se skutečně zobrazí
+  const dpr = Math.min(window.devicePixelRatio || 1, 2) * (mapEl.getBoundingClientRect().width / w || 1);
   cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
   mapWrap.classList.toggle('narrow', w < 720);
   drawMap(now());
@@ -802,7 +803,9 @@ function cellFromEvent(e){
     const ii = i + a, jj = j + b;
     if (ii >= 0 && ii < NC && jj >= 0 && jj < NR && cellAt[jj * NC + ii] >= 0) { best = cellAt[jj * NC + ii]; break; }
   }
-  return { k: best, x: e.clientX - mapWrap.getBoundingClientRect().left, y: e.clientY - mapWrap.getBoundingClientRect().top };
+  // poloha v bodech uvnitř mapy (při zvětšení přes CSS zoom se liší od bodů obrazovky)
+  const m = mapWrap.getBoundingClientRect(), z = (r.width / (mapW || r.width)) || 1;
+  return { k: best, x: (e.clientX - m.left) / z, y: (e.clientY - m.top) / z };
 }
 cv.addEventListener('mousemove', e => {
   const { k, x, y } = cellFromEvent(e);

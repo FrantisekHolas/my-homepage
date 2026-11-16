@@ -289,6 +289,26 @@ h2{font-size:21px;margin:30px 0 4px}
 footer{color:var(--muted);font-size:12.5px;margin-top:26px;line-height:1.6}
 footer a{color:inherit}
 
+/* Široké obrazovky. Bloky .col v index.html (hodiny, kartičky, kalendář | předpověď, mapa, změna času)
+   se na užších obrazovkách nijak neprojeví. Od 2200 px dva sloupce, od 4000 px (např. 5120 × 1440)
+   tři sloupce: kalendář a změna času | hodiny, kartičky, předpověď | mapa, vše o 30 % větší. */
+.col{display:contents}
+@media (min-width:2200px) and (max-width:3999.98px){
+  .wrap{max-width:3200px;padding:0 32px 32px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px;align-items:start}
+  .wrap>header,.wrap>footer{grid-column:1/-1}
+  .col{display:block;min-width:0}
+  .col>:first-child,.col>:first-child>.sechead:first-child{margin-top:0}
+}
+@media (min-width:4000px){
+  .wrap{zoom:1.3;max-width:3800px;padding:0 32px 32px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 40px;align-items:start;
+    grid-template-rows:auto auto auto 1fr auto auto;
+    grid-template-areas:"head head head" "cal hero world" "cal cards world" "cal fc world" "dst fc world" "foot foot foot"}
+  .wrap>header{grid-area:head} .hero{grid-area:hero} .cards{grid-area:cards;margin-top:0}
+  #sec-calendar{grid-area:cal} #sec-forecast{grid-area:fc} #sec-world{grid-area:world} #sec-timechange{grid-area:dst} .wrap>footer{grid-area:foot;margin-top:0}
+  #sec-calendar>.sechead,#sec-forecast>.sechead,#sec-world>h2,#sec-timechange>h2{margin-top:0}
+  .fc{grid-template-columns:repeat(8,minmax(0,1fr))}
+}
+
 @media (max-width:900px){
   .cal.q{grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
   .cal.year{grid-template-columns:repeat(3,minmax(0,1fr))}

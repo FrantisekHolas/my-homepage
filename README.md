@@ -26,6 +26,7 @@ Je to statická stránka bez serveru, bez sestavování a bez instalace. Funguje
 | Světový čas | mapa časových pásem se dnem a nocí, jedno hlavní město za každé pásmo, detail po najetí nebo kliknutí |
 | Změna času | aktuální režim a datum další změny letního/zimního času |
 | Vzhled | světlý a tmavý režim podle systému; tlačítkem vedle 24 h / 12 h ho lze přepnout (volba se pamatuje) |
+| Široký monitor | od šířky 2200 px dva sloupce, od 4000 px (např. 5120 × 1440) tři sloupce a vše o 30 % větší, celá stránka na jedné obrazovce |
 | Rodinný strom | ikona stromu vpravo v záhlaví vede na holasovi.net |
 
 ## Přizpůsobení
