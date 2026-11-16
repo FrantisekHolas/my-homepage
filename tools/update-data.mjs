@@ -19,18 +19,35 @@ const names = JSON.parse(fs.readFileSync(new URL('./node_modules/namedays-cs/dis
 const STEP = 1.5, LAT_TOP = 78, ROWS = 90, COLS = 240;   // 78° s. š. až 57° j. š., bez Antarktidy
 const topo = JSON.parse(fs.readFileSync(require.resolve('world-atlas/land-50m.json'), 'utf8'));
 const land = feature(topo, topo.objects.land);
+// Některé polygony (Eurasie s Čukotkou, Wrangelův ostrov, Fidži) přecházejí přes 180. poledník:
+// hrana skočí z +180° na −180°. Rovinný test by ji bral jako čáru přes celý svět a v pásu
+// zeměpisných šířek mezi skoky by prohodil pevninu a moře. Proto se délky kruhu „rozbalí“
+// (po skoku o víc než 180° se přičte/odečte 360°) a bod se testuje i posunutý o ±360°.
+const unwrap = r => {
+  let off = 0;
+  const out = r.map(([x, y], k) => {
+    if (k) { const dx = x - r[k - 1][0]; if (dx > 180) off -= 360; else if (dx < -180) off += 360; }
+    return [x + off, y];
+  });
+  if (off !== 0) return r;   // kruh kolem pólu (Antarktida) se nerozbalí; je mimo rozsah mapy
+  // posunout tak, aby kruh začínal mezi −180° a +180° (obrys i díry, např. Kaspické moře, pak leží stejně)
+  const shift = Math.min(...out.map(p => p[0])) < -180 ? 360 : 0;
+  return shift ? out.map(([x, y]) => [x + shift, y]) : out;
+};
 const polys = [];
 for (const f of (land.features || [land])) {
   const g = f.geometry || f;
-  for (const rings of (g.type === 'Polygon' ? [g.coordinates] : g.coordinates)) {
+  for (const rings0 of (g.type === 'Polygon' ? [g.coordinates] : g.coordinates)) {
+    const rings = rings0.map(unwrap);
     let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
     for (const [x, y] of rings[0]) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
     polys.push({ rings, x0, y0, x1, y1 });
   }
 }
-// rovinný test bodu v polygonu (data jsou oříznutá na ±180°, Antarktida je mimo rozsah)
+// rovinný test bodu v polygonu (Antarktida je mimo rozsah)
 const inRing = (r, x, y) => { let c = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) { const [xi, yi] = r[i], [xj, yj] = r[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
-const isLand = (x, y) => polys.some(p => x >= p.x0 && x <= p.x1 && y >= p.y0 && y <= p.y1 && inRing(p.rings[0], x, y) && !p.rings.slice(1).some(h => inRing(h, x, y)));
+const inPoly = (p, x, y) => x >= p.x0 && x <= p.x1 && y >= p.y0 && y <= p.y1 && inRing(p.rings[0], x, y) && !p.rings.slice(1).some(h => inRing(h, x, y));
+const isLand = (x, y) => polys.some(p => inPoly(p, x, y) || inPoly(p, x + 360, y) || inPoly(p, x - 360, y));
 const validTz = tz => { try { new Intl.DateTimeFormat('en', { timeZone: tz }); return true; } catch { return false; } };
 
 const tzNames = [], tzIdx = new Map(), rle = [];
