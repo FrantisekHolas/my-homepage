@@ -403,6 +403,20 @@ function renderWeather(){
 /* ===== Předpověď na týden: Brno, nebo jiné místo (hledání / poloha) – volba se nepamatuje ===== */
 let fcLoc = null;   // { name, sub, lat, lon, data, t, loading, error }
 function fcMsg(txt){ const el = $('fc-msg'); el.hidden = !txt; set(el, txt || ''); }
+// Ikona a popis dne v předpovědi podle stejného pravidla jako text o srážkách („wet“). Denní kód Open-Meteo je
+// nejhorší počasí kterékoli hodiny a s úhrnem a pravděpodobností srážek se u malých srážek rozchází.
+// Bouřka a mlha zůstávají podle kódu.
+const WET_CODE = c => (c >= 51 && c <= 67) || (c >= 71 && c <= 77) || (c >= 80 && c <= 86);
+function dayLook(d, wet){
+  const c = d.code;
+  if (!wet && WET_CODE(c)) return { code: 3, txt: WMO[3] };
+  if (wet && c <= 3) {
+    if (d.snow >= 0.5) return { code: 71, txt: WMO[71] };
+    if (d.prec >= 1) return { code: 61, txt: WMO[61] };
+    return { code: 51, txt: 'slabé srážky' };
+  }
+  return { code: c, txt: WMO[c] || '' };
+}
 async function loadLoc(loc, quiet){
   if (!quiet) { loc.loading = true; renderForecast(); }
   try {
@@ -450,12 +464,13 @@ function renderForecast(){
     const cls = ['fd']; if (rel === 0) cls.push('now'); if (hol) cls.push('hol'); else if (wd === 0 || wd === 6) cls.push('we');
     const st = sunTimes(y, mo, dd, src.lat, src.lon);
     const prob = d.prob == null ? null : Math.round(d.prob);
+    const wet = d.prec >= 0.1 || (prob != null && prob >= 30);
+    const look = dayLook(d, wet);
     const tip = WEEKDAY[wd] + ' ' + dd + '. ' + mo + '. ' + y + (hol ? ' – ' + hol : '') + '\n' +
-      (WMO[d.code] || '') + ', ' + tempTxt(d.tmax) + ' / ' + tempTxt(d.tmin) + '\n' +
+      look.txt + (look.code !== d.code && WMO[d.code] ? ' (Open-Meteo: ' + WMO[d.code] + ')' : '') + ', ' + tempTxt(d.tmax) + ' / ' + tempTxt(d.tmin) + '\n' +
       'Srážky ' + dec(d.prec, 1) + ' mm' + (prob != null ? ' (pravděpodobnost ' + prob + ' %)' : '') + (d.snow > 0 ? ', sníh ' + dec(d.snow, 1) + ' cm' : '') + '\n' +
       'Vítr až ' + Math.round(d.wind) + ' km/h, nárazy ' + Math.round(d.gust) + ' km/h' +
       (st ? '\nVýchod slunce ' + hm(tz, st.rise) + ', západ ' + hm(tz, st.set) + (czech ? '' : ' (místního času)') : '');
-    const wet = d.prec >= 0.1 || (prob != null && prob >= 30);
     const NB = ' ';
     const amount = d.snow >= 0.5 ? 'sníh' + NB + dec(d.snow, d.snow < 10 ? 1 : 0) + NB + 'cm' : dec(d.prec, d.prec < 10 ? 1 : 0) + NB + 'mm';
     const precTxt = wet ? amount + (prob != null ? ' · ' + prob + NB + '%' : '') : 'bez srážek';
@@ -464,8 +479,8 @@ function renderForecast(){
     const windTxt = gust >= 60 ? 'nárazy ' + gust + ' km/h' : 'vítr ' + Math.round(d.wind) + ' km/h';
     h += '<div class="' + cls.join(' ') + '" title="' + esc(tip) + '">' +
       '<div class="fl"><b>' + label + '</b><span>' + dd + '. ' + mo + '.</span></div>' +
-      '<svg class="wi lg" viewBox="0 0 24 24">' + wxIcon(d.code, true) + '</svg>' +
-      '<div class="fdsc">' + (WMO[d.code] || '') + '</div>' +
+      '<svg class="wi lg" viewBox="0 0 24 24">' + wxIcon(look.code, true) + '</svg>' +
+      '<div class="fdsc">' + look.txt + '</div>' +
       '<div class="ft"><b>' + deg(d.tmax) + '</b><span>' + deg(d.tmin) + '</span></div>' +
       '<div class="fb"><i style="left:' + left.toFixed(1) + '%;width:' + width.toFixed(1) + '%;background:linear-gradient(90deg,' + tcol(d.tmin) + ',' + tcol(d.tmax) + ')"></i></div>' +
       '<div class="fp' + (wet ? ' wet' : '') + '">' + (wet ? DROP_SVG : '') + precTxt + '</div>' +
