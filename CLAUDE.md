@@ -33,6 +33,7 @@ Osobní domovská stránka Františka Holase: přesný čas, svátky (jmenný ka
 - Barvy jen přes CSS proměnné, světlý i tmavý režim. Režim je výchozí podle systému; tlačítko vedle 24 h / 12 h ho ručně přepne (localStorage `pc_theme`, shoda se systémem volbu smaže; malý skript v `<head>` ho nastaví ještě před vykreslením). Tmavé proměnné jsou ve `styl.css` dvakrát (media query a `:root[data-theme="dark"]`) – měnit obě. Rozložení musí fungovat od šířky 360 px (záhlaví na jednom řádku).
 - Široké obrazovky (`styl.css`, „Široké obrazovky“): do 2199 px jeden sloupec; od 2200 px dva sloupce (bloky `.col` v `index.html`: hodiny, kartičky, kalendář | předpověď, mapa, změna času); od 4000 px (monitor 5120 × 1440) tři sloupce kalendář | hodiny, kartičky, předpověď | mapa a změna času a vše o 30 % větší (`zoom: 1.3`). Bloky `.col` jsou jinak `display: contents`, pořadí částí na mobilu se nemění. Mapa při zvětšení přepočítává polohu myši a rozlišení plátna podle skutečného měřítka (`resizeMap`, `cellFromEvent` v `app.js`).
 - Lidé v `config.js` (`people`): narozeniny jen den a měsíc, věk se nikde nezobrazuje. Pro jmeniny používat výhradně slovo **svátek**; státní svátky v souhrnu a legendě označovat „státní svátek“. Svátek se dopočítá z jmenného kalendáře podle `firstName` (jinak prvního slova `name`), lze ho zadat ručně (`nameday`) nebo vypnout (`false`). V kalendáři tečka vlevo nahoře u čísla dne (narozeniny `--bday`, svátek `--nday`), seznam pod kalendářem se jmenuje „Události ve zvoleném období“ a má řádky „Narozeniny – jméno“ / „Svátek – jméno“. Kdo má narozeniny 29. 2., slaví v nepřestupném roce 28. 2.
+- Adventní neděle (`adventOf()`): čtyři neděle před Vánocemi, 4. adventní neděle je poslední neděle před 25. 12. (může to být i Štědrý den, např. 2028). V kalendáři fialová tečka u čísla dne (`--advent`, světlý i tmavý režim), v bublině a v Událostech řádek „1. adventní neděle“ atd., v legendě „adventní neděle“ jen v období, kde nějaká je. Na pracovní dny nemají vliv.
 
 ## Testování před commitem
 
@@ -41,7 +42,7 @@ V headless Chromiu (Playwright) s podvrženými odpověďmi Open-Meteo a time.ak
 - bez sítě: hodiny běží, místo počasí je srozumitelná hláška,
 - `config.js` výchozí, chybějící, s jiným místem a s neplatnými souřadnicemi,
 - lidé: dopočet svátku, přezdívka s `firstName`, ruční a vypnutý svátek, neplatné datum a chybějící jméno (jen varování v konzoli), 29. 2. v přestupném i nepřestupném roce,
-- u kalendáře kontrola svátků a počtu pracovních dní (2026: 250, 2027: 252), obchody o svátcích (23.–26. 12., Velikonoce, otevřený svátek 17. 11.), u mapy bez překryvů bublin měst.
+- u kalendáře kontrola svátků a počtu pracovních dní (2026: 250, 2027: 252), adventní neděle (2026: 29. 11.–20. 12., 2028: 4. adventní neděle 24. 12.), obchody o svátcích (23.–26. 12., Velikonoce, otevřený svátek 17. 11.), u mapy bez překryvů bublin měst.
 
 ## Nasazení
 

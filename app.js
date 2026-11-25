@@ -147,6 +147,15 @@ function holidayOf(y, mo, d){
   return '';
 }
 const holT = t => { const p = ymd(t); return holidayOf(p.y, p.mo, p.d); };
+// Adventní neděle: čtyři neděle před Vánocemi, 4. adventní neděle je poslední neděle před 25. 12. (může to být i Štědrý den)
+function adventOf(y, mo, d){   // 0 = není, jinak číslo adventní neděle 1–4
+  if (mo < 11) return 0;
+  const t = Date.UTC(y, mo - 1, d);
+  if (new Date(t).getUTCDay() !== 0) return 0;
+  const vanoce = Date.UTC(y, 11, 25), wd = new Date(vanoce).getUTCDay();
+  const n = 4 - Math.round((vanoce - (wd || 7) * D - t) / (7 * D));
+  return n >= 1 && n <= 4 ? n : 0;
+}
 // Prodejní doba o svátcích (zákon č. 223/2016 Sb.): obchody nad 200 m² mají zavřeno, Štědrý den od 12:00
 const SHOPS_CLOSED = { '01-01': 'closed', '05-08': 'closed', '09-28': 'closed', '10-28': 'closed', '12-24': 'noon', '12-25': 'closed', '12-26': 'closed' };
 function shopsOf(y, mo, d){   // '' = není státní svátek, jinak 'closed' | 'noon' | 'open'
@@ -593,13 +602,16 @@ function monthHTML(y, mo, today, curWeekMon){
       if (hol) cls.push('hol');
       if (shop === 'open' || shop === 'noon') cls.push('shop-' + shop);
       if (t === today) cls.push('today'); else if (t < today) cls.push('past');
-      const nm = nameOf(mo, day), pe = peopleOn(y, mo, day);
+      const nm = nameOf(mo, day), pe = peopleOn(y, mo, day), adv = adventOf(y, mo, day);
       if (pe) cls.push('ev');
+      if (adv) cls.push('adv');
       const tip = WEEKDAY[(i + 1) % 7] + ' ' + day + '. ' + mo + '. ' + y + (hol ? '\n' + hol + ' · ' + SHOP_TXT[shop] : '') +
+        (adv ? '\n' + adv + '. adventní neděle' : '') +
         (pe && pe.b.length ? '\nNarozeniny: ' + pe.b.join(', ') : '') +
         (nm || (pe && pe.n.length) ? '\nSvátek: ' + [nm, pe && pe.n.some(x => !(nm || '').split(', ').includes(x)) ? 'slaví ' + pe.n.filter(x => !(nm || '').split(', ').includes(x)).join(', ') : ''].filter(Boolean).join(' – ') : '') + '\nTýden ' + wk;
-      const dots = pe ? '<i class="dots">' + (pe.b.length ? '<b class="db"></b>' : '') + (pe.n.length ? '<b class="dn"></b>' : '') + '</i>' : '';
-      h += '<td class="' + cls.join(' ') + '" title="' + esc(tip) + '">' + (pe ? '<span class="num">' + dots + day + '</span>' : day) + '</td>';
+      const dots = pe || adv ? '<i class="dots">' + (pe && pe.b.length ? '<b class="db"></b>' : '') + (pe && pe.n.length ? '<b class="dn"></b>' : '') +
+        (adv ? '<b class="da"></b>' : '') + '</i>' : '';
+      h += '<td class="' + cls.join(' ') + '" title="' + esc(tip) + '">' + (dots ? '<span class="num">' + dots + day + '</span>' : day) + '</td>';
     }
     h += '</tr>';
   }
@@ -640,7 +652,7 @@ function renderCal(){
   // svátky v období
   const t0 = utc(fy, fm, 1), t1 = utc(ly, lm, daysIn(ly, lm));
   const seen = new Set(), items = [];
-  let onWork = 0, nHol = 0, nB = 0, nN = 0;
+  let onWork = 0, nHol = 0, nB = 0, nN = 0, nA = 0;
   for (let t = t0; t <= t1; t += D) {
     const past = t < today ? ' class="past"' : '';
     const hol = holT(t);
@@ -652,7 +664,8 @@ function renderCal(){
       items.push('<li' + past + '><span class="hd' + (isWeekend(t) ? ' wkend' : '') + '">' + shortD(t) + '</span><span class="hn">' + esc(hol) + '</span>' +
         '<span class="hx' + (note ? ' ' + note.cls : '') + '"><span class="shop ' + shop + '">' + SHOP_TAG[shop] + '</span>' + (note ? esc(note.txt) : '') + '</span></li>');
     }
-    const p = ymd(t), pe = peopleOn(p.y, p.mo, p.d);
+    const p = ymd(t), pe = peopleOn(p.y, p.mo, p.d), adv = adventOf(p.y, p.mo, p.d);
+    if (adv) { nA++; items.push('<li' + past + '><span class="hd pa">' + shortD(t) + '</span><span class="hn">' + adv + '. adventní neděle</span></li>'); }
     if (pe && pe.b.length) { nB += pe.b.length; items.push('<li' + past + '><span class="hd pb">' + shortD(t) + '</span><span class="hn">Narozeniny – ' + esc(pe.b.join(', ')) + '</span></li>'); }
     if (pe && pe.n.length) { nN += pe.n.length; items.push('<li' + past + '><span class="hd pn">' + shortD(t) + '</span><span class="hn">Svátek – ' + esc(pe.n.join(', ')) + '</span></li>'); }
   }
@@ -661,6 +674,7 @@ function renderCal(){
     (nB ? ' · ' + nB + ' ' + plural(nB, 'narozeniny', 'narozeniny', 'narozenin') : '') +
     (nN ? ' · ' + nN + ' ' + plural(nN, 'svátek', 'svátky', 'svátků') : ''));
   document.querySelectorAll('.legend .lgp').forEach(el => { el.hidden = !HAS_PEOPLE; });
+  document.querySelectorAll('.legend .lga').forEach(el => { el.hidden = !nA; });
   setHTML($('cal-hol'), items.length ? items.join('') : '<li class="none">V tomto období nejsou žádné události.</li>');
   $('cal-shopnote').hidden = !nHol;
   document.querySelectorAll('#cal-mode button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === calMode)));

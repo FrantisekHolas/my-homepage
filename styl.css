@@ -9,7 +9,7 @@
   --open-bg:#dcfce7; --warn-bg:#ffedd5;
   --map-sea:#dfe7f1; --map-l1:#9aabc2; --map-l2:#b9c6d9; --map-l3:#8194b0; --map-home:#3f78e0; --map-hl:#f59e0b;
   --map-night:8 16 34; --map-night-a:.42;
-  --bday:#db2777; --nday:#0d9488;
+  --bday:#db2777; --nday:#0d9488; --advent:#7c3aed;
   color-scheme: light dark;
 }
 /* Tmavý režim: podle systému, pokud ho tlačítko v záhlaví ručně nezmění (data-theme na <html>).
@@ -25,7 +25,7 @@
     --open-bg:#14361f; --warn-bg:#3b2412;
     --map-sea:#1a2638; --map-l1:#46587a; --map-l2:#5f7394; --map-l3:#394a66; --map-home:#3b82f6; --map-hl:#f59e0b;
     --map-night:0 0 0; --map-night-a:.6;
-    --bday:#f472b6; --nday:#2dd4bf;
+    --bday:#f472b6; --nday:#2dd4bf; --advent:#a78bfa;
   }
 }
 :root[data-theme="dark"]{
@@ -38,7 +38,7 @@
   --open-bg:#14361f; --warn-bg:#3b2412;
   --map-sea:#1a2638; --map-l1:#46587a; --map-l2:#5f7394; --map-l3:#394a66; --map-home:#3b82f6; --map-hl:#f59e0b;
   --map-night:0 0 0; --map-night-a:.6;
-  --bday:#f472b6; --nday:#2dd4bf;
+  --bday:#f472b6; --nday:#2dd4bf; --advent:#a78bfa;
 }
 :root[data-theme="light"]{color-scheme:light}
 :root[data-theme="dark"]{color-scheme:dark}
@@ -206,7 +206,7 @@ h2{font-size:21px;margin:30px 0 4px}
 .mon .num{position:relative;display:inline-block}
 .mon .dots{position:absolute;right:calc(100% + 1px);top:-1px;display:flex;gap:2px;pointer-events:none}
 .mon .dots b,.legend b.dot{display:block;width:6px;height:6px;border-radius:50%}
-.dots .db,.legend .db{background:var(--bday)} .dots .dn,.legend .dn{background:var(--nday)}
+.dots .db,.legend .db{background:var(--bday)} .dots .dn,.legend .dn{background:var(--nday)} .dots .da,.legend .da{background:var(--advent)}
 .cal.year .mon .dots{top:0;gap:1px} .cal.year .mon .dots b{width:4px;height:4px}
 .mon td.today{box-shadow:inset 0 0 0 2px var(--accent);font-weight:700;color:var(--text)}
 .mon td.hol.today{color:var(--hol-text)}
@@ -226,7 +226,7 @@ h2{font-size:21px;margin:30px 0 4px}
 .hlist li{break-inside:avoid;display:grid;grid-template-columns:76px 1fr;gap:0 10px;padding:5px 0;font-size:14px;line-height:1.35}
 .hlist .hd{color:var(--hol-text);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 .hlist .hd.wkend{color:var(--muted)}
-.hlist .hd.pb{color:var(--bday)} .hlist .hd.pn{color:var(--nday)}
+.hlist .hd.pb{color:var(--bday)} .hlist .hd.pn{color:var(--nday)} .hlist .hd.pa{color:var(--advent)}
 .hlist .hx{grid-column:2;font-size:12.5px;color:var(--muted)}
 .hlist .hx.good{color:var(--good)}
 .hlist .hx.tip{color:var(--accent)}
